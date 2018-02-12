@@ -2,7 +2,7 @@
 
 Personal website of Mark W. Firth
 
-Required:
+Requirements:
 - Ruby
 - Jekyll
 - gem 'jekyll-sitemap'

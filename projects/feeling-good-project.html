@@ -1,0 +1,34 @@
+---
+layout: default
+---
+<div class="container text-center">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <div class="modal-body">
+                <h2>Feeling Good Project</h2>
+                <hr class="star-primary">
+                <br>
+                <h3>An art photography project that is still under development. This project will be announced on <a target="_blank" href="https://www.instagram.com/mark.wf">Instagram</a> so follow me there to keep updated.</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% raw %}
+<section id="content">
+  <div id="instafeed"></div>
+  <script type="text/javascript">
+    var feed = new Instafeed({
+        get: 'tagged',
+        tagName: 'feelinggoodproject',
+        clientId: '2f205830e2cd461aa9bd742c891589e0',
+        accessToken: '532620043.2f20583.6df7efd581634dcfa576f5d7d8b757c0',
+        resolution: 'standard_resolution',
+        limit: '16',
+        sortBy: 'random',
+        template: '<div class="col-3 portfolio-item" style="margin: 0 auto"><a target="_blank" href="{{link}}" class="portfolio-link"><div class="caption"><div class="caption-content"><h3><i class="fa fa-heart" aria-hidden="true"></i> {{model.likes.count}} &nbsp;&nbsp;&nbsp;<i class="fa fa-comment" aria-hidden="true"></i> {{comments}}</h3></div></div><img src="{{image}}" class="img-responsive"></a></div>'
+    });
+    feed.run();
+  </script>
+</section>
+{% endraw %}

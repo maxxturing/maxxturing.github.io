@@ -1,0 +1,36 @@
+title: Mark W. Firth
+description: > # this means to ignore newlines until "baseurl:"
+  Personal website of Mark W. Firth
+permalink: ':title'
+# permalink: ':title'
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "http://mark.wf" # the base hostname & protocol for your site, e.g. http://example.com
+site-twitter: markwf #if your site has a twitter account, enter it here
+
+# Author Settings
+author: Mark W. Firth # add your name
+author-img: mark-w-firth.png # add your photo
+about-author: Jack of all trades, master of some. Operations & strategy professional. Tech startup guy. Content creator. # add description
+social-twitter: markwf # add your Twitter handle
+social-instagram: mark.wf # add your Instagram handle
+social-github: markwf # add your Github handle
+social-linkedin: markwilliamfirth # add your Linkedin handle
+social-email: hello@mark.wf # add your Email address
+
+# Disqus
+discus-identifier: markwf # add your discus identifier
+
+# Tracker
+analytics: # Google Analytics
+
+# Build Settings
+markdown: kramdown
+plugins_dir:
+  - jekyll-sitemap
+  - jekyll-paginate
+  - jemoji
+
+paginate: 8
+paginate_path: "/page/:num"
+
+exclude: ["node_modules", "gulpfile.js", "package.json", "yarn.lock"]

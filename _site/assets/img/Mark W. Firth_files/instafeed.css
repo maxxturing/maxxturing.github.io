@@ -1,0 +1,117 @@
+#instafeed img {
+  /* margin-top: 25px;
+  margin-bottom: 25px; */
+}
+
+a i.fa-heart{
+  color: white;
+}
+
+a i.fa-comment{
+  color: white;
+}
+
+#instafeed .portfolio-item {
+  margin: 0 0 31px!important;
+  right: 0;
+  display: inline-block;
+}
+
+#instafeed .portfolio-item .portfolio-link {
+  display: block;
+  position: relative;
+  width: 293px;
+  margin: 0 auto;
+}
+
+#instafeed .portfolio-item .portfolio-link .caption {
+  background: rgba(237,111,47,0.95);
+  position: absolute;
+  width: 293px;
+  height: 293px;
+  opacity: 0;
+  margin: 0 auto;
+  transition: all ease 0.5s;
+  -webkit-transition: all ease 0.5s;
+  -moz-transition: all ease 0.5s;
+}
+
+#instafeed .portfolio-item .portfolio-link .caption:hover {
+  opacity: 1;
+}
+
+#instafeed .portfolio-item .portfolio-link .caption .caption-content {
+  position: absolute;
+  width: 100%;
+  height: 20px;
+  font-size: 20px;
+  font-style: normal!important;
+  text-align: center;
+  top: 50%;
+  margin-top: -12px;
+  color: white;
+}
+
+#instafeed .portfolio-item .portfolio-link .caption .caption-content i {
+  margin-top: -12px;
+}
+
+#instafeed .portfolio-item .portfolio-link .caption .caption-content h3,
+#instafeed .portfolio-item .portfolio-link .caption .caption-content h4 {
+  margin: 0;
+}
+
+#instafeed * {
+  z-index: 2;
+}
+@media {
+  #instafeed .portfolio-item {
+    margin: 0 0 30px;
+  }
+}
+.floating-label-form-group {
+  position: relative;
+  margin-bottom: 0;
+  padding-bottom: 0.5em;
+  border-bottom: 1px solid #eeeeee;
+}
+.floating-label-form-group input,
+.floating-label-form-group textarea {
+  z-index: 1;
+  position: relative;
+  padding-right: 0;
+  padding-left: 0;
+  border: none;
+  border-radius: 0;
+  font-size: 1.5em;
+  background: none;
+  box-shadow: none !important;
+  resize: none;
+}
+.floating-label-form-group label {
+  display: block;
+  z-index: 0;
+  position: relative;
+  top: 2em;
+  margin: 0;
+  font-size: 0.85em;
+  line-height: 1.764705882em;
+  vertical-align: middle;
+  vertical-align: baseline;
+  opacity: 0;
+  -webkit-transition: top 0.3s ease,opacity 0.3s ease;
+  -moz-transition: top 0.3s ease,opacity 0.3s ease;
+  -ms-transition: top 0.3s ease,opacity 0.3s ease;
+  transition: top 0.3s ease,opacity 0.3s ease;
+}
+.floating-label-form-group:not(:first-child) {
+  padding-left: 14px;
+  border-left: 1px solid #eeeeee;
+}
+.floating-label-form-group-with-value label {
+  top: 0;
+  opacity: 1;
+}
+.floating-label-form-group-with-focus label {
+  color: #18BC9C;
+}

@@ -11,7 +11,7 @@ layout: blog
       <div class="author-name">{{site.author}}</div>
       <p>{{site.about-author}}</p>
     </div>
-  </header> <!-- End Header -->
+  </header>
   <footer>
     <section class="contact">
       <h3 class="contact-title">Contact</h3>
@@ -42,14 +42,14 @@ layout: blog
           <li class="github"><a href="https://github.com/" target="_blank"><i class="fab fa-github fa-fw" aria-hidden="true"></i></a></li>
         {% endif %}
       </ul>
-    </section> <!-- End Section Contact -->
+    </section>
     {% include contact-sidebar.html %}
     <div class="copyright">
       <hr class="star-primary">
       <p>{{site.time | date: '%Y'}} &copy; {{site.author}}</p>
     </div>
-  </footer> <!-- End Footer -->
-</aside> <!-- End Sidebar -->
+  </footer>
+</aside>
 <div class="content-box clearfix">
   {{ content }}
 </div>

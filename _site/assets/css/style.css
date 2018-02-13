@@ -7,6 +7,14 @@ body {
   padding-bottom: 680px; // 650 of footer height plus 30 margin-bottom
 }
 
+/* nav {
+   display:block!important;
+} */
+
+#button {
+  float: right;
+}
+
 .orange-dot {
   color: #ed6f2f;
 }
@@ -116,9 +124,9 @@ a:hover {
 .navbar-expand-lg .show>ul>.nav-item {
   text-align: right;
   width: 100%;
-  -webkit-transition: all 0.4s ease-in-out;
-     -moz-transition: all 0.4s ease-in-out;
-          transition: all 0.4s ease-in-out;
+  -webkit-transition: all 0.1s ease-in-out;
+     -moz-transition: all 0.1s ease-in-out;
+          transition: all 0.1s ease-in-out;
 }
 
 .nav-item {
@@ -268,7 +276,7 @@ p {
 }
 
 .sticky-nav {
-  min-height: 80px;
+  min-height: 70px;
   z-index:5;
   position:-webkit-sticky;
   position:sticky;
@@ -276,21 +284,21 @@ p {
 }
 
 .sticky-subnav {
-  height: 58px;
+  height: 70px;
   z-index:4;
   position:-webkit-sticky;
   position:sticky;
-  top: 80px;
+  top: 70px;
   box-shadow: 0px 4px 5px #343a40;
   /* width: 2000px; */
 }
 
 .sticky-card-title {
-  min-height: 80px;
+  min-height: 70px;
   z-index:2;
   position:-webkit-sticky;
   position:sticky;
-  top: 138px;
+  top: 140px;
 }
 
 .card {
@@ -407,6 +415,10 @@ button:focus {
 .navbar-nav .nav-link {
   padding-right: 20px;
   padding-left: 20px;
+}
+
+.navbar-brand {
+  margin-left: 1rem;
 }
 
 @media only screen and (max-width: 768px) {

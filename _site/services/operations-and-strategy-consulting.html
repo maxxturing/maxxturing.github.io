@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
 		<meta charset="utf-8">
 	<title>Mark W. Firth</title>
@@ -92,9 +92,15 @@
 	<script type="text/javascript" src="/assets/scripts/jquery.js"></script>
 	<script type="text/javascript" src="/assets/scripts/nav.js"></script>
 
+	<link rel="stylesheet" href="/assets/css/about.css">
+	<link rel="stylesheet" href="/assets/css/animate.css">
+	<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> -->
+	<script src="/assets/scripts/modernizr.js"></script> <!-- required to spring cards? -->
+	<script src="/assets/scripts/main.js"></script> <!-- spring cards -->
+  <script src="/assets/scripts/wow.js"></script> <!-- Animates fadein of header -->
 </head>
 
-<body>
+<body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
 
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-nav">
   <button id="button" class="navbar-toggler hamburger hamburger--spring" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -170,13 +176,18 @@
 </nav>
 
 
-  <div class="wrapper-default">
-    <div class="container">
+  <div>
+    <header id="ourstory">
+	<h1 class="wow fadeIn">Operations & Strategy Consulting</h1>
+	<p class="wow fadeIn">
+		I help talented people start and grow their own businesses.
+	</p>
+</header>
+
+<div class="container">
     <div class="row">
         <div class="col-lg-8 offset-lg-2">
             <div class="modal-body">
-                <h2 class="text-center">Operations & Strategy Consulting</h2>
-                <hr class="star-primary">
                 <h2>Is This You?</h2>
 
                 <ul>
@@ -199,7 +210,6 @@
                   producer of startups in the world. I've met over 250 founders
                   and have extensive experience advising in early-stage.
                 </p>
-                <br>
                 <h2>What problem are you currently facing?</h2>
                 <p>
                   If I can't provide a solution for you, I'll point you to someone who can.<br>

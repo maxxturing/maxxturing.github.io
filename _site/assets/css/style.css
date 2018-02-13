@@ -92,6 +92,15 @@ hr {
   background-color: #ed6f2f;
 }
 
+a {
+  color: #323638;
+}
+
+a:hover {
+  color: #ed6f2f;
+  text-decoration: none;
+}
+
 .navbar-expand-lg .navbar-nav {
   width: 100%
 }
@@ -364,7 +373,7 @@ hr {
   height: 100%;
 }
 
- .subnav-word i, a:hover {
+ .subnav-word i a:hover {
    text-decoration: none;
    color: white;
  }

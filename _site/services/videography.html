@@ -173,17 +173,7 @@
 
 
   <div class="wrapper-default">
-    <script>
-    $("video source").each(function() {
-        var sourceFile = $(this).attr("src");
-        $(this).attr("src", sourceFile);
-        var video = this.parentElement;
-        video.load();
-        video.play();
-    });
-</script>
-
-<video id="bgvid" playsinline autoplay muted loop poster="/assets/img/poster.png">
+    <video id="bgvid" playsinline autoplay muted loop poster="/assets/img/poster.png">
   <source src="/assets/img/wild.mp4" type="video/mp4">
   <source src="/assets/img/wild.webm" type="video/webm">
   <source src="/assets/img/wild.ogg" type="video/ogg">

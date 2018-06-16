@@ -15,7 +15,7 @@
 " property="og:description">
   
   
-    <meta content="http://localhost:4000/projects/mytodo" property="og:url">
+    <meta content="http://localhost:4000/projects/unfinished" property="og:url">
   
   
   
@@ -31,7 +31,7 @@
     <meta name="twitter:title" content="Mark W. Firth">
   
   
-    <meta name="twitter:url" content="http://localhost:4000/projects/mytodo">
+    <meta name="twitter:url" content="http://localhost:4000/projects/unfinished">
   
   
     <meta name="twitter:description" content="Personal website of Mark W. Firth
@@ -174,27 +174,47 @@
 
 
   <div class="wrapper-default">
-    <div class="container text-center">
-    <div class="row">
-        <div class="col-lg-8 offset-lg-2">
-            <div class="modal-body">
-                <h2>MyTo.Do</h2>
-                <hr class="star-primary">
-                <img src="/assets/img/mytodo-logo.png" class="project-logo" alt="MyTo.Do Logo">
-                <br>
-                <h3>A simple and intuitive way to manage your tasks.</h3>
-
-                <p>MyTo.Do allows you to collaborate with others by
-                sharing your tasks and task lists. Get more done
-                whilst keeping your tasks in sync with Gmail,
-                Google Calendar and Google Tasks.</p>
-
-                <p>Learn more at <a target="_blank" href="http://myto.do/">http://myto.do/</a>.</p>
-
-            </div>
-        </div>
-    </div>
+    <div id="wild">
+  <div class="modal-body">
+    <h1>Feeling Good Project</h1>
+      <hr class="star-primary">
+      <p>
+        An art photography project that is still under development. This project will be announced on Instagram so follow me there to keep updated.
+      </p>
+      <p class="d-none d-md-block">
+        <a href="https://www.instagram.com/mark.wf" target="_blank">Follow me on Instagram</a>
+      </p>
+      <p class="d-block d-md-none" style="text-align:center">
+        <a href="https://www.instagram.com/mark.wf" target="_blank">Follow me on Instagram</a>
+      </p>
+  </div>
 </div>
+
+<video id="bgvid" playsinline autoplay muted loop poster="/assets/img/black.png">
+  <source src="/assets/img/bg.mp4" type="video/mp4">
+  <source src="/assets/img/wild.webm" type="video/webm">
+  <source src="/assets/img/wild.ogg" type="video/ogg">
+</video>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<!-- 
+<section id="content">
+  <div id="instafeed"></div>
+  <script type="text/javascript">
+    var feed = new Instafeed({
+        get: 'tagged',
+        tagName: 'feelinggoodproject',
+        clientId: '2f205830e2cd461aa9bd742c891589e0',
+        accessToken: '532620043.2f20583.6df7efd581634dcfa576f5d7d8b757c0',
+        resolution: 'standard_resolution',
+        limit: '16',
+        sortBy: 'random',
+        template: '<div class="col-3 portfolio-item" style="margin: 0 auto"><a target="_blank" href="{{link}}" class="portfolio-link"><div class="caption"><div class="caption-content"><h3><i class="fa fa-heart" aria-hidden="true"></i> {{model.likes.count}} &nbsp;&nbsp;&nbsp;<i class="fa fa-comment" aria-hidden="true"></i> {{comments}}</h3></div></div><img src="{{image}}" class="img-responsive"></a></div>'
+    });
+    feed.run();
+  </script>
+</section>
+ -->
 
   </div>
 

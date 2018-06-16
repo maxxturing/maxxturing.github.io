@@ -3,8 +3,12 @@
 Personal website of Mark W. Firth
 
 Requirements:
-- Ruby
-- Jekyll
+- Ruby https://rubyinstaller.org/downloads/ (pick bold version with devkit)
+- gem install bundle
+- bundle install
+- bundle exec jekyll serve
+
+- gem install jekyll
 - gem 'jekyll-sitemap'
 - gem 'jekyll-paginate'
 - gem 'jemoji'
@@ -14,7 +18,6 @@ Docs:
 - https://github.com/qwtel/hydejack/issues/8
 - https://stackoverflow.com/questions/10012181/bundle-install-returns-could-not-locate-gemfile
 
-bundle exec jekyll serve
 
 http://127.0.0.1:4000/
 

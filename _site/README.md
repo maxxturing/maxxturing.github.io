@@ -6,6 +6,7 @@ Requirements:
 - Ruby https://rubyinstaller.org/downloads/ (pick bold version with devkit)
 - gem install bundle
 - bundle install
+- Change Nokogiri in Gemfile.lock to 1.8.2
 - bundle exec jekyll serve
 
 - gem install jekyll

@@ -30,3 +30,22 @@ Mobile:
 - d-none d-md-block to hide on small and extra-small devices.
 
 https://css-tricks.com/snippets/jquery/smooth-scrolling/
+
+# Mobile Web Notes
+
+
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+img, embed,
+object, video {
+  max-width:100%;
+}
+
+# tap target
+
+nav a, button {
+  min-width: 48px;
+  min-height: 48px;
+}
+
+room between = 40px

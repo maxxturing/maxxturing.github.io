@@ -49,3 +49,14 @@ nav a, button {
 }
 
 room between = 40px
+
+# Media Queries
+
+@media screen and (min-width: 500px) {
+  .yes {
+    opacity: 1;
+  }
+  .no {
+    opacity: 0;
+  }
+}

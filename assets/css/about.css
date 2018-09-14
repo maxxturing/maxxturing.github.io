@@ -317,17 +317,6 @@ a:focus {
 .cd-timeline-block:last-child {
   margin-bottom: 0;
 }
-@media only screen and (min-width: 1170px) {
-  .cd-timeline-block {
-    margin: 4em 0;
-  }
-  .cd-timeline-block:first-child {
-    margin-top: 0;
-  }
-  .cd-timeline-block:last-child {
-    margin-bottom: 0;
-  }
-}
 
 .cd-timeline-img {
   position: absolute;
@@ -338,15 +327,35 @@ a:focus {
   border-radius: 50%;
   box-shadow: 0 0 0 4px white, inset 0 2px 0 rgba(0, 0, 0, 0.08), 0 3px 0 4px rgba(0, 0, 0, 0.05);
 }
-.cd-timeline-img img {
+.cd-timeline-img i {
   display: block;
   width: 24px;
   height: 24px;
   position: relative;
   left: 50%;
-  top: 50%;
-  margin-left: -12px;
-  margin-top: -12px;
+  top: 25%;
+  margin: -12px;
+  margin-top: 0px;
+}
+
+@media only screen and (min-width: 1170px) {
+  .cd-timeline-block {
+    margin: 4em 0;
+  }
+  .cd-timeline-block:first-child {
+    margin-top: 0;
+  }
+  .cd-timeline-block:last-child {
+    margin-bottom: 0;
+  }
+  .cd-timeline-img i {
+    display: block;
+    width: 60px;
+    height: 60px;
+    position: relative;
+    left: 20%;
+    top: 20%;
+  }
 }
 
 /* .cd-timeline-img i {

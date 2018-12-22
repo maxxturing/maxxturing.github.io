@@ -187,6 +187,14 @@ a i.fa-instagram:hover{
   color: #E33765;
 }
 
+a i.fa-facebook:hover{
+  color: #3b5998;
+}
+
+a i.fa-youtube:hover{
+  color: #c4302b;
+}
+
 a i.fa-cogs:hover{
   color: #43464B;
 }

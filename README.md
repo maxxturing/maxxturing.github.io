@@ -1,6 +1,5 @@
-# markwf.github.io
+# maxxwellfirth.github.io
 
-Personal website of Mark W. Firth
 
 Requirements:
 - Ruby https://rubyinstaller.org/downloads/ (pick bold version with devkit)

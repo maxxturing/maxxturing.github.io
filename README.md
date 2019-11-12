@@ -2,9 +2,9 @@
 
 
 Requirements:
-- Ruby https://rubyinstaller.org/downloads/ (pick bold version with devkit)
-- gem install bundle
-- bundle install
+1. Install Ruby. Mac = already installed? (Check ruby -v in terminal). Windows = https://rubyinstaller.org/downloads/ (pick bold version with devkit)
+- sudo gem install bundle
+- sudo bundle install (warning - don't install bundler as root?)
 - Change Nokogiri in Gemfile.lock to 1.8.2
 - bundle exec jekyll serve
 

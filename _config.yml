@@ -1,6 +1,6 @@
-title: Mark W. Firth
+title: Maxxwell Firth
 description: > # this means to ignore newlines until "baseurl:"
-  Personal website of Mark W. Firth
+  Personal website of Maxxwell Firth
 permalink: ':title'
 # permalink: ':title'
 baseurl: "" # the subpath of your site, e.g. /blog
@@ -8,13 +8,13 @@ url: "http://mark.wf" # the base hostname & protocol for your site, e.g. http://
 site-twitter: markwf #if your site has a twitter account, enter it here
 
 # Author Settings
-author: Mark W. Firth # add your name
-author-img: mark-w-firth.png # add your photo
+author: Maxxwell Firth # add your name
+author-img: maxxwell.png # add your photo
 about-author: Jack of all trades, master of some. Operations & strategy professional. Tech startup guy. Content creator. # add description
 social-twitter: markwf # add your Twitter handle
 social-instagram: mark.wf # add your Instagram handle
-social-github: markwf # add your Github handle
-social-linkedin: markwf # add your Linkedin handle
+social-github: maxxwellfirth # add your Github handle
+social-linkedin: maxxwell # add your Linkedin handle
 social-email: hello@mark.wf # add your Email address
 
 # Disqus

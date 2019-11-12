@@ -3,11 +3,11 @@
 
 Requirements:
 1. Install Ruby. Mac = already installed? (Check ruby -v in terminal). Windows = https://rubyinstaller.org/downloads/ (pick bold version with devkit)
-- sudo gem install bundle
-- sudo bundle install (warning - don't install bundler as root?)
-- Change Nokogiri in Gemfile.lock to 1.8.2
-- bundle exec jekyll serve
+2. sudo gem install bundle
+3. sudo bundle install (warning - don't install bundler as root?)
+4. bundle exec jekyll serve
 
+- Change Nokogiri in Gemfile.lock to 1.8.2
 - gem install jekyll
 - gem 'jekyll-sitemap'
 - gem 'jekyll-paginate'

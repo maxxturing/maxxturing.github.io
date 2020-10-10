@@ -1,24 +1,21 @@
-title: Maxxwell
+title: Maxx Turing
 description: > # this means to ignore newlines until "baseurl:"
-  Maxxwell's personal website.
+  Maxx Turing's personal website.
 permalink: ':title'
 # permalink: ':title'
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://maxxwell.co.uk" # the base hostname & protocol for your site, e.g. http://example.com
-site-twitter: maxxwellfirth #if your site has a twitter account, enter it here
+baseurl: '' # the subpath of your site, e.g. /blog
+url: 'http://maxxturing.com' # the base hostname & protocol for your site, e.g. http://example.com
+site-twitter: maxxturing #if your site has a twitter account, enter it here
 
 # Author Settings
-author: Maxxwell # add your name
-author-img: maxxwell.png # add your photo
+author: Maxx Turing # add your name
+author-img: maxx-turing.png # add your photo
 about-author: Jack of all trades, master of some. Operations & strategy professional. Tech startup guy. Content creator. # add description
-social-twitter: maxxwellfirth # add your Twitter handle
-social-instagram: maxxwellfirth # add your Instagram handle
-social-github: maxxwellfirth # add your Github handle
-social-linkedin: maxxwell # add your Linkedin handle
-social-email: maxx@maxxwell.co.uk # add your Email address
-
-# Disqus
-discus-identifier: maxxwellfirth # add your discus identifier
+social-twitter: maxxturing # add your Twitter handle
+social-instagram: maxxturing # add your Instagram handle
+social-github: maxxturing # add your Github handle
+social-linkedin: maxxturing # add your Linkedin handle
+social-email: maxx@maxxturing.com # add your Email address
 
 # Tracker
 analytics: # Google Analytics
@@ -31,6 +28,6 @@ plugins_dir:
   - jemoji
 
 paginate: 8
-paginate_path: "/page/:num"
+paginate_path: '/page/:num'
 
-exclude: ["node_modules", "gulpfile.js", "package.json", "yarn.lock"]
+exclude: ['node_modules', 'gulpfile.js', 'package.json', 'yarn.lock']

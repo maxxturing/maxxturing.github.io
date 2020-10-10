@@ -4,7 +4,7 @@
   "description": "A starter project for Jekyll",
   "main": "index.js",
   "repository": "https://github.com/markwf/markwf.github.io",
-  "author": "Maxxwell Firth",
+  "author": "Maxx Turing",
   "license": "MIT",
   "dependencies": {
     "browser-sync": "^2.18.13",

@@ -4,7 +4,8 @@ body {
   font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
   min-height: 100vh;
   position: relative;
-  padding-bottom: 680px; // 650 of footer height plus 30 margin-bottom
+  padding-bottom: 250px;
+  /* footer height */
 }
 
 #button {

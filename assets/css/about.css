@@ -133,7 +133,7 @@ header h1 {
 header p {
   text-transform: uppercase;
   font-weight: bold;
-  font-size: 10px;
+  font-size: 14px;
   letter-spacing: 2px;
 }
 @media only screen and (min-width: 1170px) {
@@ -269,7 +269,7 @@ a:focus {
 }
 
 .dropdown-item {
-  /* text-align:center; */
+  text-align: left;
 }
 
 .hackathon-btn {

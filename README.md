@@ -6,6 +6,7 @@ Requirements:
 2. sudo gem install bundle
 3. sudo bundle install (warning - don't install bundler as root?)
 4. bundle exec jekyll serve (make sure you cd to the right directory)
+5. http://127.0.0.1:4000/
 
 - Change Nokogiri in Gemfile.lock to 1.8.2
 - gem install jekyll

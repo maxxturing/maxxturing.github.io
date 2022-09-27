@@ -11,11 +11,15 @@
 </url>
 <url>
 <loc>http://localhost:4000/cv.pdf</loc>
-<lastmod>2021-07-05T19:49:23+01:00</lastmod>
+<lastmod>2022-08-10T17:38:13+01:00</lastmod>
 </url>
 <url>
 <loc>http://localhost:4000/cv/index.html</loc>
 <lastmod>2021-07-05T19:49:23+01:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4000/events/30th-birthday/menu/index.html</loc>
+<lastmod>2022-09-27T17:22:49+01:00</lastmod>
 </url>
 <url>
 <loc>http://localhost:4000/index-redirect.html</loc>
@@ -24,5 +28,9 @@
 <url>
 <loc>http://localhost:4000/meet-maxx/index.html</loc>
 <lastmod>2021-07-05T19:49:23+01:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4000/menu.pdf</loc>
+<lastmod>2022-09-27T17:14:57+01:00</lastmod>
 </url>
 </urlset>

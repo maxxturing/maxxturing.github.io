@@ -12,6 +12,7 @@ layout: about
 
   <div class="wow fadeIn">
     <h1 class="wow fadeIn">Maxx Turing</h1>
+    <i class="fa-regular fa-file-lines"></i>
     <br>
     <p class="wow fadeIn">
       Founder at <a href="http://startbook.co.uk/" target="_blank">⚡ Startbook</a>
@@ -22,6 +23,21 @@ layout: about
         <div class="col-md-12" style="padding: 0;">
           <section class="contact">
             <ul>
+              {% if site.social-linkedin %}
+              <li class="linkedin">
+                <a
+                  href="https://linkedin.com/in/{{site.social-linkedin}}"
+                  target="_blank"
+                  ><i class="fab fa-linkedin fa-fw fa-lg"></i
+                ></a>
+              </li>
+              {% else %}
+              <li class="linkedin">
+                <a href="https://linkedin.com/" target="_blank"
+                  ><i class="fab fa-linkedin fa-fw fa-lg" aria-hidden="true"></i
+                ></a>
+              </li>
+              {% endif %} 
               {% if site.social-twitter %}
               <li>
                 <a
@@ -36,7 +52,8 @@ layout: about
                   ><i class="fab fa-twitter fa-fw fa-lg" aria-hidden="true"></i
                 ></a>
               </li>
-              {% endif %} {% if site.social-instagram %}
+              {% endif %}
+              {% if site.social-instagram %}
               <li>
                 <a
                   href="https://instagram.com/{{ site.social-instagram }}"
@@ -50,33 +67,8 @@ layout: about
                   ><i class="fab fa-instagram fa-fw fa-lg" aria-hidden="true"></i
                 ></a>
               </li>
-              {% endif %} {% if site.social-email %}
-              <li class="email">
-                <a href="mailto:{{site.social-email}}"
-                  ><i class="far fa-envelope fa-fw fa-lg"></i
-                ></a>
-              </li>
-              {% else %}
-              <li class="email">
-                <a href="mailto:maxx@maxxturing.com"
-                  ><i class="far fa-envelope fa-fw fa-lg" aria-hidden="true"></i
-                ></a>
-              </li>
-              {% endif %} {% if site.social-linkedin %}
-              <li class="linkedin">
-                <a
-                  href="https://linkedin.com/in/{{site.social-linkedin}}"
-                  target="_blank"
-                  ><i class="fab fa-linkedin fa-fw fa-lg"></i
-                ></a>
-              </li>
-              {% else %}
-              <li class="linkedin">
-                <a href="https://linkedin.com/" target="_blank"
-                  ><i class="fab fa-linkedin fa-fw fa-lg" aria-hidden="true"></i
-                ></a>
-              </li>
-              {% endif %} {% if site.social-github %}
+              {% endif %}
+              {% if site.social-github %}
               <li class="github">
                 <a
                   href="https://github.com/{{site.social-github}}"
@@ -88,6 +80,37 @@ layout: about
               <li class="github">
                 <a href="https://github.com/" target="_blank"
                   ><i class="fab fa-github fa-fw fa-lg" aria-hidden="true"></i
+                ></a>
+              </li>
+              {% endif %}
+
+              {% if site.social-cv %}
+              <li class="cv">
+                <a
+                  href="https://maxxturing.com/{{site.social-cv}}"
+                  target="_blank"
+                  ><i class="fa-regular fa-file-lines fa-fw fa-lg"></i
+                    ></a>
+              </li>
+              {% else %}
+              <li class="cv">
+                <a href="https://maxxturing.com/" target="_blank"
+                ><i class="fa-regular fa-file-lines fa-fw fa-lg" aria-hidden="true"></i
+                  ></a>
+              </li>
+              {% endif %}
+
+
+              {% if site.social-email %}
+              <li class="email">
+                <a href="mailto:{{site.social-email}}"
+                  ><i class="far fa-envelope fa-fw fa-lg"></i
+                ></a>
+              </li>
+              {% else %}
+              <li class="email">
+                <a href="mailto:maxx@maxxturing.com"
+                  ><i class="far fa-envelope fa-fw fa-lg" aria-hidden="true"></i
                 ></a>
               </li>
               {% endif %}

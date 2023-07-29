@@ -16,6 +16,7 @@ social-instagram: maxxturing # add your Instagram handle
 social-github: maxxturing # add your Github handle
 social-linkedin: maxxturing # add your Linkedin handle
 social-email: maxx@maxxturing.com # add your Email address
+social-cv: cv.pdf # add your CV pdf name
 
 # Tracker
 analytics: # Google Analytics

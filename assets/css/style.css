@@ -251,11 +251,7 @@ a i.fa-github:hover {
   color: black;
 }
 
-a i.fa-file-pdf-o {
-  color: black;
-}
-
-a i.fa-file-pdf-o:hover {
+a i.fa-file-lines:hover {
   color: #ff0000;
 }
 

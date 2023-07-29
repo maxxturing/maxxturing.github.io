@@ -4,12 +4,12 @@ description: > # this means to ignore newlines until "baseurl:"
 permalink: ':title'
 # permalink: ':title'
 baseurl: '' # the subpath of your site, e.g. /blog
-url: 'http://maxxturing.com' # the base hostname & protocol for your site, e.g. http://example.com
+url: 'https://maxxturing.com' # the base hostname & protocol for your site, e.g. http://example.com
 site-twitter: maxxturing #if your site has a twitter account, enter it here
 
 # Author Settings
 author: Maxx Turing # add your name
-# author-img: maxx-turing.png # add your photo
+author-img: meta-cover.png # add your photo
 about-author: Maxx Turing | Founder at Startbook | Tech entrepreneur helping other founders succeed. # add description
 social-twitter: maxxturing # add your Twitter handle
 social-instagram: maxxturing # add your Instagram handle

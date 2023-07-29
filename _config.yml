@@ -1,6 +1,6 @@
 title: Maxx Turing
 description: > # this means to ignore newlines until "baseurl:"
-  Maxx Turing's personal website.
+  MPersonal website of Maxx Turing.
 permalink: ':title'
 # permalink: ':title'
 baseurl: '' # the subpath of your site, e.g. /blog

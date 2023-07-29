@@ -33,7 +33,7 @@ jQuery(document).ready(function($){
 	  var scrollTop = $(this).scrollTop(),
 	      height = header.outerHeight(),
 	      offset = height / 2,
-	      calc = 2.2 - (scrollTop - offset + range) / range;
+	      calc = 2.1 - (scrollTop - offset + range) / range;
 
 	  header.css({ 'opacity': calc });
 

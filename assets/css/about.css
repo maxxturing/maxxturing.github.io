@@ -19,8 +19,12 @@ html * {
 body {
   font-size: 100%;
   font-family: 'Proxima Nova', sans-serif;
-  color: #ffffff;
-  background-color: #222222;
+  color: #212529;
+  background-color: #E8E8E8;
+}
+
+i {
+  color: white;
 }
 
 a {
@@ -41,7 +45,7 @@ h6 {
   /* text-transform: uppercase; */
   font-weight: bold;
   /* letter-spacing: 6px; */
-  color: #ed6f2f;
+  color: #6429E9;
 }
 
 h2 {
@@ -49,7 +53,7 @@ h2 {
   /* font-family: "Oswald", "Helvetica Neue", Helvetica, Arial, sans-serif; */
   font-weight: bold;
   letter-spacing: 1px;
-  color: #ed6f2f;
+  color: #6429E9;
   line-height: 28px;
 }
 
@@ -101,10 +105,10 @@ Main components
 
 -------------------------------- */
 header {
-  height: 200px;
-  line-height: 200px;
+  /* height: 200px; */
+  line-height: 1.6;
   text-align: center;
-  /* background: url(../img/header5.png) no-repeat center scroll; */
+  background: url(../img/banner.png) no-repeat center scroll;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   background-size: cover;
@@ -122,11 +126,11 @@ header {
 } */
 
 header h1 {
-  color: white;
+  color: #212529;
   font-size: 18px;
   font-size: 1.125rem;
-  padding-top: 100px;
-  padding-bottom: 50px;
+  /* padding-top: 10px;
+  padding-bottom: 10px; */
   margin: 0px;
 }
 
@@ -138,7 +142,7 @@ header p {
 }
 @media only screen and (min-width: 1170px) {
   header {
-    height: 300px;
+    /* height: 820px; */
   }
   header h1 {
     font-size: 24px;
@@ -155,7 +159,7 @@ header p {
 }
 
 a {
-  color: #ed6f2f;
+  color: #6429E9;
   -webkit-transition: all 0.2s ease-in-out;
   -moz-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
@@ -163,7 +167,7 @@ a {
 a:hover,
 a:focus {
   text-decoration: none;
-  color: white;
+  color: #2937f0;
 }
 
 .light {
@@ -291,7 +295,7 @@ a:focus {
   left: 18px;
   height: 100%;
   width: 4px;
-  background: #ed6f2f;
+  background: #6429E9;
 }
 @media only screen and (min-width: 1170px) {
   #cd-timeline {
@@ -373,13 +377,13 @@ a:focus {
 }
 
 .cd-timeline-img.cd-picture {
-  background: #ed6f2f;
+  background: #6429E9;
 }
 .cd-timeline-img.cd-movie {
-  background: #ed6f2f;
+  background: #6429E9;
 }
 .cd-timeline-img.cd-location {
-  background: #ed6f2f;
+  background: #6429E9;
 }
 @media only screen and (min-width: 1170px) {
   .cd-timeline-img {
@@ -469,7 +473,8 @@ a:focus {
 .cd-timeline-content {
   position: relative;
   margin-left: 60px;
-  background: #000000;
+  background: white;
+  color: #47515c;
   border-radius: 0.25em;
   padding: 1em;
   -webkit-box-shadow: 0px 0px 26px 3px rgba(0, 0, 0, 0.47);
@@ -482,7 +487,7 @@ a:focus {
   clear: both;
 }
 .cd-timeline-content h2 {
-  color: #ed6f2f;
+  color: #6429E9;
 }
 
 .cd-timeline-content h2 span {
@@ -508,8 +513,8 @@ a:focus {
   float: right;
   padding: 0.8em 1em;
   background: transparent;
-  color: #ed6f2f;
-  border: 1px solid #ed6f2f;
+  color: #6429E9;
+  border: 1px solid #6429E9;
 }
 .no-touch .cd-timeline-content .cd-read-more:hover {
   background-color: #36ffd1;
@@ -519,6 +524,8 @@ a:focus {
   float: left;
   padding: 0.8em 0;
   opacity: 0.7;
+  color: #212529;
+  /* font-weight: 500; */
 }
 .cd-timeline-content::before {
   content: '';

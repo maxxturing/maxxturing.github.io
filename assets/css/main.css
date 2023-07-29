@@ -1062,7 +1062,7 @@ table tfoot td {
 
 .contact ul li {
   display: inline-block;
-  margin-left: 10px;
+  /* margin-left: 10px; */
 }
 
 .contact ul li:first-child {

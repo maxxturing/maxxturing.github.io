@@ -12,7 +12,7 @@ body {
 }
 
 .orange-dot {
-  color: #ed6f2f;
+  color: #6429E9;
 }
 
 .center-bullet {
@@ -93,11 +93,11 @@ hr {
 }
 
 .bg-orange {
-  background-color: #ed6f2f;
+  background-color: #6429E9;
 }
 
 a {
-  color: #ed6f2f;
+  color: #6429E9;
 }
 
 a:hover {
@@ -136,7 +136,7 @@ a:hover {
 
 .navbar-dark .navbar-nav .nav-link:hover {
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
-  color: #ed6f2f;
+  color: #6429E9;
 }
 
 h1 {

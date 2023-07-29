@@ -26,14 +26,14 @@ jQuery(document).ready(function($){
 
 	// opacityonscroll
 	var header = $('header');
-	var range = 200;
+	var range = 300;
 
 	$(window).on('scroll', function () {
 
 	  var scrollTop = $(this).scrollTop(),
 	      height = header.outerHeight(),
 	      offset = height / 2,
-	      calc = 1 - (scrollTop - offset + range) / range;
+	      calc = 2.2 - (scrollTop - offset + range) / range;
 
 	  header.css({ 'opacity': calc });
 

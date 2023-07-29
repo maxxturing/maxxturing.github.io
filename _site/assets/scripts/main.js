@@ -26,7 +26,7 @@ jQuery(document).ready(function($){
 
 	// opacityonscroll
 	var header = $('header');
-	var range = 300;
+	var range = 200;
 
 	$(window).on('scroll', function () {
 

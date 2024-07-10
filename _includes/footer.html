@@ -19,8 +19,7 @@
                 ><i class="fab fa-linkedin fa-fw fa-lg" aria-hidden="true"></i
               ></a>
             </li>
-            {% endif %} 
-            {% if site.social-twitter %}
+            {% endif %} {% if site.social-twitter %}
             <li>
               <a
                 href="https://twitter.com/{{ site.social-twitter }}"
@@ -34,8 +33,7 @@
                 ><i class="fab fa-twitter fa-fw fa-lg" aria-hidden="true"></i
               ></a>
             </li>
-            {% endif %}
-            {% if site.social-instagram %}
+            {% endif %} {% if site.social-instagram %}
             <li>
               <a
                 href="https://instagram.com/{{ site.social-instagram }}"
@@ -49,8 +47,7 @@
                 ><i class="fab fa-instagram fa-fw fa-lg" aria-hidden="true"></i
               ></a>
             </li>
-            {% endif %}
-            {% if site.social-github %}
+            {% endif %} {% if site.social-github %}
             <li class="github">
               <a
                 href="https://github.com/{{site.social-github}}"
@@ -64,23 +61,24 @@
                 ><i class="fab fa-github fa-fw fa-lg" aria-hidden="true"></i
               ></a>
             </li>
-            {% endif %}
-            {% if site.social-cv %}
+            {% endif %} {% if site.social-cv %}
             <li class="cv">
               <a
                 href="https://maxxturing.com/{{site.social-cv}}"
                 target="_blank"
                 ><i class="fa-regular fa-file-lines fa-fw fa-lg"></i
-                  ></a>
+              ></a>
             </li>
             {% else %}
             <li class="cv">
               <a href="https://maxxturing.com/" target="_blank"
-              ><i class="fa-regular fa-file-lines fa-fw fa-lg" aria-hidden="true"></i
-                ></a>
+                ><i
+                  class="fa-regular fa-file-lines fa-fw fa-lg"
+                  aria-hidden="true"
+                ></i
+              ></a>
             </li>
-            {% endif %}
-            {% if site.social-email %}
+            {% endif %} {% if site.social-email %}
             <li class="email">
               <a href="mailto:{{site.social-email}}"
                 ><i class="far fa-envelope fa-fw fa-lg"></i
@@ -98,11 +96,11 @@
         {% include contact.html %}
         <hr
           class="star-primary"
-          style="height: 1px; background-color: #47515C"
+          style="height: 1px; background-color: #47515c"
         />
         <div class="row">
           <div class="col-md-4 offset-md-4">
-            <p class="text-muted">2023 © Maxx Turing</p>
+            <p class="text-muted">2024 © Maxx Turing</p>
           </div>
         </div>
       </div>

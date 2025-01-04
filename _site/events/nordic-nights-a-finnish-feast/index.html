@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="Nordic Nights: A Finnish Feast"
+      content="Nordic Nights: A Finnish Feast"
+    />
+    <meta name="Maxx Turing" content="Maxx Turing" />
+
+    <title>Nordic Nights: A Finnish Feast</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="background">
+      <img
+        src="bg.png"
+        style="display: block; margin: auto; max-height: 50%; max-width: 100%"
+      />
+      <iframe
+        src="https://airtable.com/embed/appip2BLsBBgVz6Ta/shriFWUPBHgGSUbCS"
+        style="
+          position: fixed;
+          width: 100%;
+          height: 50%;
+          border: none;
+          margin: 0;
+          padding: 0;
+          overflow: hidden;
+          z-index: 999999;
+        "
+      >
+        Your browser doesn't support iframes
+      </iframe>
+
+      <canvas
+        id="flowfield"
+        class="flowfield"
+        width="400"
+        height="400"
+        style="z-index: -1"
+      ></canvas>
+    </div>
+
+    <!-- partial -->
+    <script src="https://codepen.io/DonKarlssonSan/pen/jBWaad.js"></script>
+    <script src="https://codepen.io/Tibixx/pen/rRBKBm.js"></script>
+    <script src="./script.js"></script>
+  </body>
+</html>

@@ -1,57 +1,85 @@
 # maxxturing.github.io
 
-Requirements:
+Personal site for Maxx Turing, built with [Jekyll](https://jekyllrb.com/) and
+hosted on GitHub Pages (custom domain `maxxturing.com` via the `CNAME` file).
 
-1. Install Ruby. Mac = already installed? (Check ruby -v in terminal). Windows = https://rubyinstaller.org/downloads/ (pick bold version with devkit)
-2. sudo gem install bundle
-3. sudo bundle install (warning - don't install bundler as root?)
-4. bundle exec jekyll serve (make sure you cd to the right directory)
-5. http://127.0.0.1:4000/
+## Local setup
 
-### Notes:
+GitHub Pages builds the site for you on push — these steps are only for previewing
+changes locally.
 
-- gem install jekyll
-- gem 'jekyll-sitemap'
-- gem 'jekyll-paginate'
-- gem 'jemoji'
+### 1. Use a modern Ruby
 
-### Docs:
+macOS ships an old, deprecated system Ruby (2.6) that **cannot** build this site's
+native gem dependencies. Install a current Ruby with Homebrew:
 
-- https://jekyllrb.com/
-- https://github.com/qwtel/hydejack/issues/8
-- https://stackoverflow.com/questions/10012181/bundle-install-returns-could-not-locate-gemfile
+```bash
+brew install ruby
+```
 
-### Mobile:
+Then put it ahead of the system Ruby on your `PATH`. Add this line to your
+`~/.zshrc` (Apple Silicon path shown; use `/usr/local/opt/ruby/bin` on Intel Macs):
 
-- d-block d-md-none to hide on medium, large and extra large devices.
-- d-none d-md-block to hide on small and extra-small devices.
+```bash
+export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
+```
 
-https://css-tricks.com/snippets/jquery/smooth-scrolling/
+Reload your shell (`source ~/.zshrc`) and confirm you're on the Homebrew Ruby:
 
-# Mobile Web Notes
+```bash
+ruby -v   # should be 3.x / 4.x, not 2.6
+```
 
-<meta name="viewport" content="width=device-width,initial-scale=1">
-img, embed,
-object, video {
-max-width:100%;
-}
+### 2. Install dependencies
 
-# tap target
+From the repo root:
 
-nav a, button {
-min-width: 48px;
-min-height: 48px;
-}
+```bash
+bundle install
+```
 
-room between = 40px
+Gems install into the Homebrew Ruby's user-owned gem directory, so no `sudo`
+is required.
 
-# Media Queries
+### 3. Serve the site
 
-@media screen and (min-width: 500px) {
-.yes {
-opacity: 1;
-}
-.no {
-opacity: 0;
-}
-}
+```bash
+bundle exec jekyll serve
+```
+
+Open http://127.0.0.1:4000/. The server watches for changes and rebuilds
+automatically; stop it with `Ctrl+C`.
+
+To do a one-off build without serving:
+
+```bash
+bundle exec jekyll build   # output goes to _site/ (git-ignored)
+```
+
+## Troubleshooting
+
+- **`make failed` / native extension errors (ffi, nokogiri) during `bundle install`** —
+  you're almost certainly on the old system Ruby. Recheck `ruby -v` (step 1).
+- **`Could not locate Gemfile`** — run commands from the repo root.
+
+## Tech notes
+
+- **Plugins:** `jekyll-sitemap`, `jekyll-paginate`, `jemoji` (see `Gemfile` / `_config.yml`).
+- **Markdown:** kramdown.
+- **Styles:** SCSS under `assets/css/scss/` plus plain CSS in `assets/css/`.
+
+## Reference
+
+- Jekyll docs: https://jekyllrb.com/
+- Smooth scrolling snippet: https://css-tricks.com/snippets/jquery/smooth-scrolling/
+
+### Bootstrap responsive helpers
+
+- `d-block d-md-none` — hide on medium and larger screens.
+- `d-none d-md-block` — hide on small and extra-small screens.
+
+### Mobile / accessibility reminders
+
+- Viewport meta: `<meta name="viewport" content="width=device-width, initial-scale=1">`
+- Keep media responsive: `img, embed, object, video { max-width: 100%; }`
+- Tap targets: `nav a, button { min-width: 48px; min-height: 48px; }` with ~40px spacing.

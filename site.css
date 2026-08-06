@@ -297,13 +297,17 @@ h1,h2,h3{font-weight:600;letter-spacing:-0.03em;line-height:1.02;margin:0;}
   .nav{padding:16px 22px;}
   .nav .links{display:none;}
   .nav .burger{display:inline-block;}
-  .hero-photo,.hero-duoc{width:100%;
-    -webkit-mask-image:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.4) 26%,#000 60%);
-            mask-image:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.4) 26%,#000 60%);}
-  .hero-feather{width:100%;height:60%;top:auto;bottom:0;background:linear-gradient(0deg,#120E0A 8%,rgba(18,14,10,.6) 46%,transparent 100%);}
-  .hero-top{height:24%;}
+  /* mobile hero: photo becomes a banner up top, text stacks below it
+     (so the headline never sits over the face) */
+  .hero{height:auto;min-height:0;padding:0 0 54px;overflow:hidden;}
+  .hero-photo{position:relative;width:100%;height:auto;aspect-ratio:1/1;
+    -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 70%,transparent 100%);
+            mask-image:linear-gradient(180deg,#000 0%,#000 70%,transparent 100%);}
+  .hero-photo img{object-position:50% 30%;transform:none;}
+  .hero-duoc,.hero-top,.hero-feather{display:none;}
+  .hero-inner{position:relative;height:auto;padding:20px 22px 0;justify-content:flex-start;}
   .hero-content{max-width:100%;}
-  .hero{height:auto;min-height:100vh;padding:120px 0 60px;}
+  .hero h1{text-shadow:none;}
   .hero-scroll{display:none;}
   /* keep the two cards, and the two CTAs, side-by-side and equal-width on mobile */
   .hero-cards{flex-wrap:nowrap;gap:10px;}

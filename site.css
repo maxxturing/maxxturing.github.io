@@ -307,7 +307,7 @@ h1,h2,h3{font-weight:600;letter-spacing:-0.03em;line-height:1.02;margin:0;}
   .hero-scroll{display:none;}
   /* keep the two cards, and the two CTAs, side-by-side and equal-width on mobile */
   .hero-cards{flex-wrap:nowrap;gap:10px;}
-  .hero-card{flex:1 1 0;min-width:0;padding:12px 14px;}
+  .hero-card{flex:1 1 0;min-width:0;padding:12px 14px;justify-content:flex-start;align-items:center;text-align:center;}
   .hero-cta{flex-wrap:nowrap;gap:8px;}
   .hero-cta .btn{flex:1 1 0;min-width:0;justify-content:center;padding:13px 10px;font-size:12px;}
   .now-grid,.contact-grid{grid-template-columns:1fr;}

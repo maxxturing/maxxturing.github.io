@@ -108,6 +108,7 @@ h1,h2,h3{font-weight:600;letter-spacing:-0.03em;line-height:1.02;margin:0;}
 .hero-sub{font-size:clamp(16px,1.9vw,19px);color:var(--ink2);max-width:40ch;margin-bottom:32px;line-height:1.5;}
 .hero-cards{display:flex;gap:13px;margin-bottom:34px;flex-wrap:wrap;}
 .hero-card{border-radius:12px;padding:14px 18px;border:1px solid rgba(255,255,255,.18);background:rgba(16,12,8,.5);backdrop-filter:blur(8px);
+  display:flex;flex-direction:column;justify-content:center;
   transition:border-color .2s, transform .2s;}
 .hero-card:hover{border-color:var(--orange);transform:translateY(-3px);}
 .hero-card small{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;}

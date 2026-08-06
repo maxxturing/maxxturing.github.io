@@ -13,7 +13,7 @@
   --sans:"Space Grotesk",system-ui,sans-serif;
 }
 *{box-sizing:border-box;}
-html{scroll-behavior:smooth;}
+html{scroll-behavior:smooth;overflow-x:hidden;}
 body{
   margin:0; background:var(--bg); color:var(--ink);
   font-family:var(--sans); -webkit-font-smoothing:antialiased;
@@ -310,7 +310,7 @@ h1,h2,h3{font-weight:600;letter-spacing:-0.03em;line-height:1.02;margin:0;}
   .comm-grid{grid-template-columns:1fr;}
   .comm-grid .duo{aspect-ratio:16/10;}
   .gal{gap:10px;}
-  .gal .duo{height:200px;}
+  .gal .duo{height:220px;flex:1 1 100%;}
   .gal .g-a,.gal .g-f{grid-row:auto;}
   .section{padding:72px 0;}
 }

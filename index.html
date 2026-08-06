@@ -25,7 +25,7 @@
   <div class="links">
     <a href="#now">Now</a>
     <a href="#communities">Startbook</a>
-    <a href="#fractional">Fractional COO</a>
+    <a href="#fractional-services">Fractional COO</a>
     <a href="#speaking">Speaking</a>
     <a href="#beyond">Beyond work</a>
     <a href="/timeline/">Timeline</a>
@@ -36,7 +36,7 @@
 <div class="mobile-menu" id="mobileMenu">
   <a href="#now">Now</a>
   <a href="#communities">Startbook</a>
-  <a href="#fractional">Fractional COO</a>
+  <a href="#fractional-services">Fractional COO</a>
   <a href="#speaking">Speaking</a>
   <a href="#beyond">Beyond work</a>
   <a href="/timeline/">Timeline</a>
@@ -181,7 +181,7 @@
 </section>
 
 <!-- ============ FRACTIONAL COO ============ -->
-<section class="section" id="fractional" data-screen-label="Fractional COO" style="padding-top:30px;">
+<section class="section" id="fractional-services" data-screen-label="Fractional COO" style="padding-top:30px;">
   <div class="wrap">
     <div class="eyebrow reveal-up">03 — Fractional COO</div>
     <h2 class="reveal-up">Operations for founders — without a full-time hire.</h2>
@@ -319,7 +319,7 @@
   <div class="wrap">
     <div class="contact-grid">
       <div>
-        <div class="eyebrow reveal-up">06 — Get in touch</div>
+        <div class="eyebrow reveal-up">Get in touch</div>
         <h2 class="reveal-up">Let's talk.</h2>
         <p class="lead reveal-up" data-delay="1">Building something, hiring, or just want to compare notes? I'm always happy to hear from founders and fellow operators.</p>
         <div class="links-list reveal-up" data-delay="2">
@@ -366,6 +366,13 @@
   const menu = document.getElementById('mobileMenu');
   burger.addEventListener('click', () => menu.classList.toggle('open'));
   menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => menu.classList.remove('open')));
+
+  // logo → smooth-scroll to top without leaving "#top" in the URL
+  document.querySelector('.nav .logo').addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    history.replaceState(null, '', location.pathname + location.search);
+  });
 
   // reveal on scroll
   const io = new IntersectionObserver((entries) => {

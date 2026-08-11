@@ -14,6 +14,8 @@
 }
 *{box-sizing:border-box;}
 html{scroll-behavior:smooth;overflow-x:hidden;}
+/* anchor jumps clear the fixed nav */
+section[id],header[id]{scroll-margin-top:78px;}
 body{
   margin:0; background:var(--bg); color:var(--ink);
   font-family:var(--sans); -webkit-font-smoothing:antialiased;
@@ -111,6 +113,7 @@ h1,h2,h3{font-weight:600;letter-spacing:-0.03em;line-height:1.02;margin:0;}
   display:flex;flex-direction:column;justify-content:center;
   transition:border-color .2s, transform .2s;}
 .hero-card:hover{border-color:var(--orange);transform:translateY(-3px);}
+.hero-card:focus-visible{outline:2px solid var(--orange);outline-offset:3px;}
 .hero-card small{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;}
 .hero-card strong{font-size:15px;font-weight:600;}
 .hero-cta{display:flex;gap:14px;flex-wrap:wrap;}

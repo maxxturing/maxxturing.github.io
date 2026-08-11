@@ -5,6 +5,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 :root{
+  /* tells the browser this page is dark: canvas, scrollbars, overscroll
+     gutters and form controls all follow, instead of defaulting to white */
+  color-scheme:dark;
   --bg:#120E0A; --bg2:#171109; --panel:#1E1710; --panel2:#241C13;
   --line:#2E2820; --line2:#3A3328;
   --ink:#FBEFE4; --ink2:#E2D4C4; --muted:#A89684; --muted2:#7E7060;
@@ -13,9 +16,13 @@
   --sans:"Space Grotesk",system-ui,sans-serif;
 }
 *{box-sizing:border-box;}
-html{scroll-behavior:smooth;overflow-x:hidden;}
-/* anchor jumps clear the fixed nav */
-section[id],header[id]{scroll-margin-top:78px;}
+html{scroll-behavior:smooth;overflow-x:hidden;background:var(--bg);}
+/* Anchor jumps clear the fixed nav. Sections carry their own top padding,
+   so the offset is discounted by it — otherwise a section with the full
+   110px padding drops its heading 80px lower than one overridden to 30px. */
+:root{--anchor-offset:78px;}
+section[id],header[id]{scroll-margin-top:var(--anchor-offset);}
+#now,#contact{scroll-margin-top:calc(var(--anchor-offset) - 80px);}
 body{
   margin:0; background:var(--bg); color:var(--ink);
   font-family:var(--sans); -webkit-font-smoothing:antialiased;

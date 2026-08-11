@@ -221,6 +221,43 @@ h1,h2,h3{font-weight:600;letter-spacing:-0.03em;line-height:1.02;margin:0;}
 }
 
 /* ============================================================
+   SECTION HEADER SPLIT (copy left, media right)
+   ============================================================ */
+.sec-split{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center;}
+.sec-split .lead{max-width:none;}
+
+/* ---------- click-to-play video ---------- */
+.vid{margin:0;}
+.vid-frame{display:block;position:relative;width:100%;padding:0;border:1px solid var(--line);border-radius:18px;
+  overflow:hidden;background:#0E0A06;cursor:pointer;aspect-ratio:16/9;
+  transition:border-color .25s,transform .25s,box-shadow .25s;}
+.vid-frame img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.2,.7,.2,1),filter .35s;}
+.vid-frame::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,14,10,.1),rgba(18,14,10,.45));
+  opacity:.75;transition:opacity .35s;}
+.vid-frame:hover{border-color:var(--orange);transform:translateY(-3px);box-shadow:0 22px 50px -26px rgba(0,0,0,.9);}
+.vid-frame:hover img{transform:scale(1.03);}
+.vid-frame:hover::after{opacity:.45;}
+.vid-frame:focus-visible{outline:2px solid var(--orange);outline-offset:3px;}
+.vid-play{position:absolute;left:20px;bottom:20px;z-index:2;
+  width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:var(--orange);color:#120E0A;box-shadow:0 10px 34px -8px rgba(255,138,51,.7);
+  transition:transform .25s cubic-bezier(.2,.7,.2,1);}
+.vid-play svg{width:24px;height:24px;margin-left:3px;display:block;}
+.vid-frame:hover .vid-play{transform:scale(1.08);}
+.vid-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
+.vid-frame.is-playing{cursor:default;border-color:var(--line2);}
+.vid-frame.is-playing:hover{transform:none;box-shadow:none;border-color:var(--line2);}
+.vid-frame.is-playing::after{display:none;}
+.vid figcaption{margin-top:12px;font-family:var(--mono);font-size:12.5px;color:var(--muted);}
+.vid figcaption a{color:var(--muted);border-bottom:1px solid var(--line2);transition:color .2s,border-color .2s;}
+.vid figcaption a:hover{color:var(--orange);border-color:var(--orange);}
+@media(max-width:900px){
+  .sec-split{grid-template-columns:1fr;gap:32px;}
+  .vid-play{width:50px;height:50px;left:16px;bottom:16px;}
+  .vid-play svg{width:21px;height:21px;}
+}
+
+/* ============================================================
    SPEAKING & TEACHING
    ============================================================ */
 .sp-grid{display:grid;grid-template-columns:1.25fr 0.75fr;gap:42px;margin-top:54px;align-items:start;}

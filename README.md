@@ -56,6 +56,34 @@ To do a one-off build without serving:
 bundle exec jekyll build   # output goes to _site/ (git-ignored)
 ```
 
+## Shared blocks (`_partials/`)
+
+`index.html` and `timeline/index.html` are hand-written static pages with no YAML
+front matter, so Jekyll copies them verbatim and `{% include %}` never runs in
+them. Blocks that appear on both pages live in `_partials/` instead, and each page
+marks the region it borrows:
+
+```html
+<!-- @partial:contact -->
+...generated — edit _partials/contact.html, not this...
+<!-- /@partial:contact -->
+```
+
+Edit the file in `_partials/`, then rewrite both pages:
+
+```bash
+python3 tools/sync-partials.py           # rewrite every marked region
+python3 tools/sync-partials.py --check   # exit 1 if a region is stale
+```
+
+`_partials/` starts with an underscore, so Jekyll never publishes it. To catch a
+forgotten sync before it ships, wire the check into a local pre-commit hook:
+
+```bash
+printf '#!/bin/sh\npython3 tools/sync-partials.py --check\n' > .git/hooks/pre-commit
+chmod +x .git/hooks/pre-commit
+```
+
 ## Troubleshooting
 
 - **`make failed` / native extension errors (ffi, nokogiri) during `bundle install`** —

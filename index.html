@@ -5,7 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Maxx Turing — Founder & Operator</title>
 <meta name="description" content="Maxx Turing — tech entrepreneur helping other founders succeed. Founder at Startbook and fractional COO for early-stage teams." />
-<link rel="icon" type="image/png" href="assets/img/favicon.png" />
+<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
 <meta property="og:type" content="website" />
 <meta property="og:title" content="Maxx Turing — Founder & Operator" />
 <meta property="og:description" content="Tech entrepreneur helping other founders succeed. Founder at Startbook and fractional COO for early-stage teams." />
@@ -128,9 +132,20 @@
 <!-- ============ FOUNDER COMMUNITIES ============ -->
 <section class="section" id="communities" data-screen-label="Why Startbook" style="padding-top:30px;">
   <div class="wrap">
-    <div class="eyebrow reveal-up">02 — Why Startbook</div>
-    <h2 class="reveal-up">A decade in founder communities — now I'm building the tools behind them.</h2>
-    <p class="lead reveal-up" data-delay="1">I've spent over ten years as part of, and managing, the communities that back early-stage founders — Entrepreneurs First, the Centre for Entrepreneurs, The Family and more. <strong>Startbook</strong> is where all of that comes together: software that helps incubators and accelerators digitise, run and grow their entrepreneurial ecosystems.</p>
+    <div class="sec-split">
+      <div class="sec-split-copy">
+        <div class="eyebrow reveal-up">02 — Why Startbook</div>
+        <h2 class="reveal-up">A decade in founder communities — now I'm building the tools behind them.</h2>
+        <p class="lead reveal-up" data-delay="1">I've spent over ten years as part of, and managing, the communities that back early-stage founders — Entrepreneurs First, the Centre for Entrepreneurs, The Family and more. <strong>Startbook</strong> is where all of that comes together: software that helps incubators and accelerators digitise, run and grow their entrepreneurial ecosystems.</p>
+      </div>
+      <figure class="vid reveal-up" data-delay="2">
+        <button class="vid-frame" type="button" data-yt="QSsK0vooHao" data-title="⚡ Startbook for Schools" aria-label="Play video: Startbook for Schools">
+          <img src="assets/img/yt-startbook-for-schools.jpg" alt="Startbook for Schools" loading="lazy" width="1280" height="720" />
+          <span class="vid-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.2v13.6L19 12z"/></svg></span>
+        </button>
+        <figcaption>⚡ Startbook for Schools — <a href="https://www.youtube.com/watch?v=QSsK0vooHao" target="_blank" rel="noopener">watch on YouTube ↗</a></figcaption>
+      </figure>
+    </div>
     <div class="sp-grid">
       <div class="sp-photo reveal-up" data-delay="1">
         <div class="sp-stage" id="commStage">
@@ -344,6 +359,7 @@
 </section>
 
 <!-- ============ CONTACT ============ -->
+<!-- @partial:contact -->
 <section class="contact" id="contact" data-screen-label="Contact">
   <div class="wrap">
     <div class="contact-grid">
@@ -380,6 +396,7 @@
     </div>
   </div>
 </section>
+<!-- /@partial:contact -->
 
 <template id="__bundler_thumbnail">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#120E0A"/><text x="50" y="46" font-family="monospace" font-size="13" fill="#FF8A33" text-anchor="middle" font-weight="700">maxx</text><text x="50" y="62" font-family="monospace" font-size="13" fill="#FBEFE4" text-anchor="middle">.turing</text></svg>
@@ -409,6 +426,21 @@
     entries.forEach(e => { if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
   }, {threshold:0.14, rootMargin:'0px 0px -8% 0px'});
   document.querySelectorAll('.reveal-up').forEach(el => io.observe(el));
+
+  // click-to-play video — no YouTube player is loaded until someone asks for it
+  document.querySelectorAll('.vid-frame').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const frame = document.createElement('iframe');
+      frame.src = `https://www.youtube-nocookie.com/embed/${btn.dataset.yt}?autoplay=1&rel=0`;
+      frame.title = btn.dataset.title || 'Video';
+      frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+      frame.allowFullscreen = true;
+      const holder = document.createElement('div');
+      holder.className = 'vid-frame is-playing';
+      holder.appendChild(frame);
+      btn.replaceWith(holder);
+    }, {once:true});
+  });
 
   // contact form → Web3Forms
   document.getElementById('contactForm').addEventListener('submit', async (e) => {

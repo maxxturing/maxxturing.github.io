@@ -431,7 +431,12 @@
   }, {threshold:0.14, rootMargin:'0px 0px -8% 0px'});
   document.querySelectorAll('.reveal-up').forEach(el => io.observe(el));
 
-  // Gallery tiles that hold a clip: play on hover, click to toggle sound.
+  // A real pointer that can hover gets hover behaviour; everything else is
+  // driven by taps, which have to toggle rather than only turn things on.
+  const canHover = window.matchMedia('(hover: hover)').matches;
+
+  // Gallery tiles that hold a clip. On a mouse: play on hover, click for sound,
+  // leaving stops it. On touch: tap to play, tap again to stop, badge for sound.
   // preload="none" means the file is only fetched once someone asks for it.
   // Browsers refuse play() with audio until the page has been interacted with,
   // so we try with sound and fall back to muted rather than failing to play.
@@ -459,6 +464,14 @@
       count.replaceChildren(tick);
     };
 
+    const soundLabel = () =>
+      label(v.muted ? (canHover ? '🔇 click for sound' : '🔇 tap for sound') : '🔊 sound on');
+    const toggleSound = () => {
+      wantSound = v.muted;
+      v.muted = !v.muted;               // a click is a gesture, so this always sticks
+      soundLabel();
+    };
+
     const play = async () => {
       fig.classList.add('vid-on');
       v.volume = 0.85;                      // clips are loudness-matched to -18 LUFS
@@ -469,7 +482,7 @@
         v.muted = true;                       // blocked with audio — go quiet, keep playing
         try { await v.play(); } catch (e2) { fig.classList.remove('vid-on'); return; }
       }
-      label(v.muted ? '🔇 click for sound' : '🔊 sound on');
+      soundLabel();
     };
     const stop = () => {
       clearTimers();
@@ -495,19 +508,29 @@
       timers.push(setTimeout(() => { fig.classList.remove('counting'); play(); }, 2000));
     };
 
-    if (window.matchMedia('(hover: hover)').matches) {
-      fig.addEventListener('mouseenter', countIn);
-      fig.addEventListener('mouseleave', stop);
+    if (canHover) {
+      fig.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') countIn(); });
+      fig.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') stop(); });
     }
+    // With no pointer to leave, a tap has to be able to stop the clip — so the
+    // badge takes over as the sound control, which is what its label already
+    // says it is. On a mouse the tile itself keeps doing sound, since leaving
+    // the tile is what stops playback.
+    if (badge) badge.addEventListener('click', e => {
+      if (v.paused || fig.classList.contains('counting')) return;   // let the tile handle starting
+      e.stopPropagation();
+      toggleSound();
+    });
     fig.addEventListener('click', () => {
-      if (fig.classList.contains('counting')) {             // clicking skips the wait
+      if (fig.classList.contains('counting')) {             // tapping skips the wait
         clearTimers(); fig.classList.remove('counting');
         wantSound = true; play(); return;
       }
-      if (v.paused) { wantSound = true; play(); return; }   // touch: first tap starts it
-      wantSound = v.muted;
-      v.muted = !v.muted;                                   // a click is a gesture, so this always sticks
-      label(v.muted ? '🔇 click for sound' : '🔊 sound on');
+      // the tile's own state, not v.paused — a clip that is still decoding is
+      // paused but already running, and a second tap then has to stop it
+      if (!fig.classList.contains('vid-on')) { wantSound = true; play(); return; }
+      if (!canHover) { stop(); return; }                    // touch: a second tap stops it
+      toggleSound();
     });
   });
 
@@ -577,19 +600,29 @@
     };
   })();
 
-  // "shot of the day": hover fires it on desktop — the flash is pure CSS, so
-  // only the sound needs a listener. Touch has no hover, so tapping toggles it.
-  const canHover = window.matchMedia('(hover: hover)').matches;
-  document.querySelectorAll('.gal .duo.has-shot').forEach(fig => {
-    if (canHover) fig.addEventListener('mouseenter', shutter);
-    else fig.addEventListener('click', () => { if (fig.classList.toggle('shot-on')) shutter(); });
-  });
-  // the macro loupe is hover-only too, and needs the same touch fallback
-  if (!canHover) {
-    document.querySelectorAll('.gal .duo.has-macro').forEach(fig => {
-      fig.addEventListener('click', () => fig.classList.toggle('macro-on'));
+  // The two reveal tiles — "shot of the day" and the macro loupe — hold their
+  // state in a class rather than in CSS :hover, so a phone can toggle them off
+  // again. Pointer events are used rather than mouseenter/click alone because
+  // only they carry pointerType: a tap fires mouseenter too, so a mouse-shaped
+  // listener would open the tile and then the tap would immediately close it.
+  document.querySelectorAll('.gal .duo.has-shot, .gal .duo.has-macro').forEach(fig => {
+    const shot = fig.classList.contains('has-shot');
+    const cls = shot ? 'shot-on' : 'macro-on';
+    const fire = () => { if (shot) shutter(); };
+
+    fig.addEventListener('pointerenter', e => {
+      if (e.pointerType !== 'mouse') return;      // touch gets the tap handler below
+      fig.classList.add(cls); fire();
     });
-  }
+    fig.addEventListener('pointerleave', e => {
+      if (e.pointerType !== 'mouse') return;
+      fig.classList.remove(cls);
+    });
+    fig.addEventListener('click', e => {
+      if (e.pointerType === 'mouse') return;      // a mouse already has enter/leave
+      if (fig.classList.toggle(cls)) fire();      // tap on, tap off
+    });
+  });
 
   // click-to-play video — no YouTube player is loaded until someone asks for it
   document.querySelectorAll('.vid-frame').forEach(btn => {

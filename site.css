@@ -314,6 +314,12 @@ h1,h2,h3{font-weight:600;letter-spacing:-0.03em;line-height:1.02;margin:0;}
    brackets mark the subject and the close-up grows out of them as a print.
    .shot-on is the tap equivalent of :hover for touch, where there is none. */
 
+/* These two reveal tiles are driven by a class, never by :hover. A tap on a
+   phone leaves a sticky :hover on the tile, which would hold the reveal open
+   after the class had been toggled off — so it would open once and never
+   close. The page script adds the class on a mouse pointer entering and on a
+   tap, and removes it on leaving or a second tap. */
+
 /* The brackets have to sit on the animal, but the tile flexes wider than the
    square photo, so object-fit crops it. This box reproduces the cover geometry
    exactly — for a square source it is max(tile width, tile height) square,
@@ -321,7 +327,6 @@ h1,h2,h3{font-weight:600;letter-spacing:-0.03em;line-height:1.02;margin:0;}
 .gal .duo.has-shot .shot-space{position:absolute;left:50%;top:50%;z-index:4;pointer-events:none;
   width:max(100%,300px);aspect-ratio:1;transform:translate(-50%,-50%);
   transition:transform .9s cubic-bezier(.2,.7,.2,1);}
-.gal .duo.has-shot:hover .shot-space,
 .gal .duo.has-shot.shot-on .shot-space{transform:translate(-50%,-50%) scale(1.05);}
 
 /* the animal, as a fraction of the photo */
@@ -333,9 +338,7 @@ h1,h2,h3{font-weight:600;letter-spacing:-0.03em;line-height:1.02;margin:0;}
 .shot-mark i:nth-child(2){right:0;top:0;border-left:0;border-bottom:0;}
 .shot-mark i:nth-child(3){left:0;bottom:0;border-right:0;border-top:0;}
 .shot-mark i:nth-child(4){right:0;bottom:0;border-left:0;border-top:0;}
-.gal .duo.has-shot:hover .shot-mark,
 .gal .duo.has-shot.shot-on .shot-mark{opacity:1;transform:scale(1.06);}
-.gal .duo.has-shot:hover .shot-mark i,
 .gal .duo.has-shot.shot-on .shot-mark i{border-color:var(--orange);}
 
 /* the print: springs up out of the brackets and settles top-centre — the gap
@@ -350,32 +353,26 @@ h1,h2,h3{font-weight:600;letter-spacing:-0.03em;line-height:1.02;margin:0;}
 /* The sound is two focus beeps and then the shot, so the picture has to wait
    for the shutter rather than firing on the hover: both are held to .2s, which
    is where the shutter lands (SHOT_AT in the page script, plus its 20ms lead). */
-.gal .duo.has-shot:hover .shot-print,
 .gal .duo.has-shot.shot-on .shot-print{opacity:1;transform:translate(-50%,0) scale(1) rotate(-2deg);
   transition-delay:.2s;}
 /* the flash: one white blink as the shutter fires, then it's gone */
 .shot-flash{position:absolute;inset:0;z-index:7;background:#fff;opacity:0;pointer-events:none;}
-.gal .duo.has-shot:hover .shot-flash,
 .gal .duo.has-shot.shot-on .shot-flash{animation:shotFlash .46s ease-out .2s;}
 @keyframes shotFlash{0%{opacity:0}7%{opacity:.92}22%{opacity:.34}100%{opacity:0}}
 /* context dims so the full-colour print reads as the output */
-.gal .duo.has-shot:hover>img,
+.gal .duo.has-shot.shot-on::after{opacity:0;}
 .gal .duo.has-shot.shot-on>img{filter:grayscale(.15) brightness(.62) contrast(1.02);}
 /* badge sits left here so the print never lands on it, and clears on reveal */
 .gal .duo.has-shot .gal-badge{right:12px;left:auto;}
-.gal .duo.has-shot:hover .gal-badge,
 .gal .duo.has-shot.shot-on .gal-badge{opacity:0;}
 /* two captions: the setup, then the payoff */
 .gal .duo.has-shot figcaption .cap-b{display:none;}
-.gal .duo.has-shot:hover figcaption .cap-a,
 .gal .duo.has-shot.shot-on figcaption .cap-a{display:none;}
-.gal .duo.has-shot:hover figcaption .cap-b,
 .gal .duo.has-shot.shot-on figcaption .cap-b{display:inline;}
 @media(prefers-reduced-motion:reduce){
   .gal .duo.has-shot .shot-print{transition:opacity .3s ease;transform:translate(-50%,0) rotate(-2deg);}
   .gal .duo.has-shot .shot-space,.shot-mark{transition:none;}
   /* no blink for anyone who asked for less motion */
-  .gal .duo.has-shot:hover .shot-flash,
   .gal .duo.has-shot.shot-on .shot-flash{animation:none;}
 }
 
@@ -391,18 +388,13 @@ h1,h2,h3{font-weight:600;letter-spacing:-0.03em;line-height:1.02;margin:0;}
   transition:transform .55s cubic-bezier(.2,1.25,.4,1),opacity .3s ease;}
 /* 460% = 4.6×; the offsets are 50% − (37.5% × 4.6) and 50% − (61% × 4.6) */
 .gal .duo.has-macro .macro-glass img{position:absolute;left:-122.5%;top:-230.6%;width:460%;max-width:none;}
-.gal .duo.has-macro:hover .macro-glass,
 .gal .duo.has-macro.macro-on .macro-glass{opacity:1;transform:translate(-50%,-50%) scale(1);}
 /* the frame drops back so the glass is the only thing in focus */
-.gal .duo.has-macro:hover>img,
 .gal .duo.has-macro.macro-on>img{filter:grayscale(0) contrast(1.02) brightness(.66);transform:scale(1.02);}
-/* tapping is the touch equivalent of hovering, so clear the duotone wash too */
 .gal .duo.has-macro.macro-on::after{opacity:0;}
 .gal .duo.has-macro .macro-tag{position:absolute;right:14px;top:16px;z-index:6;font-size:11px;letter-spacing:.16em;
   color:#fff;opacity:0;text-shadow:0 1px 10px rgba(0,0,0,.9);transition:opacity .3s ease .15s;}
-.gal .duo.has-macro:hover .macro-tag,
 .gal .duo.has-macro.macro-on .macro-tag{opacity:1;}
-.gal .duo.has-macro:hover .gal-badge,
 .gal .duo.has-macro.macro-on .gal-badge{opacity:0;}
 @media(prefers-reduced-motion:reduce){
   .gal .duo.has-macro .macro-glass{transition:opacity .3s ease;transform:translate(-50%,-50%);}

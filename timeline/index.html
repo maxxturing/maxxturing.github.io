@@ -113,7 +113,11 @@
   .tl-rebrand .lg img{width:100%;height:100%;object-fit:contain;}
   .tl-rebrand .lg.tribe{background:#F5643B;}
   .tl-rebrand .arrow{font-family:var(--mono);font-size:26px;color:var(--orange);flex:none;}
-  @media(max-width:600px){.tl-rebrand .arrow{transform:rotate(90deg);}}
+  @media(max-width:600px){
+    .tl-rebrand{flex-direction:column;flex-wrap:nowrap;gap:14px;padding:22px 18px;}
+    .tl-rebrand .lg{flex:none;width:100%;max-width:220px;height:104px;}
+    .tl-rebrand .arrow{transform:rotate(90deg);line-height:1;}
+  }
   .tl-embed{margin-top:18px;display:flex;justify-content:center;}
   .tl-embed iframe{width:100%;max-width:400px;height:560px;border:1px solid var(--line);border-radius:12px;background:#fff;}
   .tl-video{margin-top:18px;position:relative;width:100%;aspect-ratio:16/9;border-radius:12px;overflow:hidden;border:1px solid var(--line);}
@@ -153,13 +157,27 @@
   .tl-carousel{margin-top:18px;display:flex;align-items:center;gap:10px;}
   .tl-car-viewport{overflow:hidden;flex:1;}
   .tl-car-track{display:flex;gap:12px;transition:transform .45s cubic-bezier(.3,.7,.2,1);}
-  .tl-car-track>iframe{flex:0 0 calc(50% - 6px);height:480px;border:1px solid var(--line);border-radius:12px;background:#fff;}
-  .tl-car-track>figure{flex:0 0 calc(50% - 6px);margin:0;}
-  .tl-car-track>figure img{height:300px;object-fit:cover;}
+  /* min-width:0 so the iframe's 300px intrinsic width can't overrule its flex-basis on narrow screens */
+  .tl-car-track>iframe{flex:0 0 calc(50% - 6px);min-width:0;height:480px;border:1px solid var(--line);border-radius:12px;background:#fff;}
+  .tl-car-track>figure{flex:0 0 calc(50% - 6px);min-width:0;margin:0;}
+  /* A ratio, not a fixed height: the frame then follows the slide width instead
+     of turning portrait on a narrow screen and cropping the sides off a group
+     shot. 3:2 suits the sources here, which run 1.24–1.78. */
+  .tl-car-track>figure img{width:100%;aspect-ratio:3/2;height:auto;object-fit:cover;}
+  /* the one portrait source (a leaflet) sits inside the frame instead of being cropped by it */
+  .tl-car-track>figure.pad img{object-fit:contain;}
   .tl-car-btn{flex:none;width:42px;height:42px;border-radius:50%;border:1px solid var(--line2);background:var(--panel);color:var(--ink);font-family:var(--mono);font-size:18px;cursor:pointer;transition:border-color .2s,color .2s;display:flex;align-items:center;justify-content:center;}
   .tl-car-btn:hover{border-color:var(--orange);color:var(--orange);}
   .tl-car-btn:disabled{opacity:.35;cursor:default;border-color:var(--line);color:var(--muted2);}
-  @media(max-width:600px){.tl-car-track>iframe{flex-basis:100%;}}
+  /* one slide per view on mobile — the JS reads the slide width, so this is the only place the count lives.
+     The arrows sit over the slide rather than beside it, so the photo keeps the card's full width. */
+  @media(max-width:600px){
+    .tl-car-track>iframe,.tl-car-track>figure{flex-basis:100%;}
+    .tl-carousel{position:relative;gap:0;}
+    .tl-car-btn{position:absolute;top:50%;transform:translateY(-50%);z-index:2;width:34px;height:34px;font-size:16px;background:rgba(18,14,10,.72);}
+    .tl-car-prev{left:8px;}
+    .tl-car-next{right:8px;}
+  }
   .tl-docs{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:12px;}
   .tl-doc{display:flex;align-items:center;gap:16px;border:1px solid var(--line);border-radius:12px;padding:20px;background:var(--panel);transition:border-color .2s,background .2s,transform .2s;}
   .tl-doc:hover{border-color:var(--orange);background:var(--panel2);transform:translateY(-2px);}
@@ -169,12 +187,12 @@
   .tl-doc-meta span{font-family:var(--mono);font-size:11.5px;color:var(--muted);}
   .tl-doc-open{flex:none;font-family:var(--mono);font-size:12.5px;color:var(--muted);transition:color .2s;}
   .tl-doc:hover .tl-doc-open{color:var(--orange);}
-  .tl-videolink{margin-top:18px;display:block;position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--line);aspect-ratio:16/9;}
-  .tl-videolink img{width:100%;height:100%;object-fit:cover;filter:grayscale(.4) sepia(.3) saturate(1.2) hue-rotate(-8deg) brightness(.85);transition:filter .3s, transform .5s;}
-  .tl-videolink:hover img{filter:none;transform:scale(1.03);}
-  .tl-videolink::after{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:74px;height:74px;border-radius:50%;background:var(--orange);box-shadow:0 8px 30px rgba(0,0,0,.5);}
-  .tl-videolink::before{content:"";position:absolute;z-index:2;left:50%;top:50%;transform:translate(-40%,-50%);border-style:solid;border-width:15px 0 15px 26px;border-color:transparent transparent transparent #120E0A;}
-  .tl-videolink .vl-cap{position:absolute;z-index:2;left:16px;bottom:14px;font-family:var(--mono);font-size:12px;color:#fff;text-shadow:0 1px 10px rgba(0,0,0,.7);}
+  /* click-to-play embed (.vid/.vid-frame live in site.css) sat in a card:
+     match the 16px rhythm of .tl-figure, and the card's 12px corner radius */
+  .tl-vid{margin:16px 0 0;}
+  .tl-vid .vid-frame{border-radius:12px;}
+  .tl-vid .vid-play{width:48px;height:48px;}
+  .tl-vid .vid-play svg{width:20px;height:20px;}
   @media(max-width:600px){.tl-docs{grid-template-columns:1fr;}}
   .tl-item.is-hidden{display:none;}
   .tl-stats{margin-top:16px;border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:22px 24px;}
@@ -309,9 +327,9 @@ const DATA = [
   {d:'Dec', y:'2022', cat:['politics'], st:'Paused political campaigning', sb:"Stepped back from local campaigning to refocus on growing Startbook.", t:'Took Hiatus From Political Campaigning', b:`<p>Having spent ~2 years dipping my toes into the world of local politics, I decided to renew my focus as 2023 approached. I hit pause on the part-time political campaigning work I had been doing with the Islington Liberal Democrats in order to spend more of my time growing my business, <a href="https://startbook.co.uk/" target="_blank" rel="noopener">Startbook</a>.</p>`},
   {d:'Jun', y:'2022', cat:['venture'], st:'The Tribe becomes Startbook', sb:"Rebranded fully around software for incubators and accelerators.", t:'The Tribe rebrands to Startbook', b:`<p>We decided to adapt our brand to lean more towards our focus of creating software for incubators and accelerators. <a href="https://startbook.co.uk/platform/" target="_blank" rel="noopener">The Startbook Platform</a> allows our clients to easily digitise, share and manage the data of their entrepreneurial ecosystems.</p><div class="tl-rebrand"><span class="lg tribe"><img src="/assets/img/logo-tribe.png" alt="The Tribe logo" /></span><span class="arrow">⟶</span><span class="lg book"><img src="/assets/img/logo-startbook.png" alt="Startbook logo" /></span></div>`},
   {d:'May', y:'2022', cat:['politics'], st:'Best Lib Dem result since 2014', sb:"The Lib Dems' best Islington result since 2014 — ~32% in St Mary's & St James'.", t:'Secured 991 Votes in May 2022 Local Elections', b:`<div class="tl-split top"><div class="tl-split-text"><p>We didn't win, but we collectively achieved the best electoral result the Liberal Democrats had in Islington since 2014, taking home ~32% of the vote in <a href="https://stmstj.votemaxx.com/" target="_blank" rel="noopener">St Mary's &amp; St James'</a>.</p><p>Individually, I achieved a similar level of votes to my co-candidates, despite the fact that they had been established candidates for several years.</p><p>You can view the full electoral results here: <a href="https://votemaxx.com/2022-results" target="_blank" rel="noopener">votemaxx.com/2022-results</a><br/>You can read the manifesto for the campaign here: <a href="https://votemaxx.com/manifesto" target="_blank" rel="noopener">votemaxx.com/manifesto</a></p><p>We campaigned over several months on a number of issues including reducing litter and improving affordable cycle parking. The overarching theme of the campaign focused on ensuring residents were being heard and respected via methods such as citizen's assemblies; a big issue present at the time was the divisiveness of the newly-introduced 'Low-traffic Neighbourhoods' in Islington.</p></div><div class="tl-split-ig"><div class="tl-embed"><iframe src="https://www.instagram.com/p/CdV3FtAOmWd/embed" loading="lazy" allowtransparency="true" frameborder="0" scrolling="no"></iframe></div></div></div>`},
-  {d:'Apr', y:'2022', cat:['politics'], st:'Target-ward candidate, 2022', sb:"Selected to stand in the Lib Dems' target ward for the local elections.", t:'Selected as Target Ward Candidate in 2022 Local Elections', b:`<p>After consolidating the vote in the Islington Bunhill by-election in May 2021, I was selected again by the <a href="https://www.liberalislington.com/" target="_blank" rel="noopener">Islington Liberal Democrats</a> as a candidate for the campaign's target ward, <a href="https://stmstj.votemaxx.com/" target="_blank" rel="noopener">St Mary's &amp; St James'</a>, alongside Kate Pothalingam and Terry Stacy MBE as part of the 2022 Local Elections in <a href="https://islington.votemaxx.com/" target="_blank" rel="noopener">Islington</a>.</p><div class="tl-carousel"><button class="tl-car-btn tl-car-prev" aria-label="Previous">‹</button><div class="tl-car-viewport"><div class="tl-car-track"><figure class="tl-figure"><img src="/assets/img/tl-candidates.jpg" alt="The three Liberal Democrat candidates outside Islington Town Hall" /><figcaption>The candidate team · Islington Town Hall</figcaption></figure><figure class="tl-figure"><img src="/assets/img/tl-canvass2022.jpg" alt="The campaign team out canvassing" /><figcaption>Out with the campaign team</figcaption></figure><figure class="tl-figure"><img src="/assets/img/tl-leaflet2022.jpg" alt="2022 Vote Lib Dem leaflet" /><figcaption>The St Mary's &amp; St James' campaign leaflet</figcaption></figure><figure class="tl-figure"><img src="/assets/img/tl-canvass2022b.jpg" alt="Evening canvassing with the team" /><figcaption>Out canvassing after dark</figcaption></figure><figure class="tl-figure"><img src="/assets/img/tl-canvass2022c.jpg" alt="The campaign team on the high street" /><figcaption>Street stall with the team</figcaption></figure><figure class="tl-figure"><img src="/assets/img/tl-canvass2022d.jpg" alt="The campaign team on the green" /><figcaption>On the campaign trail · Islington Green</figcaption></figure></div></div><button class="tl-car-btn tl-car-next" aria-label="Next">›</button></div>`},
+  {d:'Apr', y:'2022', cat:['politics'], st:'Target-ward candidate, 2022', sb:"Selected to stand in the Lib Dems' target ward for the local elections.", t:'Selected as Target Ward Candidate in 2022 Local Elections', b:`<p>After consolidating the vote in the Islington Bunhill by-election in May 2021, I was selected again by the <a href="https://www.liberalislington.com/" target="_blank" rel="noopener">Islington Liberal Democrats</a> as a candidate for the campaign's target ward, <a href="https://stmstj.votemaxx.com/" target="_blank" rel="noopener">St Mary's &amp; St James'</a>, alongside Kate Pothalingam and Terry Stacy MBE as part of the 2022 Local Elections in <a href="https://islington.votemaxx.com/" target="_blank" rel="noopener">Islington</a>.</p><div class="tl-carousel"><button class="tl-car-btn tl-car-prev" aria-label="Previous">‹</button><div class="tl-car-viewport"><div class="tl-car-track"><figure class="tl-figure"><img src="/assets/img/tl-candidates.jpg" alt="The three Liberal Democrat candidates outside Islington Town Hall" /><figcaption>The candidate team · Islington Town Hall</figcaption></figure><figure class="tl-figure"><img src="/assets/img/tl-canvass2022.jpg" alt="The campaign team out canvassing" /><figcaption>Out with the campaign team</figcaption></figure><figure class="tl-figure pad"><img src="/assets/img/tl-leaflet2022.jpg" alt="2022 Vote Lib Dem leaflet" /><figcaption>The St Mary's &amp; St James' campaign leaflet</figcaption></figure><figure class="tl-figure"><img src="/assets/img/tl-canvass2022b.jpg" alt="Evening canvassing with the team" /><figcaption>Out canvassing after dark</figcaption></figure><figure class="tl-figure"><img src="/assets/img/tl-canvass2022c.jpg" alt="The campaign team on the high street" /><figcaption>Street stall with the team</figcaption></figure><figure class="tl-figure"><img src="/assets/img/tl-canvass2022d.jpg" alt="The campaign team on the green" /><figcaption>On the campaign trail · Islington Green</figcaption></figure></div></div><button class="tl-car-btn tl-car-next" aria-label="Next">›</button></div>`},
   {d:'May', y:'2021', cat:['politics'], st:'572 votes in a by-election', sb:"Grew the Bunhill vote share by 2.7% on a self-built campaign.", t:'Secured 572 Votes in Local By-election', b:`<div class="tl-split top"><div class="tl-split-text"><p>I didn't win, but improved on the previous 2018 Bunhill campaign by increasing the vote percentage by 2.7%.</p><p>The by-election was also the same day (Thu, 6 May) as the 2021 London Mayoral Elections. The Liberal Democrat candidate for the London Mayor seat achieved <a href="https://www.londonelects.org.uk/sites/default/files/2021-05/2021%20London%20Elects%20-%20Ward%20Level%20Data%20Release.xlsx" target="_blank" rel="noopener">121 votes</a> in the Bunhill ward — I received 472% more votes than the 'baseline' of the comparable candidate.</p><p>You can view the full electoral results here: <a href="https://votemaxx.com/2021-results" target="_blank" rel="noopener">votemaxx.com/2021-results</a></p><p>My campaign focussed on highlighting a need for better local representation and improved accountability within the local council, as well as better health and safety and an improved local environment for residents.</p><p>Highlights of the campaign included:</p><ul><li>Creating an informational campaign website — <a href="https://votemaxx.com/" target="_blank" rel="noopener">votemaxx.com</a></li><li>Designing and printing 6,500 z-fold <a href="https://votemaxx.com/leaflet/" target="_blank" rel="noopener">leaflets</a> and <a href="https://votemaxx.com/sticker/" target="_blank" rel="noopener">stickers</a></li><li>Filming and editing a campaign <a href="https://votemaxx.com/video" target="_blank" rel="noopener">video</a></li><li>Raising £1,420 of <a href="https://votemaxx.com/donate" target="_blank" rel="noopener">donations</a> for the campaign</li><li>Running a digital marketing campaign across <a href="https://instagram.votemaxx.com/" target="_blank" rel="noopener">Instagram</a>, <a href="https://facebook.votemaxx.com/" target="_blank" rel="noopener">Facebook</a> and <a href="https://x.votemaxx.com/" target="_blank" rel="noopener">X</a></li></ul></div><div class="tl-split-ig"><div class="tl-embed"><iframe src="https://www.instagram.com/p/COlKrW8rCwy/embed" loading="lazy" allowtransparency="true" frameborder="0" scrolling="no"></iframe></div></div></div>`},
-  {d:'Mar', y:'2021', cat:['politics'], st:'Took on the council over broadband', sb:"Ran for councillor in Bunhill after lobbying for better local broadband.", t:'Selected as Local By-election Candidate', b:`<p>With my business growing and profitable, I decided to spend some of my spare time giving back to the local community where I live in EC1.</p><p>I became aware that there was an oligopoly of broadband provision by BT and Virgin Media in my local area, so I attempted to lobby the local council to improve broadband connectivity in the area and was ignored. In the process I became aware of several issues with the local Labour-run Islington Council, and decided to join forces with the <a href="https://www.liberalislington.com/" target="_blank" rel="noopener">Islington Liberal Democrats</a> to run for local councillor in the Thu 6 May 2021 by-election for the electoral ward of <a href="https://bunhill-2021.votemaxx.com/" target="_blank" rel="noopener">Bunhill</a> in the <a href="https://islington-2021.votemaxx.com/" target="_blank" rel="noopener">London Borough of Islington</a>.</p><p><strong>Spoiler:</strong> <em>Islington Council's Housing Scrutiny Committee later responded to my campaigning by highlighting the broadband provision issue in their meeting on 28/6/21 (following the by-election) and resolved to launch a tender to tackle the problem.</em></p><a class="tl-videolink" href="https://www.youtube.com/watch?v=Js-6izZJj_I" target="_blank" rel="noopener"><img src="https://img.youtube.com/vi/Js-6izZJj_I/hqdefault.jpg" alt="Campaign video" /><span class="vl-cap">▶ Watch the campaign video</span></a>`},
+  {d:'Mar', y:'2021', cat:['politics'], st:'Took on the council over broadband', sb:"Ran for councillor in Bunhill after lobbying for better local broadband.", t:'Selected as Local By-election Candidate', b:`<p>With my business growing and profitable, I decided to spend some of my spare time giving back to the local community where I live in EC1.</p><p>I became aware that there was an oligopoly of broadband provision by BT and Virgin Media in my local area, so I attempted to lobby the local council to improve broadband connectivity in the area and was ignored. In the process I became aware of several issues with the local Labour-run Islington Council, and decided to join forces with the <a href="https://www.liberalislington.com/" target="_blank" rel="noopener">Islington Liberal Democrats</a> to run for local councillor in the Thu 6 May 2021 by-election for the electoral ward of <a href="https://bunhill-2021.votemaxx.com/" target="_blank" rel="noopener">Bunhill</a> in the <a href="https://islington-2021.votemaxx.com/" target="_blank" rel="noopener">London Borough of Islington</a>.</p><p><strong>Spoiler:</strong> <em>Islington Council's Housing Scrutiny Committee later responded to my campaigning by highlighting the broadband provision issue in their meeting on 28/6/21 (following the by-election) and resolved to launch a tender to tackle the problem.</em></p><figure class="vid tl-vid"><button class="vid-frame" type="button" data-yt="Js-6izZJj_I" data-title="Bunhill by-election campaign video" aria-label="Play video: Bunhill by-election campaign video"><img src="/assets/img/yt-bunhill-campaign.jpg" alt="Campaign video" loading="lazy" width="1280" height="720" /><span class="vid-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.2v13.6L19 12z"/></svg></span></button><figcaption>▶ Bunhill campaign video — <a href="https://www.youtube.com/watch?v=Js-6izZJj_I" target="_blank" rel="noopener">watch on YouTube ↗</a></figcaption></figure>`},
   {d:'Oct', y:'2020', cat:['venture'], st:'Went full-time on The Tribe', sb:"Left Kantan to build software and services for incubators and accelerators.", t:'Started Working on The Tribe Full-time', b:`<p>The business was starting to pick up pace, so I decided to leave my full-time role at <a href="https://kantan.co.uk/" target="_blank" rel="noopener">Kantan</a> and jump into my startup full-time.</p><p>We would provide software and operational services to incubators and accelerators, allowing them to easily digitise, share and manage the data of their entrepreneurial ecosystems. One of our first major clients was the <a href="https://centreforentrepreneurs.org/nef/" target="_blank" rel="noopener">Centre for Entrepreneurs NEF+ Programme</a>.</p>`},
   {d:'Sep', y:'2020', cat:['venture'], st:'Founder Tribe becomes The Tribe', sb:"Adopted 'The Tribe' as the B2B trading name.", t:'Founder Tribe rebrands to The Tribe', b:`<p>To prevent confusion with our initial B2C founder-focussed community offering, we rebranded the B2B business from 'Founder Tribe' to 'The Tribe' and used this as our trading name.</p><div class="tl-rebrand"><span class="lg tribe"><img src="/assets/img/logo-foundertribe.png" alt="Founder Tribe logo" /></span><span class="arrow">⟶</span><span class="lg tribe"><img src="/assets/img/logo-tribe.png" alt="The Tribe logo" /></span></div>`},
   {d:'Jul', y:'2020', cat:['venture'], st:'Incorporated Founder Tribe', sb:"Set up the company to receive the grant and first client revenue.", t:'Incorporated Founder Tribe', b:`<p>Whilst still working at my full-time day job, I officially incorporated <a href="https://find-and-update.company-information.service.gov.uk/search?q=FOUNDER+TRIBE+LTD" target="_blank" rel="noopener">FOUNDER TRIBE LTD</a> and set up a bank account to receive the £20,000 grant and revenue from our first clients. I continued to work on Founder Tribe part-time and contracted a software engineering consultancy to build out the next iteration of the product.</p><figure class="tl-figure plain"><img src="/assets/img/tl-foundertribe.jpg" alt="Founder Tribe — Join the Tribe" /><figcaption>Founder Tribe · #JoinTheTribe</figcaption></figure>`},
@@ -373,12 +391,31 @@ DATA.forEach(e => {
     </div>`;
   const card = el.querySelector('.tl-card');
   card.addEventListener('click', (ev) => {
-    if (ev.target.closest('a, .tl-carousel, .tl-car-btn, iframe, .tl-doc, .tl-videolink')) return;
+    if (ev.target.closest('a, .tl-carousel, .tl-car-btn, iframe, .tl-doc, .vid')) return;
     card.classList.toggle('open');
     requestAnimationFrame(updateProgress);
     setTimeout(updateProgress, 440);
   });
   itemsEl.appendChild(el);
+});
+
+// click-to-play video — no YouTube player is loaded until someone asks for it.
+// Cards are all rendered above, so the buttons already exist by now.
+document.querySelectorAll('.vid-frame').forEach(btn => {
+  btn.addEventListener('click', (ev) => {
+    // the card's own handler would toggle it shut: by the time the click
+    // bubbles up, this button has been detached, so .closest() can't see it
+    ev.stopPropagation();
+    const frame = document.createElement('iframe');
+    frame.src = `https://www.youtube-nocookie.com/embed/${btn.dataset.yt}?autoplay=1&rel=0`;
+    frame.title = btn.dataset.title || 'Video';
+    frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+    frame.allowFullscreen = true;
+    const holder = document.createElement('div');
+    holder.className = 'vid-frame is-playing';
+    holder.appendChild(frame);
+    btn.replaceWith(holder);
+  }, {once:true});
 });
 
 // filters
@@ -424,23 +461,29 @@ window.addEventListener('scroll', updateProgress, {passive:true});
 window.addEventListener('resize', updateProgress);
 updateProgress();
 
-// carousel(s) — show two at a time, step by one
+// carousel(s) — step by one; how many fit per view comes from the CSS slide width (2 on desktop, 1 on mobile)
 document.querySelectorAll('.tl-carousel').forEach(car => {
   const track = car.querySelector('.tl-car-track');
+  const viewport = car.querySelector('.tl-car-viewport');
   const slides = [...track.children];
   const prev = car.querySelector('.tl-car-prev');
   const next = car.querySelector('.tl-car-next');
+  const GAP = 12;
   let idx = 0;
-  const maxIdx = Math.max(0, slides.length - 2);
   function render(){
-    const vp = car.querySelector('.tl-car-viewport').clientWidth;
-    const step = (vp + 12) / 2; // half viewport + half gap
+    const vp = viewport.clientWidth;
+    const slide = slides[0].getBoundingClientRect().width;
+    if (!vp || !slide) return; // card still collapsed — nothing to measure yet
+    const perView = Math.max(1, Math.round((vp + GAP) / (slide + GAP)));
+    const step = slide + GAP;
+    const maxIdx = Math.max(0, slides.length - perView);
+    if (idx > maxIdx) idx = maxIdx;
     track.style.transform = 'translateX(' + (-idx * step) + 'px)';
     prev.disabled = idx <= 0;
     next.disabled = idx >= maxIdx;
   }
   prev.addEventListener('click', ()=>{ idx = Math.max(0, idx-1); render(); });
-  next.addEventListener('click', ()=>{ idx = Math.min(maxIdx, idx+1); render(); });
+  next.addEventListener('click', ()=>{ idx = idx+1; render(); });
   window.addEventListener('resize', render);
   // re-measure when the card opens
   const card = car.closest('.tl-card');

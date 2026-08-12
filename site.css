@@ -309,6 +309,166 @@ h1,h2,h3{font-weight:600;letter-spacing:-0.03em;line-height:1.02;margin:0;}
 .gal .duo:hover figcaption{opacity:1;transform:none;}
 .gal .gal-fill{flex-grow:10;flex-basis:0;height:0;border:none;}
 
+/* ---------- "here's the shot I took" tile ----------
+   The wide photo already contains both the photographer and the animal, so
+   brackets mark the subject and the close-up grows out of them as a print.
+   .shot-on is the tap equivalent of :hover for touch, where there is none. */
+
+/* The brackets have to sit on the animal, but the tile flexes wider than the
+   square photo, so object-fit crops it. This box reproduces the cover geometry
+   exactly — for a square source it is max(tile width, tile height) square,
+   centred — which lets the brackets be positioned against the photo itself. */
+.gal .duo.has-shot .shot-space{position:absolute;left:50%;top:50%;z-index:4;pointer-events:none;
+  width:max(100%,300px);aspect-ratio:1;transform:translate(-50%,-50%);
+  transition:transform .9s cubic-bezier(.2,.7,.2,1);}
+.gal .duo.has-shot:hover .shot-space,
+.gal .duo.has-shot.shot-on .shot-space{transform:translate(-50%,-50%) scale(1.05);}
+
+/* the animal, as a fraction of the photo */
+.shot-mark{position:absolute;left:15%;top:57%;width:22%;height:20%;
+  opacity:.85;transition:opacity .4s ease,transform .5s cubic-bezier(.2,.7,.2,1);}
+.shot-mark i{position:absolute;width:9px;height:9px;border:1.5px solid rgba(255,255,255,.95);
+  transition:border-color .4s ease;}
+.shot-mark i:nth-child(1){left:0;top:0;border-right:0;border-bottom:0;}
+.shot-mark i:nth-child(2){right:0;top:0;border-left:0;border-bottom:0;}
+.shot-mark i:nth-child(3){left:0;bottom:0;border-right:0;border-top:0;}
+.shot-mark i:nth-child(4){right:0;bottom:0;border-left:0;border-top:0;}
+.gal .duo.has-shot:hover .shot-mark,
+.gal .duo.has-shot.shot-on .shot-mark{opacity:1;transform:scale(1.06);}
+.gal .duo.has-shot:hover .shot-mark i,
+.gal .duo.has-shot.shot-on .shot-mark i{border-color:var(--orange);}
+
+/* the print: springs up out of the brackets and settles top-centre — the gap
+   between Maxx and the animal — sized so its foot clears the bracket corners,
+   which sit at 57% down the photo (see .shot-mark) */
+.shot-print{position:absolute;left:50%;top:5%;width:min(42%,190px);max-height:44%;aspect-ratio:1;z-index:5;
+  border-radius:5px;overflow:hidden;border:3px solid rgba(251,239,228,.92);
+  box-shadow:0 20px 44px -14px rgba(0,0,0,.95);opacity:0;
+  transform:translate(-50%,26%) scale(.3) rotate(-6deg);transform-origin:50% 100%;
+  transition:transform .62s cubic-bezier(.2,.7,.2,1),opacity .3s ease;}
+.shot-print img{width:100%;height:100%;object-fit:cover;display:block;}
+/* The sound is two focus beeps and then the shot, so the picture has to wait
+   for the shutter rather than firing on the hover: both are held to .2s, which
+   is where the shutter lands (SHOT_AT in the page script, plus its 20ms lead). */
+.gal .duo.has-shot:hover .shot-print,
+.gal .duo.has-shot.shot-on .shot-print{opacity:1;transform:translate(-50%,0) scale(1) rotate(-2deg);
+  transition-delay:.2s;}
+/* the flash: one white blink as the shutter fires, then it's gone */
+.shot-flash{position:absolute;inset:0;z-index:7;background:#fff;opacity:0;pointer-events:none;}
+.gal .duo.has-shot:hover .shot-flash,
+.gal .duo.has-shot.shot-on .shot-flash{animation:shotFlash .46s ease-out .2s;}
+@keyframes shotFlash{0%{opacity:0}7%{opacity:.92}22%{opacity:.34}100%{opacity:0}}
+/* context dims so the full-colour print reads as the output */
+.gal .duo.has-shot:hover>img,
+.gal .duo.has-shot.shot-on>img{filter:grayscale(.15) brightness(.62) contrast(1.02);}
+/* badge sits left here so the print never lands on it, and clears on reveal */
+.gal .duo.has-shot .gal-badge{right:12px;left:auto;}
+.gal .duo.has-shot:hover .gal-badge,
+.gal .duo.has-shot.shot-on .gal-badge{opacity:0;}
+/* two captions: the setup, then the payoff */
+.gal .duo.has-shot figcaption .cap-b{display:none;}
+.gal .duo.has-shot:hover figcaption .cap-a,
+.gal .duo.has-shot.shot-on figcaption .cap-a{display:none;}
+.gal .duo.has-shot:hover figcaption .cap-b,
+.gal .duo.has-shot.shot-on figcaption .cap-b{display:inline;}
+@media(prefers-reduced-motion:reduce){
+  .gal .duo.has-shot .shot-print{transition:opacity .3s ease;transform:translate(-50%,0) rotate(-2deg);}
+  .gal .duo.has-shot .shot-space,.shot-mark{transition:none;}
+  /* no blink for anyone who asked for less motion */
+  .gal .duo.has-shot:hover .shot-flash,
+  .gal .duo.has-shot.shot-on .shot-flash{animation:none;}
+}
+
+/* ---------- macro tile: a loupe opens over the lizard ----------
+   The glass holds a second copy of the photo, blown up and offset so the
+   animal — who sits at 37.5% / 61% of the frame — lands dead centre in the
+   circle. The copy is nested, so it escapes the duotone on .duo>img and the
+   magnified crop reads in full colour against the dimmed frame. */
+.gal .duo.has-macro .macro-glass{position:absolute;left:37.5%;top:61%;z-index:5;width:52%;aspect-ratio:1;
+  border-radius:50%;overflow:hidden;pointer-events:none;
+  border:1px solid rgba(255,255,255,.7);box-shadow:0 24px 50px -18px rgba(0,0,0,.9),0 0 0 6px rgba(12,9,6,.28);
+  opacity:0;transform:translate(-50%,-50%) scale(.6);
+  transition:transform .55s cubic-bezier(.2,1.25,.4,1),opacity .3s ease;}
+/* 460% = 4.6×; the offsets are 50% − (37.5% × 4.6) and 50% − (61% × 4.6) */
+.gal .duo.has-macro .macro-glass img{position:absolute;left:-122.5%;top:-230.6%;width:460%;max-width:none;}
+.gal .duo.has-macro:hover .macro-glass,
+.gal .duo.has-macro.macro-on .macro-glass{opacity:1;transform:translate(-50%,-50%) scale(1);}
+/* the frame drops back so the glass is the only thing in focus */
+.gal .duo.has-macro:hover>img,
+.gal .duo.has-macro.macro-on>img{filter:grayscale(0) contrast(1.02) brightness(.66);transform:scale(1.02);}
+/* tapping is the touch equivalent of hovering, so clear the duotone wash too */
+.gal .duo.has-macro.macro-on::after{opacity:0;}
+.gal .duo.has-macro .macro-tag{position:absolute;right:14px;top:16px;z-index:6;font-size:11px;letter-spacing:.16em;
+  color:#fff;opacity:0;text-shadow:0 1px 10px rgba(0,0,0,.9);transition:opacity .3s ease .15s;}
+.gal .duo.has-macro:hover .macro-tag,
+.gal .duo.has-macro.macro-on .macro-tag{opacity:1;}
+.gal .duo.has-macro:hover .gal-badge,
+.gal .duo.has-macro.macro-on .gal-badge{opacity:0;}
+@media(prefers-reduced-motion:reduce){
+  .gal .duo.has-macro .macro-glass{transition:opacity .3s ease;transform:translate(-50%,-50%);}
+}
+
+/* ---------- gallery tile that plays a clip on hover ---------- */
+/* --vpos biases the crop: a portrait clip in a landscape tile otherwise
+   shows only the middle band, which cuts off whoever is in the shot */
+.gal .duo>video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;
+  object-position:50% var(--vpos,50%);
+  opacity:0;transition:opacity .45s ease;}
+.gal .duo.vid-on>video{opacity:1;}
+.gal .duo.vid-on>img{transform:scale(1.05);}
+/* ---------- three-beat tile: photo → clip → the photo it produced ----------
+   The clip has no loop attribute, so it ends and the final frame stays. */
+.gal .duo.has-seq>img.seq-end{position:absolute;inset:0;z-index:2;opacity:0;transition:opacity .6s ease;}
+.gal .duo.has-seq.seq-done>img.seq-end{opacity:1;}
+.gal .duo.has-seq figcaption .cap-b{display:none;}
+.gal .duo.has-seq.seq-done figcaption .cap-a{display:none;}
+.gal .duo.has-seq.seq-done figcaption .cap-b{display:inline;}
+
+/* 2·1 over the still before the clip starts — a viewfinder: corner brackets,
+   a rec dot, and an orange ring sweeping clockwise once per beat (a second each).
+   Numerals are JetBrains Mono — its 1 has a flag and a foot, so it reads as a 1. */
+.gal-count{position:absolute;inset:0;z-index:4;display:none;align-items:center;justify-content:center;
+  background:rgba(8,7,6,.4);}
+.gal .duo.counting .gal-count{display:flex;}
+.gal .duo.counting .gal-badge{opacity:0;}          /* the overlay owns the corner while counting */
+.gal-count .ct{position:absolute;inset:0;animation:countCut 1s ease-out forwards;}
+
+.gal-count .ct-br{position:absolute;width:24px;height:24px;border:2px solid rgba(255,255,255,.85);}
+.gal-count .ct-br.tl{left:14px;top:14px;border-right:0;border-bottom:0;}
+.gal-count .ct-br.tr{right:14px;top:14px;border-left:0;border-bottom:0;}
+.gal-count .ct-br.bl{left:14px;bottom:14px;border-right:0;border-top:0;}
+.gal-count .ct-br.brr{right:14px;bottom:14px;border-left:0;border-top:0;}
+.gal-count .ct-rec{position:absolute;left:16px;top:48px;display:flex;align-items:center;gap:7px;
+  font-family:var(--mono);font-size:11px;letter-spacing:.18em;color:#fff;text-shadow:0 1px 10px rgba(0,0,0,.6);}
+.gal-count .ct-rec i{width:8px;height:8px;border-radius:50%;background:#ff3b30;
+  animation:countBlink 1s steps(1,end) infinite;}
+
+.gal-count .ct-mid{position:absolute;inset:0;display:grid;place-items:center;}
+.gal-count .ct-dial{position:absolute;width:min(40%,110px);max-height:58%;aspect-ratio:1;fill:none;}
+.gal-count .ct-ring-bg{stroke:rgba(255,255,255,.25);stroke-width:1.5;}
+.gal-count .ct-ring{stroke:var(--orange);stroke-width:1.5;stroke-dasharray:100;stroke-dashoffset:100;
+  transform:rotate(-90deg);transform-box:view-box;transform-origin:50% 50%;   /* starts at 12 o'clock */
+  animation:countSweep 1s linear forwards;}
+.gal-count .ct-num{position:relative;font-family:var(--mono);font-weight:500;font-size:clamp(28px,6vw,46px);
+  line-height:1;color:#fff;text-shadow:0 2px 20px rgba(0,0,0,.6);}
+
+/* the offset runs to 0, so the arc grows clockwise from the top rather than
+   draining backwards — the same direction the beat is counting */
+@keyframes countSweep{from{stroke-dashoffset:100}to{stroke-dashoffset:0}}
+@keyframes countCut{0%{filter:brightness(2.2)}6%{filter:brightness(1)}100%{filter:brightness(1)}}
+@keyframes countBlink{0%,50%{opacity:1}51%,100%{opacity:.25}}
+@media(prefers-reduced-motion:reduce){
+  .gal-count .ct,.gal-count .ct-rec i{animation:none;}
+  .gal-count .ct-ring{animation:none;stroke-dashoffset:0;}
+}
+
+.gal-badge{position:absolute;right:12px;top:12px;z-index:5;font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  padding:5px 10px;border-radius:999px;color:rgba(255,255,255,.95);white-space:nowrap;
+  background:rgba(16,12,8,.55);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(6px);
+  transition:opacity .3s ease,border-color .3s ease;}
+/* stays visible while playing — it doubles as the sound control */
+.gal .duo.vid-on .gal-badge{border-color:rgba(255,138,51,.55);}
+
 /* ============================================================
    FULL-WIDTH reveal band
    ============================================================ */
@@ -375,7 +535,11 @@ h1,h2,h3{font-weight:600;letter-spacing:-0.03em;line-height:1.02;margin:0;}
   .hero-photo{position:relative;width:100%;height:auto;aspect-ratio:1/1;
     -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 70%,transparent 100%);
             mask-image:linear-gradient(180deg,#000 0%,#000 70%,transparent 100%);}
-  .hero-photo img{object-position:50% 30%;transform:none;filter:saturate(1.02) contrast(1.03) brightness(.72);}
+  .hero-photo img{object-position:50% 30%;transform:none;filter:saturate(1.02) contrast(1.03) brightness(.94);}
+  /* the nav sits transparent over the top of the banner, so darken just that
+     strip rather than the whole photo — the face keeps its own exposure */
+  .hero-photo::after{content:"";position:absolute;top:0;left:0;right:0;height:38%;
+    background:linear-gradient(180deg,rgba(18,14,10,.85),rgba(18,14,10,.34) 58%,transparent);}
   .hero-duoc,.hero-top,.hero-feather{display:none;}
   .hero-inner{position:relative;height:auto;padding:20px 22px 0;justify-content:flex-start;}
   .hero-content{max-width:100%;}
@@ -394,6 +558,11 @@ h1,h2,h3{font-weight:600;letter-spacing:-0.03em;line-height:1.02;margin:0;}
   .comm-grid .duo{aspect-ratio:16/10;}
   .gal{gap:10px;}
   .gal .duo{height:220px;flex:1 1 100%;}
+  /* tiles are shorter here, so the cover box the brackets track changes too */
+  .gal .duo.has-shot .shot-space{width:max(100%,220px);}
+  /* the hard crop pushes the animal to ~61-92% down the tile, so the print has
+     to be small enough to sit above the brackets instead of covering them */
+  .shot-print{width:32%;}
   .gal .g-a,.gal .g-f{grid-row:auto;}
   .section{padding:72px 0;}
 }

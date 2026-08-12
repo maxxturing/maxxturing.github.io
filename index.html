@@ -341,13 +341,14 @@
     <p class="lead reveal-up" data-delay="1">Photographer, traveller, skier and two-time local election candidate. I founded a couple of university societies, ran a campaign or two, and I'm happiest with a camera in hand somewhere new. (hover the photos)</p>
 
     <div class="gal">
-      <figure class="duo reveal g-a" style="--ar:0.95"><img src="assets/img/skydive.jpg" alt="Skydiving" /><figcaption>Skydiving · Algarve</figcaption></figure>
-      <figure class="duo reveal g-c" style="--ar:1.5"><img src="assets/img/capetown.jpg" alt="Cape Town" /><figcaption>Table Mountain · Cape Town</figcaption></figure>
-      <figure class="duo reveal g-d" style="--ar:1.5"><img src="assets/img/savute.jpg" alt="Botswana safari" /><figcaption>Savute · Botswana</figcaption></figure>
-      <figure class="duo reveal g-e" style="--ar:1.4"><img src="assets/img/skiing.jpg" alt="Skiing" /><figcaption>St Anton am Arlberg</figcaption></figure>
-      <figure class="duo reveal g-h" style="--ar:0.75"><img src="assets/img/snowboard.jpg" alt="Snowboarding" /><figcaption>Snowboarding · the Alps</figcaption></figure>
-      <figure class="duo reveal g-i" style="--ar:1"><img src="assets/img/safari-photo.jpg" alt="Wildlife photography on safari" /><figcaption>Shooting wildlife · Okavango Delta</figcaption></figure>
-      <figure class="duo reveal g-j" style="--ar:1"><img src="assets/img/lizard.jpg" alt="A lizard on my hand" /><figcaption>Making friends · a curious lizard</figcaption></figure>
+      <figure class="duo reveal g-a has-video" style="--ar:0.95"><img src="assets/img/skydive.jpg" alt="Skydiving" /><video src="assets/video/skydive-algarve.mp4" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video><span class="gal-count" aria-hidden="true"></span><span class="gal-badge mono">▶ video</span><figcaption>Skydiving · Algarve</figcaption></figure>
+      <figure class="duo reveal g-c has-video" style="--ar:1.5"><img src="assets/img/capetown.jpg" alt="Cape Town" /><video src="assets/video/capetown-paragliding.mp4" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video><span class="gal-count" aria-hidden="true"></span><span class="gal-badge mono">▶ video</span><figcaption>Table Mountain · Cape Town</figcaption></figure>
+      <figure class="duo reveal g-k has-video has-seq" style="--ar:1"><img src="assets/img/campsbay-shooting.jpg" alt="Maxx behind a camera, shooting the sunset at Camps Bay" /><video src="assets/video/campsbay-timelapse.mp4" muted playsinline preload="none" aria-hidden="true" tabindex="-1"></video><img class="seq-end" src="assets/img/campsbay-sunset.jpg" alt="The resulting photograph: three figures dancing in silhouette against the Camps Bay sunset" loading="lazy" /><span class="gal-count" aria-hidden="true"></span><span class="gal-badge mono">▶ video</span><figcaption><span class="cap-a">Shooting the sunset · Camps Bay</span><span class="cap-b">↑ shot of the day · Camps Bay</span></figcaption></figure>
+      <figure class="duo reveal g-d has-video" style="--ar:1.5"><img src="assets/img/savute.jpg" alt="Botswana safari" /><video src="assets/video/savute-okavango.mp4" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video><span class="gal-count" aria-hidden="true"></span><span class="gal-badge mono">▶ video</span><figcaption>Savute · Botswana</figcaption></figure>
+      <figure class="duo reveal g-e has-video" style="--ar:1.4;--vpos:22%"><img src="assets/img/skiing.jpg" alt="Skiing" /><video src="assets/video/st-anton-skiing.mp4" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video><span class="gal-count" aria-hidden="true"></span><span class="gal-badge mono">▶ video</span><figcaption>St Anton am Arlberg</figcaption></figure>
+      <figure class="duo reveal g-h has-video" style="--ar:0.75;--vpos:35%"><img src="assets/img/snowboard.jpg" alt="Snowboarding" /><video src="assets/video/snowboard-alps.mp4" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video><span class="gal-count" aria-hidden="true"></span><span class="gal-badge mono">▶ video</span><figcaption>Snowboarding · the Alps</figcaption></figure>
+      <figure class="duo reveal g-i has-shot" style="--ar:1"><img src="assets/img/safari-photo.jpg" alt="Maxx with a camera in long grass, photographing an antelope lying a short distance away" /><span class="shot-space" aria-hidden="true"><span class="shot-mark"><i></i><i></i><i></i><i></i></span></span><span class="shot-print"><img src="assets/img/okavango-buck.jpg" alt="The resulting close-up: the antelope looking straight down the lens" loading="lazy" /></span><span class="shot-flash" aria-hidden="true"></span><span class="gal-badge mono">📷 the shot →</span><figcaption><span class="cap-a">Shooting wildlife · Okavango Delta</span><span class="cap-b">↑ shot of the day · Okavango Delta</span></figcaption></figure>
+      <figure class="duo reveal g-j has-macro" style="--ar:1"><img src="assets/img/lizard.jpg" alt="A lizard on my hand" /><span class="macro-glass" aria-hidden="true"><img src="assets/img/lizard.jpg" alt="" /></span><span class="macro-tag mono" aria-hidden="true">× 4.6</span><span class="gal-badge mono">🔍 look closer</span><figcaption>Making friends · a curious lizard</figcaption></figure>
     </div>
   </div>
 </section>
@@ -429,6 +430,166 @@
     entries.forEach(e => { if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
   }, {threshold:0.14, rootMargin:'0px 0px -8% 0px'});
   document.querySelectorAll('.reveal-up').forEach(el => io.observe(el));
+
+  // Gallery tiles that hold a clip: play on hover, click to toggle sound.
+  // preload="none" means the file is only fetched once someone asks for it.
+  // Browsers refuse play() with audio until the page has been interacted with,
+  // so we try with sound and fall back to muted rather than failing to play.
+  document.querySelectorAll('.gal .duo.has-video').forEach(fig => {
+    const v = fig.querySelector('video');
+    if (!v) return;
+    const badge = fig.querySelector('.gal-badge');
+    const count = fig.querySelector('.gal-count');
+    const label = t => { if (badge) badge.textContent = t; };
+    let wantSound = true, timers = [];
+
+    const clearTimers = () => { timers.forEach(clearTimeout); timers = []; };
+    const showNum = n => {                    // a fresh node restarts the tick animation
+      if (!count) return;
+      const tick = document.createElement('span');
+      tick.className = 'ct';
+      tick.innerHTML =
+        '<span class="ct-br tl"></span><span class="ct-br tr"></span>' +
+        '<span class="ct-br bl"></span><span class="ct-br brr"></span>' +
+        '<span class="ct-rec"><i></i>REC</span>' +
+        '<span class="ct-mid"><svg class="ct-dial" viewBox="0 0 100 100" aria-hidden="true">' +
+          '<circle class="ct-ring-bg" cx="50" cy="50" r="47"/>' +
+          '<circle class="ct-ring" cx="50" cy="50" r="47" pathLength="100"/></svg>' +
+        '<span class="ct-num">' + n + '</span></span>';
+      count.replaceChildren(tick);
+    };
+
+    const play = async () => {
+      fig.classList.add('vid-on');
+      v.volume = 0.85;                      // clips are loudness-matched to -18 LUFS
+      v.muted = !wantSound;
+      try {
+        await v.play();
+      } catch (e) {
+        v.muted = true;                       // blocked with audio — go quiet, keep playing
+        try { await v.play(); } catch (e2) { fig.classList.remove('vid-on'); return; }
+      }
+      label(v.muted ? '🔇 click for sound' : '🔊 sound on');
+    };
+    const stop = () => {
+      clearTimers();
+      fig.classList.remove('vid-on', 'counting', 'seq-done');
+      v.pause(); v.currentTime = 0;
+      label('▶ video');
+    };
+
+    // photo → clip → photo: this clip doesn't loop, so when it ends the
+    // frame it produced fades in and holds until the pointer leaves
+    if (fig.classList.contains('has-seq')) {
+      v.addEventListener('ended', () => fig.classList.add('seq-done'));
+    }
+
+    // 2 · 1 over the still, a second a beat, then the clip. Buffering starts
+    // with the countdown so there's nothing left to wait for when it hits zero.
+    const countIn = () => {
+      clearTimers();
+      fig.classList.add('counting');
+      if (v.preload !== 'auto') { v.preload = 'auto'; v.load(); }
+      showNum(2);
+      timers.push(setTimeout(() => showNum(1), 1000));
+      timers.push(setTimeout(() => { fig.classList.remove('counting'); play(); }, 2000));
+    };
+
+    if (window.matchMedia('(hover: hover)').matches) {
+      fig.addEventListener('mouseenter', countIn);
+      fig.addEventListener('mouseleave', stop);
+    }
+    fig.addEventListener('click', () => {
+      if (fig.classList.contains('counting')) {             // clicking skips the wait
+        clearTimers(); fig.classList.remove('counting');
+        wantSound = true; play(); return;
+      }
+      if (v.paused) { wantSound = true; play(); return; }   // touch: first tap starts it
+      wantSound = v.muted;
+      v.muted = !v.muted;                                   // a click is a gesture, so this always sticks
+      label(v.muted ? '🔇 click for sound' : '🔊 sound on');
+    });
+  });
+
+  // The camera for "shot of the day": two focus-confirm beeps, then the shot.
+  // Synthesised rather than shipped as an audio file. Each mechanical event is
+  // a cluster of micro-impacts — dense noise burst through parallel resonant
+  // filters, so the pitch comes from filters ringing rather than from tuned
+  // oscillators. That is what makes it read as a mechanism; a few sines ringing
+  // together would just be a bell. Browsers keep audio suspended until the
+  // visitor interacts with the page, so the context opens on the first gesture
+  // and any hover before that is silent — the flash still fires.
+  const SHOT_AT = 0.185;                 // shutter fires this long after the beeps start
+  const shutter = (() => {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return () => {};
+    let ctx = null;
+    const wake = () => { ctx = ctx || new AC(); if (ctx.state === 'suspended') ctx.resume(); };
+    addEventListener('pointerdown', wake, {passive: true});
+    addEventListener('keydown', wake, {passive: true});
+
+    const GAIN = 2;                      // parallel bandpasses swallow level; this puts it back
+    const ALLOY = [[2400,22,1], [3700,18,.6], [5600,14,.35], [7600,10,.18]];  // [freq, Q, gain]
+    const jit = a => 1 + (Math.random() * 2 - 1) * a;   // no two frames sound identical
+
+    const impact = (t, level, res, exc) => {
+      const len = Math.max(2, Math.floor(ctx.sampleRate * exc));
+      const buf = ctx.createBuffer(1, len, ctx.sampleRate), d = buf.getChannelData(0);
+      for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3.2);
+      const src = ctx.createBufferSource(); src.buffer = buf;
+      const pre = ctx.createBiquadFilter(); pre.type = 'highpass'; pre.frequency.value = 600;
+      const out = ctx.createGain(); out.gain.value = level * GAIN;
+      src.connect(pre);
+      res.forEach(([f, q, g]) => {
+        const bp = ctx.createBiquadFilter();
+        bp.type = 'bandpass'; bp.frequency.value = f * jit(.02); bp.Q.value = q;
+        const gg = ctx.createGain(); gg.gain.value = g;
+        pre.connect(bp).connect(gg).connect(out);
+      });
+      const dry = ctx.createGain(); dry.gain.value = .35;   // a little raw noise for the bite
+      pre.connect(dry).connect(out);
+      out.connect(ctx.destination); src.start(t);
+    };
+    // one mechanical event = three or four impacts inside a few milliseconds
+    const clack = (t, level, n, exc) => {
+      for (let i = 0; i < n; i++)
+        impact(t + (i ? .004 * (i / n) * jit(.4) : 0),
+               level * (i ? .55 / i : 1) * jit(.12),
+               ALLOY.map(([f, q, g]) => [f * (1 + i * .06), q, g]),
+               exc * (i ? .7 : 1));
+    };
+    const beep = t => {
+      const o = ctx.createOscillator(); o.type = 'square'; o.frequency.value = 2050;
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(.0001, t);
+      g.gain.exponentialRampToValueAtTime(.075, t + .004);
+      g.gain.setValueAtTime(.075, t + .040);
+      g.gain.exponentialRampToValueAtTime(.0001, t + .048);
+      o.connect(g).connect(ctx.destination); o.start(t); o.stop(t + .06);
+    };
+
+    return () => {
+      if (!ctx || ctx.state !== 'running') return;
+      const t = ctx.currentTime + .02;
+      beep(t); beep(t + .072);                    // half-press: focus confirmed
+      clack(t + SHOT_AT, .30, 3, .005);           // the shot
+      clack(t + SHOT_AT + .040, .19, 2, .004);    // second curtain
+    };
+  })();
+
+  // "shot of the day": hover fires it on desktop — the flash is pure CSS, so
+  // only the sound needs a listener. Touch has no hover, so tapping toggles it.
+  const canHover = window.matchMedia('(hover: hover)').matches;
+  document.querySelectorAll('.gal .duo.has-shot').forEach(fig => {
+    if (canHover) fig.addEventListener('mouseenter', shutter);
+    else fig.addEventListener('click', () => { if (fig.classList.toggle('shot-on')) shutter(); });
+  });
+  // the macro loupe is hover-only too, and needs the same touch fallback
+  if (!canHover) {
+    document.querySelectorAll('.gal .duo.has-macro').forEach(fig => {
+      fig.addEventListener('click', () => fig.classList.toggle('macro-on'));
+    });
+  }
 
   // click-to-play video — no YouTube player is loaded until someone asks for it
   document.querySelectorAll('.vid-frame').forEach(btn => {

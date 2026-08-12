@@ -440,6 +440,12 @@
   // preload="none" means the file is only fetched once someone asks for it.
   // Browsers refuse play() with audio until the page has been interacted with,
   // so we try with sound and fall back to muted rather than failing to play.
+  // Only one clip runs at a time: starting one stops whatever else is going.
+  // A mouse never needs this — leaving the tile stops it — but a tap leaves the
+  // previous clip running, so two would play over each other.
+  const clips = [];
+  const stopClips = except => clips.forEach(c => { if (c.fig !== except) c.stop(); });
+
   document.querySelectorAll('.gal .duo.has-video').forEach(fig => {
     const v = fig.querySelector('video');
     if (!v) return;
@@ -472,19 +478,29 @@
       soundLabel();
     };
 
+    // play() awaits, so a stop that lands mid-await would otherwise be undone by
+    // the continuation: pause() rejects the pending play(), the catch below
+    // retries it, and a clip that was just stopped starts up again. Each run
+    // takes a ticket and drops out if stop() has since invalidated it.
+    let run = 0;
     const play = async () => {
+      const mine = ++run;
+      stopClips(fig);
       fig.classList.add('vid-on');
       v.volume = 0.85;                      // clips are loudness-matched to -18 LUFS
       v.muted = !wantSound;
       try {
         await v.play();
       } catch (e) {
+        if (mine !== run) return;             // stopped while we were waiting
         v.muted = true;                       // blocked with audio — go quiet, keep playing
-        try { await v.play(); } catch (e2) { fig.classList.remove('vid-on'); return; }
+        try { await v.play(); } catch (e2) { if (mine === run) fig.classList.remove('vid-on'); return; }
       }
+      if (mine !== run) return;
       soundLabel();
     };
     const stop = () => {
+      run++;
       clearTimers();
       fig.classList.remove('vid-on', 'counting', 'seq-done');
       v.pause(); v.currentTime = 0;
@@ -517,7 +533,7 @@
     // says it is. On a mouse the tile itself keeps doing sound, since leaving
     // the tile is what stops playback.
     if (badge) badge.addEventListener('click', e => {
-      if (v.paused || fig.classList.contains('counting')) return;   // let the tile handle starting
+      if (!fig.classList.contains('vid-on')) return;   // nothing running: let the tile start it
       e.stopPropagation();
       toggleSound();
     });
@@ -532,6 +548,8 @@
       if (!canHover) { stop(); return; }                    // touch: a second tap stops it
       toggleSound();
     });
+
+    clips.push({fig, stop});
   });
 
   // The camera for "shot of the day": two focus-confirm beeps, then the shot.
@@ -627,6 +645,7 @@
   // click-to-play video — no YouTube player is loaded until someone asks for it
   document.querySelectorAll('.vid-frame').forEach(btn => {
     btn.addEventListener('click', () => {
+      stopClips();                      // don't leave a gallery clip talking over it
       const frame = document.createElement('iframe');
       frame.src = `https://www.youtube-nocookie.com/embed/${btn.dataset.yt}?autoplay=1&rel=0`;
       frame.title = btn.dataset.title || 'Video';

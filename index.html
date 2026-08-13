@@ -29,6 +29,17 @@
 <meta name="twitter:image" content="https://maxxturing.com/assets/img/og-cover.jpg?v=2" />
 <meta name="twitter:image:alt" content="Maxx Turing — helping other founders succeed." />
 <link rel="stylesheet" href="site.css" />
+<!-- @partial:analytics -->
+<!-- Google tag (gtag.js) — GA4 property "maxxturing.com".
+     async, so it never blocks the first paint. -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-3WC1D0EMKE"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-3WC1D0EMKE');
+</script>
+<!-- /@partial:analytics -->
 </head>
 <body>
 
@@ -448,6 +459,11 @@
   const clips = [];
   const stopClips = except => clips.forEach(c => { if (c.fig !== except) c.stop(); });
 
+  // One beat of the count-in. Deliberately quicker than a real second: three
+  // ticks read as a proper slate, but a 3s wait before a 10s clip does not.
+  // Keep in step with --beat in site.css, which drives the ring and the dot.
+  const BEAT = 600;
+
   document.querySelectorAll('.gal .duo.has-video').forEach(fig => {
     const v = fig.querySelector('video');
     if (!v) return;
@@ -515,15 +531,16 @@
       v.addEventListener('ended', () => fig.classList.add('seq-done'));
     }
 
-    // 2 · 1 over the still, a second a beat, then the clip. Buffering starts
+    // 3 · 2 · 1 over the still, one BEAT each, then the clip. Buffering starts
     // with the countdown so there's nothing left to wait for when it hits zero.
     const countIn = () => {
       clearTimers();
       fig.classList.add('counting');
       if (v.preload !== 'auto') { v.preload = 'auto'; v.load(); }
-      showNum(2);
-      timers.push(setTimeout(() => showNum(1), 1000));
-      timers.push(setTimeout(() => { fig.classList.remove('counting'); play(); }, 2000));
+      showNum(3);
+      timers.push(setTimeout(() => showNum(2), BEAT));
+      timers.push(setTimeout(() => showNum(1), BEAT * 2));
+      timers.push(setTimeout(() => { fig.classList.remove('counting'); play(); }, BEAT * 3));
     };
 
     if (canHover) {

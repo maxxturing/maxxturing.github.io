@@ -25,10 +25,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 PARTIALS = ROOT / "_partials"
 
-# Pages that may borrow partials. A page only changes if it carries the markers.
+# Pages that may borrow partials. A page only changes if it carries the markers,
+# so listing a page here that borrows nothing is harmless.
 TARGETS = [
     "index.html",
     "timeline/index.html",
+    "cv/index.html",
+    "meet-maxx/index.html",
 ]
 
 

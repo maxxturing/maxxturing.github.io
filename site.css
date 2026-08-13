@@ -396,6 +396,17 @@ h1,h2,h3{font-weight:600;letter-spacing:-0.03em;line-height:1.02;margin:0;}
   color:#fff;opacity:0;text-shadow:0 1px 10px rgba(0,0,0,.9);transition:opacity .3s ease .15s;}
 .gal .duo.has-macro.macro-on .macro-tag{opacity:1;}
 .gal .duo.has-macro.macro-on .gal-badge{opacity:0;}
+/* The glass reaches down to the caption line, so the caption goes over the top
+   of it — and a shadow won't hold against the bright magnified crop. It borrows
+   the badge's chip instead, which is free: the badge fades as the glass opens.
+   The chip's padding is always reserved — only its background fades in — so the
+   words never shift sideways as the glass opens, and left/bottom absorb the
+   padding to keep them where they were. */
+.gal .duo.has-macro figcaption{z-index:6;left:3px;bottom:7px;padding:5px 10px;
+  border:1px solid transparent;border-radius:999px;backdrop-filter:blur(6px);
+  transition:opacity .3s,transform .3s,background .35s ease,border-color .35s ease;}
+.gal .duo.has-macro.macro-on figcaption{background:rgba(16,12,8,.62);
+  border-color:rgba(255,255,255,.22);text-shadow:0 1px 3px rgba(0,0,0,.9);}
 @media(prefers-reduced-motion:reduce){
   .gal .duo.has-macro .macro-glass{transition:opacity .3s ease;transform:translate(-50%,-50%);}
 }
@@ -416,14 +427,15 @@ h1,h2,h3{font-weight:600;letter-spacing:-0.03em;line-height:1.02;margin:0;}
 .gal .duo.has-seq.seq-done figcaption .cap-a{display:none;}
 .gal .duo.has-seq.seq-done figcaption .cap-b{display:inline;}
 
-/* 2·1 over the still before the clip starts — a viewfinder: corner brackets,
-   a rec dot, and an orange ring sweeping clockwise once per beat (a second each).
+/* 3·2·1 over the still before the clip starts — a viewfinder: corner brackets,
+   a rec dot, and an orange ring sweeping clockwise once per beat (see --beat).
    Numerals are JetBrains Mono — its 1 has a flag and a foot, so it reads as a 1. */
-.gal-count{position:absolute;inset:0;z-index:4;display:none;align-items:center;justify-content:center;
+.gal-count{--beat:.6s;                             /* = BEAT in the page script */
+  position:absolute;inset:0;z-index:4;display:none;align-items:center;justify-content:center;
   background:rgba(8,7,6,.4);}
 .gal .duo.counting .gal-count{display:flex;}
 .gal .duo.counting .gal-badge{opacity:0;}          /* the overlay owns the corner while counting */
-.gal-count .ct{position:absolute;inset:0;animation:countCut 1s ease-out forwards;}
+.gal-count .ct{position:absolute;inset:0;animation:countCut var(--beat) ease-out forwards;}
 
 .gal-count .ct-br{position:absolute;width:24px;height:24px;border:2px solid rgba(255,255,255,.85);}
 .gal-count .ct-br.tl{left:14px;top:14px;border-right:0;border-bottom:0;}
@@ -433,14 +445,14 @@ h1,h2,h3{font-weight:600;letter-spacing:-0.03em;line-height:1.02;margin:0;}
 .gal-count .ct-rec{position:absolute;left:16px;top:48px;display:flex;align-items:center;gap:7px;
   font-family:var(--mono);font-size:11px;letter-spacing:.18em;color:#fff;text-shadow:0 1px 10px rgba(0,0,0,.6);}
 .gal-count .ct-rec i{width:8px;height:8px;border-radius:50%;background:#ff3b30;
-  animation:countBlink 1s steps(1,end) infinite;}
+  animation:countBlink var(--beat) steps(1,end) infinite;}
 
 .gal-count .ct-mid{position:absolute;inset:0;display:grid;place-items:center;}
 .gal-count .ct-dial{position:absolute;width:min(40%,110px);max-height:58%;aspect-ratio:1;fill:none;}
 .gal-count .ct-ring-bg{stroke:rgba(255,255,255,.25);stroke-width:1.5;}
 .gal-count .ct-ring{stroke:var(--orange);stroke-width:1.5;stroke-dasharray:100;stroke-dashoffset:100;
   transform:rotate(-90deg);transform-box:view-box;transform-origin:50% 50%;   /* starts at 12 o'clock */
-  animation:countSweep 1s linear forwards;}
+  animation:countSweep var(--beat) linear forwards;}
 .gal-count .ct-num{position:relative;font-family:var(--mono);font-weight:500;font-size:clamp(28px,6vw,46px);
   line-height:1;color:#fff;text-shadow:0 2px 20px rgba(0,0,0,.6);}
 

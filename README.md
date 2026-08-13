@@ -113,11 +113,13 @@ chmod +x .git/hooks/pre-commit
   below the fold. Please resize before committing a camera original — the pages
   once shipped 70MB of them.
 
-### Legacy under `assets/`
+### What lives under `assets/`
 
-`assets/img/`, `assets/video/` and `assets/docs/` are live. The rest —
-`assets/css/` (including `scss/`), `assets/scripts/`, `assets/fonts/` — is left
-over from the old Bootstrap/jQuery theme and is not referenced by any page.
+`img/`, `video/` and `docs/` — all three are referenced by the pages, and
+that is the whole of it. The old theme's `css/` (with its SCSS), `scripts/`
+(jQuery, Modernizr, wow.js, instafeed) and `fonts/` (Font Awesome) are gone;
+the site loads no icon font and pulls its typefaces from Google Fonts via an
+`@import` at the top of `site.css`.
 
 ## Reference
 

@@ -58,9 +58,11 @@ bundle exec jekyll build   # output goes to _site/ (git-ignored)
 
 ## Shared blocks (`_partials/`)
 
-`index.html` and `timeline/index.html` are hand-written static pages with no YAML
-front matter, so Jekyll copies them verbatim and `{% include %}` never runs in
-them. Blocks that appear on both pages live in `_partials/` instead, and each page
+Every page here — `index.html`, `timeline/index.html`, `cv/index.html` and
+`meet-maxx/index.html` — is hand-written static HTML with no YAML front matter,
+so Jekyll copies them verbatim and `{% include %}` never runs in them. That is
+why there is no `_layouts/` or `_includes/`: nothing could reach them. Blocks
+that appear on more than one page live in `_partials/` instead, and each page
 marks the region it borrows:
 
 ```html
@@ -69,7 +71,12 @@ marks the region it borrows:
 <!-- /@partial:contact -->
 ```
 
-Edit the file in `_partials/`, then rewrite both pages:
+Current partials are `contact.html` (the contact section, on the two long pages)
+and `analytics.html` (the GA4 tag, on all four — so the measurement ID has one
+home). Which pages get rewritten is the `TARGETS` list in the script; a page
+without the markers is left alone either way.
+
+Edit the file in `_partials/`, then rewrite the pages that borrow it:
 
 ```bash
 python3 tools/sync-partials.py           # rewrite every marked region
@@ -92,19 +99,29 @@ chmod +x .git/hooks/pre-commit
 
 ## Tech notes
 
-- **Plugins:** `jekyll-sitemap`, `jekyll-paginate`, `jemoji` (see `Gemfile` / `_config.yml`).
-- **Markdown:** kramdown.
-- **Styles:** SCSS under `assets/css/scss/` plus plain CSS in `assets/css/`.
+- **Plugins:** `jekyll-sitemap`, `jekyll-paginate`, `jemoji` — listed under
+  `plugins:` in `_config.yml` (not `plugins_dir:`, which is where Jekyll looks
+  for plugin *files*; getting those two confused is what kept `sitemap.xml`
+  a 404).
+- **Markdown:** kramdown — only relevant if a page ever gains front matter.
+- **Styles:** one hand-written `site.css` at the repo root, plus a `<style>`
+  block in `timeline/index.html` for the timeline's own layout. No framework,
+  no build step.
+- **Scripts:** inline `<script>` at the foot of the two long pages; `cv/` and
+  `meet-maxx/` are bare iframe wrappers. No jQuery, no bundler.
+- **Images:** capped at 2000px on the long edge (2600px for the hero) and lazy
+  below the fold. Please resize before committing a camera original — the pages
+  once shipped 70MB of them.
+
+### Legacy under `assets/`
+
+`assets/img/`, `assets/video/` and `assets/docs/` are live. The rest —
+`assets/css/` (including `scss/`), `assets/scripts/`, `assets/fonts/` — is left
+over from the old Bootstrap/jQuery theme and is not referenced by any page.
 
 ## Reference
 
 - Jekyll docs: https://jekyllrb.com/
-- Smooth scrolling snippet: https://css-tricks.com/snippets/jquery/smooth-scrolling/
-
-### Bootstrap responsive helpers
-
-- `d-block d-md-none` — hide on medium and larger screens.
-- `d-none d-md-block` — hide on small and extra-small screens.
 
 ### Mobile / accessibility reminders
 

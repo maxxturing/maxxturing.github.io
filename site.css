@@ -472,6 +472,16 @@ h1,h2,h3{font-weight:600;letter-spacing:-0.03em;line-height:1.02;margin:0;}
   transition:opacity .3s ease,border-color .3s ease;}
 /* stays visible while playing — it doubles as the sound control */
 .gal .duo.vid-on .gal-badge{border-color:rgba(255,138,51,.55);}
+/* it is a real <button>, so it can be tabbed to and fired with Enter/Space —
+   which means stripping the native chrome the class doesn't already override */
+button.gal-badge{appearance:none;-webkit-appearance:none;margin:0;cursor:pointer;
+  font-family:inherit;line-height:normal;text-align:center;}
+.gal-badge:focus-visible{outline:2px solid var(--orange);outline-offset:3px;}
+/* three states fade the badge out. None of them may hide the thing holding
+   focus, or the keyboard user loses their place on the page. */
+.gal .duo.has-shot.shot-on .gal-badge:focus-visible,
+.gal .duo.has-macro.macro-on .gal-badge:focus-visible,
+.gal .duo.counting .gal-badge:focus-visible{opacity:1;}
 
 /* ============================================================
    FULL-WIDTH reveal band

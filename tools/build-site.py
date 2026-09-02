@@ -32,6 +32,7 @@ NOPUBLISH = re.compile(
         | tools/          # this script and sync-partials.py
         | scripts/        # local media helpers
         | CLAUDE\.md$
+        | TODO\.md$
         | README\.md$
         | Gemfile$
         | Gemfile\.lock$

@@ -55,7 +55,7 @@ jobs:
           test -f _site/CNAME || { echo "::error::CNAME missing — custom domain would break"; exit 1; }
           test -f _site/sitemap.xml || { echo "::error::sitemap.xml missing"; exit 1; }
           test -f _site/index.html || { echo "::error::index.html missing"; exit 1; }
-          for leaked in CLAUDE.md README.md _config.yml Gemfile tools scripts _partials; do
+          for leaked in CLAUDE.md TODO.md README.md _config.yml Gemfile tools scripts _partials; do
             if [ -e "_site/$leaked" ]; then
               echo "::error::$leaked leaked into the published site"; exit 1
             fi

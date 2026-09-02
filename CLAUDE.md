@@ -20,72 +20,75 @@ collapsed title+summary, `t`/`b` expanded title+HTML), and the categories live
 in a `CATS` map above it. No icon font is loaded anywhere on the site — the
 badges and labels are Unicode glyphs.
 
-## TODO
+## Open work
 
-- [ ] **Update the labels in the Beyond work section.** These are the
-  `.gal-badge` buttons on the gallery figures in `index.html` (the
-  `<section id="beyond">` block, roughly lines 357–364). Current labels:
-  - `▶ video` — used on six figures (skydive, Cape Town, Camps Bay, Savute,
-    St Anton, snowboarding)
-  - `📷 the shot →` — the Okavango wildlife figure
-  - `🔍 look closer` — the lizard macro figure
+Tracked in `TODO.md`, not here — file and line references included so items can
+be picked up cold. Read it before starting anything; several items warn about
+sync traps you would otherwise walk into.
 
-  When changing them, keep these in sync:
-  - the button's visible text **and** its `aria-label` (the pattern is
-    `"<label> — <data-subject>"`, and the badge text is its accessible name);
-  - the inline JS around `index.html:470–478`, which swaps `badge.textContent`
-    and rewrites `aria-label` to report playback/sound state — those replacement
-    strings need to match the new wording.
+## Gotchas
 
-- [ ] **Add newer material to the Beyond work section** — e.g. from Australia.
-  The eight figures in `<section id="beyond">` are all older trips (Algarve,
-  Cape Town, Botswana, the Alps). To add one, copy an existing `<figure>` and
-  keep its anatomy intact:
-  - `class="duo reveal g-<letter>"` plus a behaviour class (`has-video`,
-    `has-shot`, `has-seq`, `has-macro`) — the behaviour class is what the inline
-    JS hooks; `.gal` is a flex-wrap row, so the `g-*` letter only matters for
-    the grid overrides around `site.css:580`;
-  - `style="--ar:<aspect ratio>"`, optionally `--vpos` to shift the video crop;
-  - a poster `<img>` with real `alt`, plus the `<video muted loop playsinline
-    preload="none" aria-hidden="true" tabindex="-1">` for video figures;
-  - the `.gal-badge` button with `data-subject` and a matching `aria-label` (see
-    the label TODO below), and a `<figcaption>` — two `<span class="cap-a">` /
-    `cap-b` captions if the figure reveals a second image.
+Things that have already cost someone an hour. Roughly in the order you are
+likely to hit them.
 
-  Media goes in `assets/img/` and `assets/video/`. Note that several earlier
-  commits deleted ~290 MB of unreferenced media, so keep new files referenced
-  and reasonably compressed.
+**`grep` in this environment is a ugrep wrapper.** It can exit **2 (error)**,
+not 1 (no match), for invocations that mix `-r` with a file list, and complex
+patterns can fail outright with `exceeds complexity limits`. So
+`if ! grep -q "$x" files…` silently treats an error as "not found". This
+produced a completely wrong unreferenced-file list once. For existence checks
+across many files, read them in Python and use `in`, rather than trusting an
+exit code.
 
-- [ ] **Font Awesome icons on the timeline.** Replace the Unicode glyphs on
-  `/timeline/` with a proper icon set. Nothing is loaded today, so this means
-  adding Font Awesome (self-hosted in `assets/` rather than a CDN — the rest of
-  the site ships zero third-party requests) and then swapping the glyph
-  characters in `timeline/index.html`: the carousel arrows `‹`/`›`, the rebrand
-  arrow `⟶`, the `↓` in `.tl-hint`, and the category swatches if those should
-  become icons too. Keep the `aria-label`s on the arrow buttons; give any
-  decorative icon `aria-hidden="true"`.
+**Scans must cover the repo root, not just `assets/`.** `avatar-256px.png`
+lives at the top level, and an `assets/`-only sweep misses it. So do the
+favicons, `cv.pdf` and the app icons — those *are* referenced, and must not be
+swept up.
 
-- [ ] **Review the timeline categories, filtering and colours.** All three live
-  near the top of `timeline/index.html`'s inline JS:
-  - `CATS` (~line 331) defines the four categories and their colours:
-    `venture` `#FF8A33`, `politics` `#E6B33E`, `learning` `#E0743A`,
-    `life` `#E0B57A`. `learning` and `venture` are close enough to be hard to
-    tell apart in an 8px swatch, and `life` reads as washed-out next to the
-    others — worth re-picking the ramp.
-  - The filter pills are built from `CATS` (~line 437–456), so adding or
-    renaming a category flows through automatically, including the per-category
-    counts. One caveat: the filter is single-select and has no "clear"
-    beyond the `All` pill, and filtering only toggles `.is-hidden` — consider
-    whether multi-select is wanted.
-  - Each entry's `cat` array drives both `data-cats` (used by the filter) and
-    the `.tl-cat` tag row; the first category in the array also picks the
-    entry's accent (`CATS[cats[0]]`, ~line 389), so category *order* within an
-    entry is meaningful, not just membership. Re-check which entries are
-    multi-category and whether the leading one is the right accent.
+**`build-site.py` publishes what `git ls-files` reports, minus `NOPUBLISH`.**
+Two consequences: an uncommitted file will not ship no matter what is on disk
+(and a build run against a tree with staged-but-missing files will fail on the
+copy), and **any new root-level doc is published unless you add it to
+`NOPUBLISH`** — that is how `CLAUDE.md` ended up live and indexed at
+`/CLAUDE`. The workflow has a guard that fails the build if a known source file
+reaches the artifact; extend it alongside `NOPUBLISH`.
 
-- [ ] **Put "The Long Game" on the same line.** In the timeline lead
-  (`timeline/index.html:267–270`) the sentence `I'm playing The Long Game.` is
-  separated from the preceding copy by blank lines in the source. HTML collapses
-  those to a single space, so it already renders in the same paragraph but wraps
-  awkwardly. Tidy the source onto one line and stop the link phrase breaking
-  mid-name (e.g. `white-space:nowrap` on the anchor, or a non-breaking space).
+**`CNAME` must be inside the published artifact** or GitHub Pages drops the
+custom domain. There is a workflow guard asserting this. Do not remove it.
+
+**`_partials/` covers markup only — not the JavaScript.** The contact-form and
+mobile-menu handlers are copy-pasted into both `index.html` and
+`timeline/index.html` and nothing keeps them in step. Edit both, and diff them
+after. See `TODO.md` item 8.
+
+**Collapsed timeline panels must stay `visibility:hidden`.** A `.tl-collapse`
+at `grid-template-rows:0fr` is invisible but still in the accessibility tree,
+with its links tab-focusable — keyboard users land on invisible targets inside
+closed entries. The `visibility` rules and their transition delay are load-
+bearing, not cosmetic.
+
+**The timeline entry header is a real `<button>` inside its `<h3>`.** Only that
+button toggles; the card body deliberately does not, so selecting text in an
+open entry no longer closes it. Keep `aria-expanded` in step via `setMenu`-style
+single-path updates, keep the chevron `aria-hidden`, and keep `aria-controls`
+pointing at a unique panel id. Same pattern for the burger: every state change
+goes through one function so the class and the attribute cannot disagree.
+
+**`.mobile-menu.open` is not inside the 880px media query but `.nav .burger`
+is.** Widening past the breakpoint used to strand an open menu on screen with
+no control left to close it. There is now a `matchMedia` listener handling it —
+if you touch the breakpoint, keep them in agreement.
+
+**No Ruby. No Jekyll.** Both are gone; `Gemfile`, `Gemfile.lock` and
+`_config.yml` were deleted. Preview with `python3 -m http.server`. If you see
+instructions mentioning `bundle exec`, they are stale.
+
+**Deploys take about 40–50 seconds** from push to live. Verify against the live
+URL rather than assuming, and pass `--retry 2 --retry-all-errors` to `curl` in
+any health poll — a single transient failure is not an outage, and curl already
+prints `000` on failure, so a `|| echo 000` fallback doubles it into `000000`.
+
+**A 200 does not mean a link works.** `oxfordentrepreneurs.com` returns 200 and
+is a parked squatter page (114 bytes, JS-redirecting to `/lander`). Several
+dead links in this repo were not 404s either — they were domains on parking IPs
+answering only on port 80, so an `https://` link hung until the browser gave up
+rather than failing fast. Check what is *at* a URL, not just its status.

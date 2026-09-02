@@ -4,9 +4,14 @@ Guidance for Claude Code when working in this repo.
 
 ## Project
 
-Personal site for Maxx Turing — Jekyll on GitHub Pages, custom domain
-`maxxturing.com`. Almost everything lives in `index.html` (markup + inline JS)
-and `site.css`. See `README.md` for local preview setup.
+Personal site for Maxx Turing — hand-written static HTML on GitHub Pages, custom
+domain `maxxturing.com`. There is no site generator: `tools/build-site.py` copies
+the publishable files and writes `sitemap.xml`, and `.github/workflows/deploy.yml`
+runs it on every push to `main`. Almost everything lives in `index.html` (markup +
+inline JS) and `site.css`. See `README.md` for local preview setup.
+
+Two checks block a deploy: `tools/sync-partials.py --check` (pages must match
+`_partials/`) and htmlhint against `.htmlhintrc`. Run both before pushing.
 
 The timeline (`/timeline/`) is the exception: `timeline/index.html` is
 self-contained, with its own inline `<style>` block and its own inline JS. The

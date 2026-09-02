@@ -1,78 +1,57 @@
 # maxxturing.github.io
 
-Personal site for Maxx Turing, built with [Jekyll](https://jekyllrb.com/) and
-hosted on GitHub Pages (custom domain `maxxturing.com` via the `CNAME` file).
+Personal site for Maxx Turing — hand-written static HTML, hosted on GitHub Pages
+(custom domain `maxxturing.com` via the `CNAME` file).
+
+There is no site generator. Every page is plain HTML with no front matter and no
+template language; `tools/build-site.py` just copies the publishable files and
+writes `sitemap.xml`. `.github/workflows/deploy.yml` runs it on every push to
+`main` and deploys the result.
 
 ## Local setup
 
-GitHub Pages builds the site for you on push — these steps are only for previewing
-changes locally.
-
-### 1. Use a modern Ruby
-
-macOS ships an old, deprecated system Ruby (2.6). It cannot read this repo's
-`Gemfile.lock` at all — that lockfile is written by Bundler 4, and system Ruby's
-RubyGems is far too old for it, so every `bundle` command dies with
-`You must use Bundler 4 or greater with this lockfile`.
-
-Install Ruby 3.4 with Homebrew. Pin the version rather than using plain
-`brew install ruby`: that now resolves to Ruby 4.0, which shipped after the
-Jekyll 4.4.1 this site is locked to.
+No toolchain to install — the site is static HTML. To preview it:
 
 ```bash
-brew install ruby@3.4
+python3 -m http.server 8000
 ```
 
-Homebrew will not symlink a versioned formula into `/usr/local`, and it does not
-need to — put it ahead of the system Ruby on your `PATH` instead. Add this line
-to your `~/.zshrc` (Intel path shown; use `/opt/homebrew/opt/ruby@3.4/bin` on
-Apple Silicon):
+Open http://127.0.0.1:8000/. Note that pretty URLs like `/timeline/` resolve
+because the directories contain `index.html`, so they work here exactly as they
+do in production.
+
+To reproduce what actually gets published — the same thing CI builds:
 
 ```bash
-export PATH="/usr/local/opt/ruby@3.4/bin:$PATH"
+python3 tools/build-site.py     # stages into _site/ (git-ignored)
 ```
 
-Reload your shell (`source ~/.zshrc`) and confirm you're on the Homebrew Ruby:
+It publishes the files `git ls-files` reports, minus the `NOPUBLISH` list at the
+top of the script, so **only committed files are ever published** — an untracked
+scratch file in your working tree cannot leak into a deploy. It also writes
+`sitemap.xml`, taking the domain from `CNAME`.
+
+## Checks
+
+`.github/workflows/deploy.yml` runs these on every push, and a failure blocks the
+deploy. Run them yourself before pushing:
 
 ```bash
-ruby -v     # ruby 3.4.x, not 2.6
-bundle -v   # Bundler 4.x — ships with Ruby 3.4, no separate install needed
+python3 tools/sync-partials.py --check   # pages match _partials/
+npx htmlhint@1.9.2 index.html timeline/index.html cv/index.html meet-maxx/index.html
 ```
 
-### 2. Install dependencies
-
-From the repo root:
-
-```bash
-bundle install
-```
-
-Gems install into the Homebrew Ruby's user-owned gem directory, so no `sudo`
-is required.
-
-### 3. Serve the site
-
-```bash
-bundle exec jekyll serve
-```
-
-Open http://127.0.0.1:4000/. The server watches for changes and rebuilds
-automatically; stop it with `Ctrl+C`.
-
-To do a one-off build without serving:
-
-```bash
-bundle exec jekyll build   # output goes to _site/ (git-ignored)
-```
+The workflow additionally asserts that the built artifact contains `CNAME` (a
+missing one silently drops the custom domain) and that no source file — `CLAUDE.md`,
+`_partials/`, `tools/`, `scripts/` — reached the published site.
 
 ## Shared blocks (`_partials/`)
 
 Every page here — `index.html`, `timeline/index.html`, `cv/index.html` and
-`meet-maxx/index.html` — is hand-written static HTML with no YAML front matter,
-so Jekyll copies them verbatim and `{% include %}` never runs in them. That is
-why there is no `_layouts/` or `_includes/`: nothing could reach them. Blocks
-that appear on more than one page live in `_partials/` instead, and each page
-marks the region it borrows:
+`meet-maxx/index.html` — is hand-written static HTML served as-is. There is no
+template language, so a page cannot `include` anything. Blocks that appear on
+more than one page live in `_partials/` instead, and each page marks the region
+it borrows:
 
 ```html
 <!-- @partial:contact -->
@@ -92,8 +71,9 @@ python3 tools/sync-partials.py           # rewrite every marked region
 python3 tools/sync-partials.py --check   # exit 1 if a region is stale
 ```
 
-`_partials/` starts with an underscore, so Jekyll never publishes it. To catch a
-forgotten sync before it ships, wire the check into a local pre-commit hook:
+`_partials/` is in `NOPUBLISH`, so it never reaches the published site. CI fails
+the deploy if a page has drifted from its partial; to catch it before you push,
+wire the same check into a local pre-commit hook:
 
 ```bash
 printf '#!/bin/sh\npython3 tools/sync-partials.py --check\n' > .git/hooks/pre-commit
@@ -102,17 +82,23 @@ chmod +x .git/hooks/pre-commit
 
 ## Troubleshooting
 
-- **`make failed` / native extension errors (ffi, nokogiri) during `bundle install`** —
-  you're almost certainly on the old system Ruby. Recheck `ruby -v` (step 1).
-- **`Could not locate Gemfile`** — run commands from the repo root.
+- **`stale (run tools/sync-partials.py)`** — a shared block was edited in a page
+  instead of in `_partials/`. Fix the partial, then run the script to rewrite the
+  pages.
+- **Deploy failed on "Verify the artifact"** — either `CNAME` went missing (which
+  would drop the custom domain) or a source file reached the output. Check
+  `NOPUBLISH` in `tools/build-site.py`.
+- **A new file didn't publish** — `build-site.py` ships only what `git ls-files`
+  reports. Commit it.
 
 ## Tech notes
 
-- **Plugins:** `jekyll-sitemap`, `jekyll-paginate`, `jemoji` — listed under
-  `plugins:` in `_config.yml` (not `plugins_dir:`, which is where Jekyll looks
-  for plugin *files*; getting those two confused is what kept `sitemap.xml`
-  a 404).
-- **Markdown:** kramdown — only relevant if a page ever gains front matter.
+- **Build:** `tools/build-site.py` — a file copy plus `sitemap.xml`. The site
+  previously ran on Jekyll, which did only those two things here; it was dropped
+  because it required a Ruby toolchain, and GitHub Pages built with a different
+  Jekyll major version than a local `bundle exec` did.
+- **Sitemap:** generated from the published files; `<lastmod>` is each file's git
+  commit date, so it reflects real edits rather than checkout time.
 - **Styles:** one hand-written `site.css` at the repo root, plus a `<style>`
   block in `timeline/index.html` for the timeline's own layout. No framework,
   no build step.
@@ -132,7 +118,7 @@ the site loads no icon font and pulls its typefaces from Google Fonts via an
 
 ## Reference
 
-- Jekyll docs: https://jekyllrb.com/
+- GitHub Pages with a custom workflow: https://docs.github.com/pages
 
 ### Mobile / accessibility reminders
 

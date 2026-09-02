@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Sync shared HTML blocks from _partials/ into the static pages.
 
-index.html and timeline/index.html are hand-written static pages with no YAML
-front matter, so Jekyll copies them verbatim and {% include %} never runs in
-them. This keeps the shared blocks in one place anyway: each page marks the
-region it borrows, and this script rewrites that region from the partial.
+index.html and timeline/index.html are hand-written static pages served as-is,
+with no template language, so a page cannot include anything. This keeps the
+shared blocks in one place anyway: each page marks the region it borrows, and
+this script rewrites that region from the partial.
 
     <!-- @partial:contact -->
     ...generated, do not edit here...

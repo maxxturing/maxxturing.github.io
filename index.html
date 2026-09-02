@@ -415,10 +415,6 @@
 </section>
 <!-- /@partial:contact -->
 
-<template id="__bundler_thumbnail">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#120E0A"/><text x="50" y="46" font-family="monospace" font-size="13" fill="#FF8A33" text-anchor="middle" font-weight="700">maxx</text><text x="50" y="62" font-family="monospace" font-size="13" fill="#FBEFE4" text-anchor="middle">.turing</text></svg>
-</template>
-
 <script>
   // nav scroll state
   const nav = document.getElementById('nav');
@@ -796,24 +792,6 @@
   }
   initRotator('spStage','spThumbs','spCap');
   initRotator('commStage','commThumbs','commCap');
-  (function(){
-    const stage = document.getElementById('__noop_speaking');
-    if (!stage) return;
-    const imgs = [...stage.querySelectorAll('img')];
-    const thumbs = [...document.querySelectorAll('#spThumbs .sp-thumb')];
-    const cap = document.getElementById('spCap');
-    let i = 0, timer;
-    function show(n){
-      i = n;
-      imgs.forEach((im,k)=>im.classList.toggle('on', k===n));
-      thumbs.forEach((t,k)=>t.classList.toggle('on', k===n));
-      cap.textContent = imgs[n].dataset.cap;
-    }
-    function next(){ show((i+1)%imgs.length); }
-    function start(){ timer = setInterval(next, 4500); }
-    thumbs.forEach((t,k)=>t.addEventListener('click', ()=>{ show(k); clearInterval(timer); start(); }));
-    start();
-  })();
 </script>
 </body>
 </html>

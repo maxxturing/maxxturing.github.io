@@ -111,7 +111,11 @@ chmod +x .git/hooks/pre-commit
 ### What lives under `assets/`
 
 `img/`, `video/` and `docs/` — all three are referenced by the pages, and
-that is the whole of it. The old theme's `css/` (with its SCSS), `scripts/`
+that is the whole of it, with one deliberate exception:
+`assets/img/logo-maxxturing.svg`. No page loads it. It is the only vector copy
+of the wordmark in the repo — every favicon and app icon is a rasterised
+PNG/ICO — so it is kept as the source to regenerate those from. Don't delete it
+as an unreferenced file. The old theme's `css/` (with its SCSS), `scripts/`
 (jQuery, Modernizr, wow.js, instafeed) and `fonts/` (Font Awesome) are gone;
 the site loads no icon font and pulls its typefaces from Google Fonts via an
 `@import` at the top of `site.css`.

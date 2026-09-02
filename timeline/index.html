@@ -54,8 +54,10 @@
   @keyframes pop{0%{transform:scale(.2);}100%{transform:scale(1);}}
 
   .tl-card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:18px 22px;
-    transition:border-color .25s, transform .25s, background .25s;cursor:pointer;}
+    transition:border-color .25s, transform .25s, background .25s;}
   .tl-card:hover{border-color:var(--orange);background:var(--panel2);}
+  /* keyboard focus should light the card up the same way hovering it does */
+  .tl-card:focus-within{border-color:var(--orange);background:var(--panel2);}
   .tl-card.open{border-color:var(--orange);transform:none;background:var(--panel2);}
   .tl-meta{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;flex-wrap:wrap;}
   .tl-date{font-family:var(--mono);font-size:12.5px;letter-spacing:.05em;color:var(--ink2);}
@@ -65,15 +67,29 @@
     display:flex;align-items:center;gap:7px;color:var(--muted);}
   .tl-cat .swatch{width:8px;height:8px;border-radius:50%;}
 
-  .tl-headrow{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;}
-  .tl-card h3{font-size:19px;line-height:1.2;margin:0;letter-spacing:-0.01em;transition:color .2s;}
-  .tl-card:hover h3,.tl-card.open h3{color:var(--orange);}
+  /* The heading stays a heading so it can still be navigated to; the button
+     inside it is the actual disclosure control. The chevron is aria-hidden, so
+     the button's accessible name is just the entry title. */
+  .tl-h{margin:0;}
+  .tl-toggle{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;
+    width:100%;background:none;border:0;padding:0;margin:0;font:inherit;color:inherit;
+    text-align:left;cursor:pointer;}
+  .tl-toggle:focus-visible{outline:2px solid var(--orange);outline-offset:4px;border-radius:8px;}
+  .tl-title{font-size:19px;line-height:1.2;letter-spacing:-0.01em;transition:color .2s;}
+  .tl-card:hover .tl-title,.tl-card.open .tl-title{color:var(--orange);}
   .tl-chev{flex:none;width:26px;height:26px;border:1px solid var(--line2);border-radius:7px;display:flex;align-items:center;
     justify-content:center;color:var(--muted);font-size:16px;transition:transform .35s, color .2s, border-color .2s;margin-top:2px;}
   .tl-card.open .tl-chev{transform:rotate(135deg);color:var(--orange);border-color:var(--orange);}
 
   .tl-collapse{display:grid;transition:grid-template-rows .42s cubic-bezier(.3,.7,.2,1), opacity .3s ease;}
   .tl-collapse>div{overflow:hidden;min-height:0;}
+  /* A panel at 0fr is invisible but still in the accessibility tree, and links
+     inside it stay tab-focusable — so collapsed entries would swallow the
+     keyboard. visibility:hidden removes them; the delay lets the collapse
+     animation finish before they disappear. */
+  .tl-full>div{visibility:hidden;transition:visibility 0s linear .42s;}
+  .tl-card.open .tl-full>div{visibility:visible;transition-delay:0s;}
+  .tl-card.open .tl-summary>div{visibility:hidden;transition:visibility 0s linear .42s;}
   .tl-summary{grid-template-rows:1fr;opacity:1;}
   .tl-card.open .tl-summary{grid-template-rows:0fr;opacity:0;}
   .tl-full{grid-template-rows:0fr;opacity:0;}
@@ -384,7 +400,7 @@ const DATA = [
 ];
 
 const itemsEl = document.getElementById('items');
-DATA.forEach(e => {
+DATA.forEach((e, i) => {
   const cats = Array.isArray(e.cat) ? e.cat : [e.cat];
   const first = CATS[cats[0]];
   const el = document.createElement('div');
@@ -398,17 +414,22 @@ DATA.forEach(e => {
         <span class="tl-date"><b>${e.d}</b> ${e.y}</span>
         <span class="tl-cats">${tags}</span>
       </div>
-      <div class="tl-headrow">
-        <h3>${e.t}</h3>
-        <span class="tl-chev">+</span>
-      </div>
+      <h3 class="tl-h">
+        <button type="button" class="tl-toggle" aria-expanded="false" aria-controls="tl-panel-${i}">
+          <span class="tl-title">${e.t}</span>
+          <span class="tl-chev" aria-hidden="true">+</span>
+        </button>
+      </h3>
       <div class="tl-collapse tl-summary"><div><p>${e.sb}</p></div></div>
-      <div class="tl-collapse tl-full"><div><div class="tl-rich">${e.b}</div></div></div>
+      <div class="tl-collapse tl-full" id="tl-panel-${i}"><div><div class="tl-rich">${e.b}</div></div></div>
     </div>`;
   const card = el.querySelector('.tl-card');
-  card.addEventListener('click', (ev) => {
-    if (ev.target.closest('a, .tl-carousel, .tl-car-btn, iframe, .tl-doc, .vid')) return;
-    card.classList.toggle('open');
+  // Only the header button toggles. It used to be the whole card, which meant
+  // no keyboard could reach it, and clicking anywhere in an open entry — to
+  // select a line of text, say — collapsed it.
+  const toggle = el.querySelector('.tl-toggle');
+  toggle.addEventListener('click', () => {
+    toggle.setAttribute('aria-expanded', String(card.classList.toggle('open')));
     requestAnimationFrame(updateProgress);
     setTimeout(updateProgress, 440);
   });

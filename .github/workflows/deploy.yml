@@ -1,0 +1,78 @@
+name: Deploy site
+
+# Replaces the Jekyll build GitHub Pages used to run for us. Jekyll only ever
+# emitted sitemap.xml and withheld a few source files; tools/build-site.py does
+# both, so this workflow can also run the checks Jekyll had nowhere to put.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never let two deploys race. Queue rather than cancel: a cancelled deploy can
+# leave Pages serving a half-published artifact.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # build-site.py reads each file's last commit date for <lastmod>,
+          # which needs real history, not a depth-1 checkout.
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Check _partials are in sync
+        # index.html and the other pages carry generated copies of the shared
+        # blocks. If someone edited a page instead of the partial, fail here
+        # rather than shipping four pages that disagree with each other.
+        run: python3 tools/sync-partials.py --check
+
+      - name: Lint HTML
+        run: >-
+          npx --yes htmlhint@1.9.2
+          index.html timeline/index.html cv/index.html meet-maxx/index.html
+
+      - name: Stage site
+        run: python3 tools/build-site.py --out _site
+
+      - name: Verify the artifact
+        # Cheap guards against the two ways this deploy could quietly go wrong:
+        # losing the custom domain, or publishing a source file.
+        run: |
+          test -f _site/CNAME || { echo "::error::CNAME missing — custom domain would break"; exit 1; }
+          test -f _site/sitemap.xml || { echo "::error::sitemap.xml missing"; exit 1; }
+          test -f _site/index.html || { echo "::error::index.html missing"; exit 1; }
+          for leaked in CLAUDE.md README.md _config.yml Gemfile tools scripts _partials; do
+            if [ -e "_site/$leaked" ]; then
+              echo "::error::$leaked leaked into the published site"; exit 1
+            fi
+          done
+          echo "artifact OK — $(find _site -type f | wc -l | tr -d ' ') files"
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

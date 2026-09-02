@@ -10,24 +10,33 @@ changes locally.
 
 ### 1. Use a modern Ruby
 
-macOS ships an old, deprecated system Ruby (2.6) that **cannot** build this site's
-native gem dependencies. Install a current Ruby with Homebrew:
+macOS ships an old, deprecated system Ruby (2.6). It cannot read this repo's
+`Gemfile.lock` at all — that lockfile is written by Bundler 4, and system Ruby's
+RubyGems is far too old for it, so every `bundle` command dies with
+`You must use Bundler 4 or greater with this lockfile`.
+
+Install Ruby 3.4 with Homebrew. Pin the version rather than using plain
+`brew install ruby`: that now resolves to Ruby 4.0, which shipped after the
+Jekyll 4.4.1 this site is locked to.
 
 ```bash
-brew install ruby
+brew install ruby@3.4
 ```
 
-Then put it ahead of the system Ruby on your `PATH`. Add this line to your
-`~/.zshrc` (Apple Silicon path shown; use `/usr/local/opt/ruby/bin` on Intel Macs):
+Homebrew will not symlink a versioned formula into `/usr/local`, and it does not
+need to — put it ahead of the system Ruby on your `PATH` instead. Add this line
+to your `~/.zshrc` (Intel path shown; use `/opt/homebrew/opt/ruby@3.4/bin` on
+Apple Silicon):
 
 ```bash
-export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
+export PATH="/usr/local/opt/ruby@3.4/bin:$PATH"
 ```
 
 Reload your shell (`source ~/.zshrc`) and confirm you're on the Homebrew Ruby:
 
 ```bash
-ruby -v   # should be 3.x / 4.x, not 2.6
+ruby -v     # ruby 3.4.x, not 2.6
+bundle -v   # Bundler 4.x — ships with Ruby 3.4, no separate install needed
 ```
 
 ### 2. Install dependencies

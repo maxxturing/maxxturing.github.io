@@ -127,7 +127,11 @@ def main():
     (out / "sitemap.xml").write_text(xml)
 
     held = len(tracked_files()) - len(published)
-    print(f"staged {len(published)} files into {out.relative_to(ROOT)}/ "
+    try:                      # --out may point outside the repo
+        shown = out.relative_to(ROOT)
+    except ValueError:
+        shown = out
+    print(f"staged {len(published)} files into {shown}/ "
           f"({held} held back)")
     print(f"sitemap.xml: {n} urls, base {base}")
 

@@ -532,6 +532,12 @@ button.gal-badge{appearance:none;-webkit-appearance:none;margin:0;cursor:pointer
   font-family:var(--sans);font-size:15px;padding:13px 15px;transition:border-color .2s;}
 .form input:focus,.form textarea:focus{outline:none;border-color:var(--orange);}
 .form textarea{min-height:120px;resize:vertical;}
+/* Submit result. Left blank and [hidden] in the markup so that writing to it is
+   a real content change — a role="status" region that is merely revealed, with
+   its text already in place, may not be announced at all. */
+.form-note{font-size:13px;margin:0;}
+.form-note.is-ok{color:var(--green);}
+.form-note.is-err{color:#E0743A;}
 .foot{margin-top:70px;display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:12px;color:var(--muted2);flex-wrap:wrap;gap:10px;}
 
 /* ============================================================

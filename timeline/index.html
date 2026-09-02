@@ -309,7 +309,7 @@ I'm playing <a href="https://www.youtube.com/watch?v=r7hraQwMKIw&amp;list=PLctgP
         <label for="f-msg">Message</label>
         <textarea id="f-msg" name="message" placeholder="Say hello…" required></textarea>
         <button class="btn" type="submit" style="align-self:flex-start;">Send message</button>
-        <p id="formNote" class="mono" style="display:none;color:var(--green);font-size:13px;margin:0;">Thanks — your message has been received and you'll hear back soon 👍</p>
+        <p id="formNote" class="form-note mono" role="status" hidden></p>
       </form>
     </div>
     <div class="foot">
@@ -523,6 +523,21 @@ document.getElementById('contactForm').addEventListener('submit', async (e) => {
   const form = e.target;
   const note = document.getElementById('formNote');
   const btn = form.querySelector('button[type=submit]');
+
+  // One place to set the result, so text and colour can never disagree. They
+  // used to: the success wording sat in the markup and only the failure path
+  // rewrote it, so a send that failed and then succeeded still read "something
+  // went wrong" in red under a "Sent" button.
+  // note is role="status", so unhide before writing — a live region has to be
+  // exposed at the moment its text changes for the result to be announced.
+  const FAILED = 'Something went wrong — please email maxx@maxxturing.com instead.';
+  const SENT = 'Thanks — your message has been received and you\'ll hear back soon 👍';
+  const showNote = (msg, ok) => {
+    note.className = 'form-note mono ' + (ok ? 'is-ok' : 'is-err');
+    note.hidden = false;
+    note.textContent = msg;
+  };
+
   btn.textContent = 'Sending…';
   try {
     const res = await fetch('https://api.web3forms.com/submit', {
@@ -532,19 +547,15 @@ document.getElementById('contactForm').addEventListener('submit', async (e) => {
     });
     const data = await res.json();
     if (data.success) {
-      note.style.display = 'block';
+      showNote(SENT, true);
       form.querySelectorAll('input,textarea').forEach(i => { if (i.type !== 'hidden' && i.type !== 'checkbox') i.value = ''; });
-      btn.textContent = 'Sent ✓';
+      btn.textContent = 'Sent \u2713';
     } else {
-      note.style.color = '#E0743A';
-      note.textContent = 'Something went wrong — please email maxx@maxxturing.com instead.';
-      note.style.display = 'block';
+      showNote(FAILED, false);
       btn.textContent = 'Send message';
     }
   } catch (err) {
-    note.style.color = '#E0743A';
-    note.textContent = 'Something went wrong — please email maxx@maxxturing.com instead.';
-    note.style.display = 'block';
+    showNote(FAILED, false);
     btn.textContent = 'Send message';
   }
 });

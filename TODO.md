@@ -4,7 +4,8 @@ Open work on the site. Each item says where it lives and what you need to know
 to start, so none of it needs rediscovering. Not published — see `NOPUBLISH` in
 `tools/build-site.py`.
 
-Last reviewed 3 September 2026 against `23c0803`.
+Last reviewed 3 September 2026. Items 6 and 7 — the timeline lead and hint
+copy — are done and have been removed; the rest are renumbered.
 
 ---
 
@@ -94,7 +95,7 @@ Glyphs to swap in `timeline/index.html`:
 
 - the carousel arrows `‹` / `›` — keep the `aria-label`s on those buttons
 - the rebrand arrow `⟶` (2 occurrences)
-- the `↓` in `.tl-hint` (`:288`)
+- the `↓` in `.tl-hint` (`:286`)
 - the category swatches, if those should become icons
 
 Note the disclosure chevron is **no longer** a bare glyph: it is
@@ -120,23 +121,7 @@ All three live near the top of `timeline/index.html`'s inline JS.
   picks the accent via `CATS[cats[0]]`. Re-check which entries are
   multi-category and whether the leading one is the right accent.
 
-## 6. Put "The Long Game" on the same line
-
-In the timeline lead the sentence `I'm playing The Long Game.` is separated
-from the preceding copy by blank lines in the source. HTML collapses them to a
-single space, so it already renders in the same paragraph but wraps awkwardly.
-Tidy the source onto one line and stop the link phrase breaking mid-name —
-`white-space:nowrap` on the anchor, or a non-breaking space.
-
-## 7. The timeline hint copy is now slightly wrong
-
-`timeline/index.html:288` reads *"Tap any moment to expand the full story ↓"*.
-That was true when the whole card was clickable. It is not any more: only the
-header button expands an entry, deliberately, so that selecting text in an open
-entry no longer collapses it. Reword — and it is now worth saying the keyboard
-works, since it did not before.
-
-## 8. The contact-form and nav JS is duplicated and unsynced
+## 6. The contact-form and nav JS is duplicated and unsynced
 
 `_partials/` keeps the **markup** of the contact section and the analytics tag
 in step across pages, and `tools/sync-partials.py --check` fails the build if a
@@ -148,7 +133,7 @@ They are byte-identical today (bar indentation) because both copies were edited
 together, but nothing enforces it. Either extend the partial mechanism to cover
 a script block, or move the shared JS into a real `.js` file both pages load.
 
-## 9. Verify whether the missing image dimensions actually cost anything
+## 7. Verify whether the missing image dimensions actually cost anything
 
 `index.html` has 68 `<img>` elements and only **one** carries `width`/`height`.
 `timeline/index.html` is better at 27 of 60. Missing intrinsic dimensions
@@ -162,7 +147,7 @@ loads. What is not obviously covered is the hero and the one-off inline shots.
 Measure it before fixing it — check CLS in a real browser rather than adding
 136 attributes on principle.
 
-## 10. Not in this repo: `x.votemaxx.com` has no valid certificate
+## 8. Not in this repo: `x.votemaxx.com` has no valid certificate
 
 The timeline no longer links to it, but the subdomain still resolves to
 Squarespace and still throws a full-page TLS warning to anyone who reaches it
@@ -174,7 +159,7 @@ Your other `votemaxx.com` subdomains (`islington.`, `bunhill-2021.`,
 was missed in the Squarespace domain settings rather than a deliberate
 retirement. Either add it there so a cert is issued, or drop the DNS record.
 
-## 11. Do a real browser pass on the accessibility work
+## 9. Do a real browser pass on the accessibility work
 
 The timeline disclosure buttons and the mobile menu were verified in jsdom,
 which confirms structure and behaviour but is not a browser. It cannot tell you

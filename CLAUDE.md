@@ -58,7 +58,7 @@ custom domain. There is a workflow guard asserting this. Do not remove it.
 **`_partials/` covers markup only — not the JavaScript.** The contact-form and
 mobile-menu handlers are copy-pasted into both `index.html` and
 `timeline/index.html` and nothing keeps them in step. Edit both, and diff them
-after. See `TODO.md` item 8.
+after. See `TODO.md` item 6.
 
 **Collapsed timeline panels must stay `visibility:hidden`.** A `.tl-collapse`
 at `grid-template-rows:0fr` is invisible but still in the accessibility tree,

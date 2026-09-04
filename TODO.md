@@ -13,17 +13,14 @@ each time, so a stale "item N" reference elsewhere is a bug.
 
 ## Do not delete these
 
-Five files are referenced by nothing in this repo and are all load-bearing.
-Every unreferenced-file scan will offer them up; keep all five.
+Two files are referenced by nothing in this repo and both are load-bearing.
+Every unreferenced-file scan will offer them up; keep both.
 
-- **`avatar-256px.png`** (repo root) — the portrait in Maxx's Gmail signature.
-  Superseded by a new signature on 4 September 2026, but **every email already
-  sent still points at this exact URL** and those cannot be updated. It can
-  never be renamed, nor tidied into `assets/`, however odd it looks at the
-  root — the untidiness is why `assets/`-only scans kept missing it.
-- **`assets/img/sig-linkedin.png`**, **`sig-github.png`**, **`sig-x.png`**,
-  **`sig-instagram.png`** — the social icons in the current signature. Same
-  frozen-URL rule applies from now on.
+- **`avatar-256px.png`** (repo root) — the portrait in Maxx's old Gmail
+  signature. The signature has been replaced, but **every email already sent
+  still points at this exact URL** and those cannot be updated. It can never be
+  renamed, nor tidied into `assets/`, however odd it looks at the root — the
+  untidiness is why `assets/`-only scans kept missing it.
 - **`assets/img/logo-maxxturing.svg`** — the only vector copy of the wordmark.
   Every favicon and app icon is a rasterised PNG/ICO, so this is the source
   they are regenerated from.
@@ -31,6 +28,11 @@ Every unreferenced-file scan will offer them up; keep all five.
 The media sweep that used to be item 1 here is done: 28 files and 48 MB became
 one file, and that one is `avatar-256px.png` above. Twelve of the 28 turned out
 to be missing references rather than dead weight. Published site: 150 MB → 104 MB.
+
+The four `assets/img/sig-*.png` social icons briefly lived here too, for a
+hand-built signature that lost out to a HubSpot-generated one. They have been
+deleted. If a future signature wants self-hosted icons, they are in history at
+`5a50833`.
 
 ---
 

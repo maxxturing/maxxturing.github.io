@@ -116,13 +116,12 @@ chmod +x .git/hooks/pre-commit
 `img/`, `video/` and `docs/` — all three are referenced by the pages, and
 that is the whole of it, with two deliberate exceptions.
 
-**`assets/img/sig-*.png` and `avatar-256px.png` are used by the email
-signature, not by any page.** The four `sig-` icons (LinkedIn, GitHub, X,
-Instagram) and the root-level avatar are hotlinked from Maxx's Gmail
-signature, so every unreferenced-file scan will report them and every one of
-them must be kept and keep its exact URL — emails already sent point at these
-paths and cannot be updated. `avatar-256px.png` in particular can never be
-renamed or moved into `assets/`, however untidy the repo root looks.
+**`avatar-256px.png` is used by the email signature, not by any page.** The
+root-level avatar is hotlinked from Maxx's Gmail signature, so every
+unreferenced-file scan will report it — and it must be kept, at that exact
+URL. Emails already sent point at that path and cannot be updated, so it can
+never be renamed or moved into `assets/`, however untidy the repo root looks.
+The signature has since been replaced; the old emails have not.
 
 The other exception is `assets/img/logo-maxxturing.svg`. No page loads it. It is the only vector copy
 of the wordmark in the repo — every favicon and app icon is a rasterised

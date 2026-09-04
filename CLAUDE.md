@@ -44,14 +44,13 @@ lives at the top level, and an `assets/`-only sweep misses it. So do the
 favicons, `cv.pdf` and the app icons — those *are* referenced, and must not be
 swept up.
 
-**Five files are referenced only by the email signature.** `avatar-256px.png`
-at the repo root and `assets/img/sig-{linkedin,github,x,instagram}.png` are
-hotlinked from Maxx's Gmail signature. No page loads them, so every
-unreferenced-file scan reports them — and every one is load-bearing. Worse,
-their URLs are frozen: emails already sent point at these exact paths and can
-never be updated, so `avatar-256px.png` cannot be tidied into `assets/` no
-matter how odd it looks at the root. Keep them, keep their names. README says
-the same.
+**`avatar-256px.png` at the repo root is the email-signature portrait.** No
+page loads it, so every unreferenced-file scan reports it — and it is
+load-bearing. Its URL is frozen: emails already sent point at that exact path
+and can never be updated, so it cannot be renamed or tidied into `assets/` no
+matter how odd it looks at the root. The signature itself has since been
+replaced, which does not help — the old emails are still out there. Keep it,
+keep its name. README and `TODO.md` say the same.
 
 **...and must search only the *published* files.** The other half of the same
 trap: `TODO.md` names `london.mp4`, `avatar-256px.png` and `meta-cover.png` in

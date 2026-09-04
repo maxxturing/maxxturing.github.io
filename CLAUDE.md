@@ -44,6 +44,15 @@ lives at the top level, and an `assets/`-only sweep misses it. So do the
 favicons, `cv.pdf` and the app icons — those *are* referenced, and must not be
 swept up.
 
+**...and must search only the *published* files.** The other half of the same
+trap: `TODO.md` names `london.mp4`, `avatar-256px.png` and `meta-cover.png` in
+prose, and `README.md` names `logo-maxxturing.svg`. Search every tracked file
+and all four look referenced, so a 50.7 MB answer comes back as 6.9 MB. Build
+the haystack from `git ls-files` minus `NOPUBLISH` — the same list
+`build-site.py` publishes — since only a published file can cause one to be
+served. (Sizes: the TODO quotes MiB, a scan in bytes reports MB. 48.4 MiB and
+50.7 MB are the same pile.)
+
 **`build-site.py` publishes what `git ls-files` reports, minus `NOPUBLISH`.**
 Two consequences: an uncommitted file will not ship no matter what is on disk
 (and a build run against a tree with staged-but-missing files will fail on the
@@ -90,10 +99,14 @@ if you touch the breakpoint, keep them in agreement.
 `_config.yml` were deleted. Preview with `python3 -m http.server`. If you see
 instructions mentioning `bundle exec`, they are stale.
 
-**Deploys take about 40–50 seconds** from push to live. Verify against the live
-URL rather than assuming, and pass `--retry 2 --retry-all-errors` to `curl` in
-any health poll — a single transient failure is not an outage, and curl already
-prints `000` on failure, so a `|| echo 000` fallback doubles it into `000000`.
+**Deploys usually take 40–50 seconds** from push to live — but one in this
+repo took **135**. Do not conclude a push failed because the new file 404s a
+minute later; confirm `git rev-parse origin/main` actually carries the commit,
+then keep polling for a few minutes before suspecting the workflow. Verify
+against the live URL rather than assuming, and pass `--retry 2` and
+`--retry-all-errors` to `curl` in any health poll — a single transient failure
+is not an outage, and curl already prints `000` on failure, so a `|| echo 000`
+fallback doubles it into `000000`.
 
 **A 200 does not mean a link works.** `oxfordentrepreneurs.com` returns 200 and
 is a parked squatter page (114 bytes, JS-redirecting to `/lander`). Several

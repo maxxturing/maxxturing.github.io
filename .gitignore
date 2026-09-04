@@ -2,3 +2,9 @@
 _site/
 node_modules/
 .sass-cache/
+
+# Editor and interpreter droppings. These matter more than usual here:
+# build-site.py publishes what `git ls-files` reports minus NOPUBLISH, and
+# neither of these is in NOPUBLISH — commit one and it ships.
+.vscode/
+__pycache__/

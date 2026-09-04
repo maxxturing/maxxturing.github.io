@@ -102,8 +102,11 @@ chmod +x .git/hooks/pre-commit
 - **Styles:** one hand-written `site.css` at the repo root, plus a `<style>`
   block in `timeline/index.html` for the timeline's own layout. No framework,
   no build step.
-- **Scripts:** inline `<script>` at the foot of the two long pages; `cv/` and
-  `meet-maxx/` are bare iframe wrappers. No jQuery, no bundler.
+- **Scripts:** `site.js` at the repo root — beside `site.css` — holds what the
+  two long pages share: the mobile menu and the contact form. Both load it with
+  `<script src="/site.js" defer></script>`. Everything page-specific stays in an
+  inline `<script>` at the foot of each page. `cv/` and `meet-maxx/` are bare
+  iframe wrappers and load neither. No jQuery, no bundler.
 - **Images:** capped at 2000px on the long edge (2600px for the hero) and lazy
   below the fold. Please resize before committing a camera original — the pages
   once shipped 70MB of them.

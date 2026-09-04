@@ -55,10 +55,18 @@ reaches the artifact; extend it alongside `NOPUBLISH`.
 **`CNAME` must be inside the published artifact** or GitHub Pages drops the
 custom domain. There is a workflow guard asserting this. Do not remove it.
 
-**`_partials/` covers markup only — not the JavaScript.** The contact-form and
-mobile-menu handlers are copy-pasted into both `index.html` and
-`timeline/index.html` and nothing keeps them in step. Edit both, and diff them
-after. See `TODO.md` item 6.
+**Shared JavaScript lives in `/site.js` — don't put it back in the pages.**
+The mobile-menu and contact-form handlers were once copy-pasted into both
+`index.html` and `timeline/index.html`, with nothing keeping them in step
+(`_partials/` covers markup only, and still does). They are now one copy in
+`site.js` at the repo root, beside `site.css`, loaded with
+`<script src="/site.js" defer></script>`. Two things about that tag: the path
+is root-relative on purpose — `index.html` uses relative asset paths elsewhere,
+but a relative one here would resolve to `/timeline/site.js` from the timeline
+— and `defer` is what lets the file call `getElementById` at top level. Each
+block returns early if its element is absent, so adding the file to `cv/` or
+`meet-maxx/` stays harmless. Everything else in those pages' inline `<script>`
+blocks is page-specific and belongs where it is.
 
 **Collapsed timeline panels must stay `visibility:hidden`.** A `.tl-collapse`
 at `grid-template-rows:0fr` is invisible but still in the accessibility tree,

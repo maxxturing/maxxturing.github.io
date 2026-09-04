@@ -4,8 +4,10 @@ Open work on the site. Each item says where it lives and what you need to know
 to start, so none of it needs rediscovering. Not published — see `NOPUBLISH` in
 `tools/build-site.py`.
 
-Last reviewed 3 September 2026. Items 6 and 7 — the timeline lead and hint
-copy — are done and have been removed; the rest are renumbered.
+Last reviewed 4 September 2026. Three items are done and have been removed:
+the timeline lead and hint copy, and the duplicated contact-form and nav JS
+(now one copy in `/site.js`). The rest are renumbered each time, so a stale
+"item N" reference elsewhere is a bug — `CLAUDE.md` no longer holds one.
 
 ---
 
@@ -121,19 +123,7 @@ All three live near the top of `timeline/index.html`'s inline JS.
   picks the accent via `CATS[cats[0]]`. Re-check which entries are
   multi-category and whether the leading one is the right accent.
 
-## 6. The contact-form and nav JS is duplicated and unsynced
-
-`_partials/` keeps the **markup** of the contact section and the analytics tag
-in step across pages, and `tools/sync-partials.py --check` fails the build if a
-page drifts. The **JavaScript** for those same features is not covered: the
-contact-form handler and the mobile-menu handler are each copy-pasted into both
-`index.html` and `timeline/index.html`, outside any `@partial:` region.
-
-They are byte-identical today (bar indentation) because both copies were edited
-together, but nothing enforces it. Either extend the partial mechanism to cover
-a script block, or move the shared JS into a real `.js` file both pages load.
-
-## 7. Verify whether the missing image dimensions actually cost anything
+## 6. Verify whether the missing image dimensions actually cost anything
 
 `index.html` has 68 `<img>` elements and only **one** carries `width`/`height`.
 `timeline/index.html` is better at 27 of 60. Missing intrinsic dimensions
@@ -147,7 +137,7 @@ loads. What is not obviously covered is the hero and the one-off inline shots.
 Measure it before fixing it — check CLS in a real browser rather than adding
 136 attributes on principle.
 
-## 8. Not in this repo: `x.votemaxx.com` has no valid certificate
+## 7. Not in this repo: `x.votemaxx.com` has no valid certificate
 
 The timeline no longer links to it, but the subdomain still resolves to
 Squarespace and still throws a full-page TLS warning to anyone who reaches it
@@ -159,7 +149,7 @@ Your other `votemaxx.com` subdomains (`islington.`, `bunhill-2021.`,
 was missed in the Squarespace domain settings rather than a deliberate
 retirement. Either add it there so a cert is issued, or drop the DNS record.
 
-## 9. Do a real browser pass on the accessibility work
+## 8. Do a real browser pass on the accessibility work
 
 The timeline disclosure buttons and the mobile menu were verified in jsdom,
 which confirms structure and behaviour but is not a browser. It cannot tell you

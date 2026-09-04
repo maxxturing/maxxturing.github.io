@@ -4,13 +4,20 @@ Open work on the site. Each item says where it lives and what you need to know
 to start, so none of it needs rediscovering. Not published — see `NOPUBLISH` in
 `tools/build-site.py`.
 
-Last reviewed 4 September 2026, down from eleven items to five. Removed as
-done: the timeline lead and hint copy, the duplicated contact-form and nav JS
-(now one copy in `/site.js`), the unreferenced-media sweep, and the
-image-dimensions question (answered — see the gotcha in `CLAUDE.md`). Removed
-as won't-do: `x.votemaxx.com`'s certificate, which is Squarespace-side and not
-worth chasing — the site links straight to <https://x.com/VoteMaxx>. Items are
-renumbered each time, so a stale "item N" reference elsewhere is a bug.
+Last reviewed **5 September 2026** against `dff4bcd`, which is live. Every
+file path, line number, colour and count below was re-checked against the tree
+on that date, not carried over.
+
+Down from eleven items to five. Removed as done: the timeline lead and hint
+copy; the duplicated contact-form and nav JS (now one copy in `/site.js`); the
+unreferenced-media sweep; and the image-dimensions question (answered — see the
+gotcha in `CLAUDE.md`, which also says not to "fix" it). Removed as won't-do:
+`x.votemaxx.com`'s certificate, Squarespace-side and not worth chasing, since
+the site links straight to <https://x.com/VoteMaxx>.
+
+Items are renumbered every time something is removed, so a stale "item N"
+reference anywhere is a bug. The only two in this file point at items 1 and 2
+and are correct as of this review.
 
 ---
 
@@ -41,8 +48,9 @@ deleted. If a future signature wants self-hosted icons, they are in history at
 
 ## 1. Update the labels in the Beyond work section
 
-The `.gal-badge` buttons on the gallery figures in `index.html`
-(`<section id="beyond">`, the eight `<figure class="duo reveal …">` rows).
+The `.gal-badge` buttons on the gallery figures in `index.html` — the section
+is `<section class="section" id="beyond">` at `:351`, and the eight
+`<figure class="duo reveal g-…">` rows run `:358`–`:365`.
 Current labels:
 
 - `▶ video` — six figures (skydive, Cape Town, Camps Bay, Savute, St Anton,
@@ -68,7 +76,8 @@ its anatomy intact:
 - `class="duo reveal g-<letter>"` plus a behaviour class (`has-video`,
   `has-shot`, `has-seq`, `has-macro`) — the behaviour class is what the inline
   JS hooks. `.gal` is a flex-wrap row, so the `g-*` letter only matters for the
-  grid overrides around `site.css:580`.
+  one grid override that uses it, `.gal .g-a,.gal .g-f{grid-row:auto;}` at
+  `site.css:586`, inside the mobile media query.
 - `style="--ar:<aspect ratio>"`, optionally `--vpos` to shift the video crop.
 - a poster `<img>` with real `alt`, plus, for video figures,
   `<video muted loop playsinline preload="none" aria-hidden="true" tabindex="-1">`.
@@ -88,9 +97,10 @@ and that is worth keeping.
 
 Glyphs to swap in `timeline/index.html`:
 
-- the carousel arrows `‹` / `›` — keep the `aria-label`s on those buttons
+- the carousel arrows `‹` / `›` — three carousels, so six buttons. Keep the
+  `aria-label`s ("Previous" / "Next") on them
 - the rebrand arrow `⟶` (2 occurrences)
-- the `↓` in `.tl-hint` (`:286`)
+- the `↓` in `.tl-hint` (`:287`)
 - the category swatches, if those should become icons
 
 Note the disclosure chevron is **no longer** a bare glyph: it is
@@ -103,10 +113,23 @@ Give any decorative icon `aria-hidden="true"`.
 
 All three live near the top of `timeline/index.html`'s inline JS.
 
-- **`CATS`** defines four categories and their colours: `venture` `#FF8A33`,
-  `politics` `#E6B33E`, `learning` `#E0743A`, `life` `#E0B57A`. `learning` and
-  `venture` are close enough to be hard to tell apart in an 8px swatch, and
-  `life` reads washed-out beside the others. Worth re-picking the ramp.
+- **`CATS`** defines four categories and their colours, and the problem is
+  measurable rather than a matter of taste. Perceptual distance (CIE76 dE,
+  where under about 15 reads as "the same colour" at swatch size):
+
+  | pair | dE |
+  |---|---|
+  | `venture` `#FF8A33` vs `learning` `#E0743A` | **15.8** |
+  | `politics` `#E6B33E` vs `life` `#E0B57A` | 27.8 |
+  | every other pair | 32–41 |
+
+  So `venture` and `learning` are the collision, at roughly half the separation
+  of the next-closest pair. Contrast against the open card (`--panel2`
+  `#241C13`) is fine everywhere and is not the issue: `venture` 7.15:1,
+  `politics` 8.70:1, `learning` 5.38:1, `life` 8.84:1 — though `learning` is
+  the weakest and `life` the palest, which is why `life` reads washed out.
+  Re-pick the ramp so no pair sits under about 25 dE while all four stay above
+  4.5:1 on the card.
 - **The filter pills** are built from `CATS`, so adding or renaming a category
   flows through automatically, counts included. Caveat: the filter is
   single-select with no "clear" beyond the `All` pill, and filtering only
@@ -116,13 +139,42 @@ All three live near the top of `timeline/index.html`'s inline JS.
   picks the accent via `CATS[cats[0]]`. Re-check which entries are
   multi-category and whether the leading one is the right accent.
 
-## 5. Do a real browser pass on the accessibility work
+## 5. Do a real browser pass on `/timeline/`
 
-The timeline disclosure buttons and the mobile menu were verified in jsdom,
-which confirms structure and behaviour but is not a browser. It cannot tell you
-whether the focus ring actually looks right, whether the collapse animation
-still feels smooth with `visibility` delayed behind it, or how a real screen
-reader announces things.
+The most useful ten minutes available on this site, for two reasons.
 
-Worth ten minutes: tab through `/timeline/`, open and close a few entries with
-the keyboard, and check the menu's Escape-and-return-focus on a phone.
+**The behaviour is verified; the appearance is not.** The mobile menu and the
+contact form were checked in jsdom against the live pages on 4 September —
+32 assertions, both pages, covering the burger's `aria-expanded`, Escape
+returning focus, link-click closing, and the form's success and failure paths.
+jsdom confirms structure and behaviour and cannot tell you whether the focus
+ring looks right, whether the collapse animation still feels smooth with
+`visibility` delayed behind it, or how a screen reader actually announces an
+entry. Tab through the timeline, open and close a few entries by keyboard, and
+check Escape-and-return-focus on a phone.
+
+**And a lot of unseen layout landed on 4–5 September.** Eleven company logos
+were added to timeline entries and every judgement about how they sit was made
+by reading CSS, not by looking. Static analysis was wrong three times that day —
+on the icon canvas, on rendered sizes, and on an upscale sweep — so treat the
+list below as unverified:
+
+- **Logos in three-column rows.** Nine rows went from two columns to three when
+  a logo was inserted, which narrowed every cell and made `object-fit:cover`
+  crop the photographs harder. Only three photos carry an `object-position`:
+  `tl-cbp1` (75%), `tl-cbp2` (38%), `tl-oxent2` (68%), all pre-existing, plus
+  `tl-hp-portrait` (78%) which was fixed after the crop cut the subject to the
+  edge. **The other ~15 are on default centre and have never been looked at.**
+  Any with an off-centre subject will have the same fault.
+- **Four logos render slightly upscaled** — `medopad-logo` 1.71×,
+  `tl-fac-logo` 1.59×, `dwyl-logo` 1.29×, `tl-jws-crest` 1.28×. Those are upper
+  bounds: `.pad` uses `object-fit:contain`, so the row height may bind before
+  the width and the real figure may be lower. Flat-colour logos tolerate this
+  far better than type-heavy artwork, so this may well be fine. Look before
+  changing anything.
+- **The MBA entry** puts the Quantic wordmark and the Smartly cohort sheet side
+  by side in a `.tl-figrow.onethird` with `align-items:start`, and the sheet's
+  box is capped at 680px with `object-fit:contain`. Check the sheet is still
+  readable at that size and that the pair stacks properly under 600px.
+- **Two bounded figures**: `tl-startbook.jpg` is cropped to 3:2 anchored bottom,
+  and `tl-foundertribe.jpg` is capped at its native 720px and centred.

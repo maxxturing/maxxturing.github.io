@@ -114,17 +114,37 @@ All three live near the top of `timeline/index.html`'s inline JS.
   picks the accent via `CATS[cats[0]]`. Re-check which entries are
   multi-category and whether the leading one is the right accent.
 
-## 5. Not in this repo: `x.votemaxx.com` has no valid certificate
+## 5. Not in this repo: `x.votemaxx.com` still has no valid certificate
 
-The timeline no longer links to it, but the subdomain still resolves to
-Squarespace and still throws a full-page TLS warning to anyone who reaches it
-from an old tweet, a printed leaflet or a bookmark:
-`no alternative certificate subject name matches target host name`.
+Nothing to change in this repo — `timeline/index.html:362` already links
+straight to <https://x.com/VoteMaxx>, which is the right target. This item is
+only about people arriving at the dead subdomain from an old tweet, a printed
+leaflet or a bookmark, who get a full-page TLS warning.
 
-Your other `votemaxx.com` subdomains (`islington.`, `bunhill-2021.`,
-`facebook.`, `instagram.`, `stmstj.`) are all fine, so this looks like one that
-was missed in the Squarespace domain settings rather than a deliberate
-retirement. Either add it there so a cert is issued, or drop the DNS record.
+Checked again 4 September 2026, after the cert was remade: **still broken.**
+The precise diagnosis, which makes the fix easy to confirm:
+
+- `x.votemaxx.com` presents `CN=*.squarespace.com` — Squarespace's generic
+  wildcard, which does not cover it. Hence
+  `no alternative certificate subject name matches target host name`.
+- `islington.votemaxx.com` presents `CN=islington.votemaxx.com`, a dedicated
+  cert. So the working subdomains each got their own issued certificate and
+  `x.` has not.
+
+To check whether a remake has landed, without a browser:
+
+```bash
+echo | openssl s_client -servername x.votemaxx.com -connect x.votemaxx.com:443 2>/dev/null \
+  | openssl x509 -noout -subject
+```
+
+A `CN=x.votemaxx.com` means it worked. A `CN=*.squarespace.com` means it has
+not been issued yet.
+
+Two ways to end it: let Squarespace finish issuing (it may just be slow), or
+**drop the DNS record**, so an old link fails fast with a plain
+does-not-resolve error instead of a browser security warning. The second is
+strictly better for a visitor if the subdomain is never coming back.
 
 ## 6. Do a real browser pass on the accessibility work
 

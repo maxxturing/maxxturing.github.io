@@ -4,11 +4,13 @@ Open work on the site. Each item says where it lives and what you need to know
 to start, so none of it needs rediscovering. Not published — see `NOPUBLISH` in
 `tools/build-site.py`.
 
-Last reviewed 4 September 2026. Five items are done and have been removed: the
-timeline lead and hint copy, the duplicated contact-form and nav JS (now one
-copy in `/site.js`), the unreferenced-media sweep, and the image-dimensions
-question (answered — see the gotcha in `CLAUDE.md`). The rest are renumbered
-each time, so a stale "item N" reference elsewhere is a bug.
+Last reviewed 4 September 2026, down from eleven items to five. Removed as
+done: the timeline lead and hint copy, the duplicated contact-form and nav JS
+(now one copy in `/site.js`), the unreferenced-media sweep, and the
+image-dimensions question (answered — see the gotcha in `CLAUDE.md`). Removed
+as won't-do: `x.votemaxx.com`'s certificate, which is Squarespace-side and not
+worth chasing — the site links straight to <https://x.com/VoteMaxx>. Items are
+renumbered each time, so a stale "item N" reference elsewhere is a bug.
 
 ---
 
@@ -114,39 +116,7 @@ All three live near the top of `timeline/index.html`'s inline JS.
   picks the accent via `CATS[cats[0]]`. Re-check which entries are
   multi-category and whether the leading one is the right accent.
 
-## 5. Not in this repo: `x.votemaxx.com` still has no valid certificate
-
-Nothing to change in this repo — `timeline/index.html:362` already links
-straight to <https://x.com/VoteMaxx>, which is the right target. This item is
-only about people arriving at the dead subdomain from an old tweet, a printed
-leaflet or a bookmark, who get a full-page TLS warning.
-
-Checked again 4 September 2026, after the cert was remade: **still broken.**
-The precise diagnosis, which makes the fix easy to confirm:
-
-- `x.votemaxx.com` presents `CN=*.squarespace.com` — Squarespace's generic
-  wildcard, which does not cover it. Hence
-  `no alternative certificate subject name matches target host name`.
-- `islington.votemaxx.com` presents `CN=islington.votemaxx.com`, a dedicated
-  cert. So the working subdomains each got their own issued certificate and
-  `x.` has not.
-
-To check whether a remake has landed, without a browser:
-
-```bash
-echo | openssl s_client -servername x.votemaxx.com -connect x.votemaxx.com:443 2>/dev/null \
-  | openssl x509 -noout -subject
-```
-
-A `CN=x.votemaxx.com` means it worked. A `CN=*.squarespace.com` means it has
-not been issued yet.
-
-Two ways to end it: let Squarespace finish issuing (it may just be slow), or
-**drop the DNS record**, so an old link fails fast with a plain
-does-not-resolve error instead of a browser security warning. The second is
-strictly better for a visitor if the subdomain is never coming back.
-
-## 6. Do a real browser pass on the accessibility work
+## 5. Do a real browser pass on the accessibility work
 
 The timeline disclosure buttons and the mobile menu were verified in jsdom,
 which confirms structure and behaviour but is not a browser. It cannot tell you

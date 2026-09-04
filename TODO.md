@@ -4,49 +4,37 @@ Open work on the site. Each item says where it lives and what you need to know
 to start, so none of it needs rediscovering. Not published — see `NOPUBLISH` in
 `tools/build-site.py`.
 
-Last reviewed 4 September 2026. Three items are done and have been removed:
-the timeline lead and hint copy, and the duplicated contact-form and nav JS
-(now one copy in `/site.js`). The rest are renumbered each time, so a stale
-"item N" reference elsewhere is a bug — `CLAUDE.md` no longer holds one.
+Last reviewed 4 September 2026. Four items are done and have been removed: the
+timeline lead and hint copy, the duplicated contact-form and nav JS (now one
+copy in `/site.js`), and the unreferenced-media sweep. The rest are renumbered
+each time, so a stale "item N" reference elsewhere is a bug.
 
 ---
 
-## 1. Decide what to cut from the unreferenced media
+## Do not delete these
 
-**28 files, 48.4 MB** that no page, stylesheet or config points at.
-`london.mp4` alone is 41 MB of that.
+Five files are referenced by nothing in this repo and are all load-bearing.
+Every unreferenced-file scan will offer them up; keep all five.
 
-Review them here, with thumbnails and a keep/cut toggle — it writes the
-`git rm` command for whatever you pick:
-<https://claude.ai/code/artifact/d2edb9b9-f332-4cae-9417-a3a622e03310>
+- **`avatar-256px.png`** (repo root) — the portrait in Maxx's Gmail signature.
+  Superseded by a new signature on 4 September 2026, but **every email already
+  sent still points at this exact URL** and those cannot be updated. It can
+  never be renamed, nor tidied into `assets/`, however odd it looks at the
+  root — the untidiness is why `assets/`-only scans kept missing it.
+- **`assets/img/sig-linkedin.png`**, **`sig-github.png`**, **`sig-x.png`**,
+  **`sig-instagram.png`** — the social icons in the current signature. Same
+  frozen-URL rule applies from now on.
+- **`assets/img/logo-maxxturing.svg`** — the only vector copy of the wordmark.
+  Every favicon and app icon is a rasterised PNG/ICO, so this is the source
+  they are regenerated from.
 
-Groups, so the decision is easier:
+The media sweep that used to be item 1 here is done: 28 files and 48 MB became
+one file, and that one is `avatar-256px.png` above. Twelve of the 28 turned out
+to be missing references rather than dead weight. Published site: 150 MB → 104 MB.
 
-- `assets/img/london.mp4` — 41.5 MB, by far the biggest win
-- **Your photos** (~6.1 MB) — `skiportrait`, `comm-group`, `seated-laptop`,
-  `comm-nefplus`, `sp-award`, `comm-cvc`, `nyan`. Genuinely yours and usable;
-  plausible material for a future gallery entry (see item 3).
-- **Superseded logos** (~0.7 MB) — `medopad-logo`, `hacktrain-logo`,
-  `dwyl-logo`, `udacity-logo`, `oxford-entrepreneurs-logo` and friends. The
-  timeline uses `tl-`-prefixed versions of these now.
-- `assets/img/meta-cover.png` — only ever referenced by `author-img:` in
-  `_config.yml`, which went with Jekyll. The real social image is
-  `og-cover.jpg`.
-- `avatar-256px.png` — note this one sits at the **repo root**, not under
-  `assets/`. Any scan that only walks `assets/` will miss it.
+---
 
-Two things to know before running anything:
-
-- Deleting stops these being **served** and shrinks a fresh checkout
-  (150 MB → ~102 MB). It does **not** shrink the repo: they stay in git
-  history, so `.git` keeps its ~694 MB. Reclaiming that means a history
-  rewrite — a separate, more disruptive job, not to be done casually to a
-  live repo.
-- `assets/img/logo-maxxturing.svg` will show up in any unreferenced scan and
-  must **not** be deleted. It is the only vector copy of the wordmark; every
-  favicon and app icon is a rasterised PNG/ICO. README says the same.
-
-## 2. Update the labels in the Beyond work section
+## 1. Update the labels in the Beyond work section
 
 The `.gal-badge` buttons on the gallery figures in `index.html`
 (`<section id="beyond">`, the eight `<figure class="duo reveal …">` rows).
@@ -66,7 +54,7 @@ Keep these in sync when changing them:
   Those replacement strings must match the new wording or the button will
   announce something the eye never sees.
 
-## 3. Add newer material to the Beyond work section
+## 2. Add newer material to the Beyond work section
 
 The eight figures are all older trips (Algarve, Cape Town, Botswana, the Alps).
 Australia is the obvious gap. To add one, copy an existing `<figure>` and keep
@@ -80,13 +68,13 @@ its anatomy intact:
 - a poster `<img>` with real `alt`, plus, for video figures,
   `<video muted loop playsinline preload="none" aria-hidden="true" tabindex="-1">`.
 - the `.gal-badge` button with `data-subject` and a matching `aria-label`
-  (see item 2), and a `<figcaption>` — two `<span class="cap-a">` / `cap-b`
+  (see item 1), and a `<figcaption>` — two `<span class="cap-a">` / `cap-b`
   captions if the figure reveals a second image.
 
 Media goes in `assets/img/` and `assets/video/`. Keep new files referenced and
 reasonably compressed; several earlier commits deleted ~290 MB of orphans.
 
-## 4. Font Awesome icons on the timeline
+## 3. Font Awesome icons on the timeline
 
 No icon font is loaded anywhere on the site today — every badge and label is a
 Unicode glyph. Doing this means adding Font Awesome **self-hosted in
@@ -106,7 +94,7 @@ and `.tl-card.open .tl-chev` rotates it 135°. If it becomes an icon, keep it
 `aria-hidden` — the button's accessible name must stay the entry title alone.
 Give any decorative icon `aria-hidden="true"`.
 
-## 5. Review the timeline categories, filtering and colours
+## 4. Review the timeline categories, filtering and colours
 
 All three live near the top of `timeline/index.html`'s inline JS.
 
@@ -123,21 +111,24 @@ All three live near the top of `timeline/index.html`'s inline JS.
   picks the accent via `CATS[cats[0]]`. Re-check which entries are
   multi-category and whether the leading one is the right accent.
 
-## 6. Verify whether the missing image dimensions actually cost anything
+## 5. Verify whether the missing image dimensions actually cost anything
 
-`index.html` has 68 `<img>` elements and only **one** carries `width`/`height`.
-`timeline/index.html` is better at 27 of 60. Missing intrinsic dimensions
-normally means layout shift.
+Only `index.html` is left: **2 of 71** `<img>` elements carry
+`width`/`height`. `timeline/index.html` is now **71 of 71** — the eleven
+figures added on 4 September all carry dimensions, which finished off what was
+already 27 of 60. Missing intrinsic dimensions normally means layout shift.
 
-It may not matter here: the galleries and rotators get their box from CSS
-`aspect-ratio` (`.sp-stage` is `3/2`, `.comm-grid .duo` is `4/3`, the `.gal`
-figures use a per-figure `--ar`), so those reserve space before the image
-loads. What is not obviously covered is the hero and the one-off inline shots.
+It may not matter on `index.html` either: the galleries and rotators get their
+box from CSS `aspect-ratio` (`.sp-stage` is `3/2`, `.comm-grid .duo` is `4/3`,
+the `.gal` figures use a per-figure `--ar`), so those reserve space before the
+image loads. What is not obviously covered is the hero and the one-off inline
+shots.
 
 Measure it before fixing it — check CLS in a real browser rather than adding
-136 attributes on principle.
+69 attributes on principle. If the timeline now measures clean and the
+homepage does not, that is the answer.
 
-## 7. Not in this repo: `x.votemaxx.com` has no valid certificate
+## 6. Not in this repo: `x.votemaxx.com` has no valid certificate
 
 The timeline no longer links to it, but the subdomain still resolves to
 Squarespace and still throws a full-page TLS warning to anyone who reaches it
@@ -149,7 +140,7 @@ Your other `votemaxx.com` subdomains (`islington.`, `bunhill-2021.`,
 was missed in the Squarespace domain settings rather than a deliberate
 retirement. Either add it there so a cert is issued, or drop the DNS record.
 
-## 8. Do a real browser pass on the accessibility work
+## 7. Do a real browser pass on the accessibility work
 
 The timeline disclosure buttons and the mobile menu were verified in jsdom,
 which confirms structure and behaviour but is not a browser. It cannot tell you

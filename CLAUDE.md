@@ -44,6 +44,15 @@ lives at the top level, and an `assets/`-only sweep misses it. So do the
 favicons, `cv.pdf` and the app icons — those *are* referenced, and must not be
 swept up.
 
+**Five files are referenced only by the email signature.** `avatar-256px.png`
+at the repo root and `assets/img/sig-{linkedin,github,x,instagram}.png` are
+hotlinked from Maxx's Gmail signature. No page loads them, so every
+unreferenced-file scan reports them — and every one is load-bearing. Worse,
+their URLs are frozen: emails already sent point at these exact paths and can
+never be updated, so `avatar-256px.png` cannot be tidied into `assets/` no
+matter how odd it looks at the root. Keep them, keep their names. README says
+the same.
+
 **...and must search only the *published* files.** The other half of the same
 trap: `TODO.md` names `london.mp4`, `avatar-256px.png` and `meta-cover.png` in
 prose, and `README.md` names `logo-maxxturing.svg`. Search every tracked file
@@ -99,14 +108,15 @@ if you touch the breakpoint, keep them in agreement.
 `_config.yml` were deleted. Preview with `python3 -m http.server`. If you see
 instructions mentioning `bundle exec`, they are stale.
 
-**Deploys usually take 40–50 seconds** from push to live — but one in this
-repo took **135**. Do not conclude a push failed because the new file 404s a
-minute later; confirm `git rev-parse origin/main` actually carries the commit,
-then keep polling for a few minutes before suspecting the workflow. Verify
-against the live URL rather than assuming, and pass `--retry 2` and
-`--retry-all-errors` to `curl` in any health poll — a single transient failure
-is not an outage, and curl already prints `000` on failure, so a `|| echo 000`
-fallback doubles it into `000000`.
+**Deploys usually take 40–50 seconds** from push to live — but they can take
+much longer: two in a row took **135** and **168** seconds. Do not conclude a
+push failed because the new file 404s a minute later; confirm that
+`git rev-parse origin/main` actually carries the commit, then keep polling for
+a few minutes before suspecting the workflow. Verify against the live URL
+rather than assuming, and pass `--retry 2` and `--retry-all-errors` to `curl`
+in any health poll — a single transient failure is not an outage, and curl
+already prints `000` on failure, so a `|| echo 000` fallback doubles it into
+`000000`.
 
 **A 200 does not mean a link works.** `oxfordentrepreneurs.com` returns 200 and
 is a parked squatter page (114 bytes, JS-redirecting to `/lander`). Several

@@ -114,8 +114,17 @@ chmod +x .git/hooks/pre-commit
 ### What lives under `assets/`
 
 `img/`, `video/` and `docs/` — all three are referenced by the pages, and
-that is the whole of it, with one deliberate exception:
-`assets/img/logo-maxxturing.svg`. No page loads it. It is the only vector copy
+that is the whole of it, with two deliberate exceptions.
+
+**`assets/img/sig-*.png` and `avatar-256px.png` are used by the email
+signature, not by any page.** The four `sig-` icons (LinkedIn, GitHub, X,
+Instagram) and the root-level avatar are hotlinked from Maxx's Gmail
+signature, so every unreferenced-file scan will report them and every one of
+them must be kept and keep its exact URL — emails already sent point at these
+paths and cannot be updated. `avatar-256px.png` in particular can never be
+renamed or moved into `assets/`, however untidy the repo root looks.
+
+The other exception is `assets/img/logo-maxxturing.svg`. No page loads it. It is the only vector copy
 of the wordmark in the repo — every favicon and app icon is a rasterised
 PNG/ICO — so it is kept as the source to regenerate those from. Don't delete it
 as an unreferenced file. The old theme's `css/` (with its SCSS), `scripts/`

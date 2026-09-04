@@ -108,11 +108,12 @@ if you touch the breakpoint, keep them in agreement.
 `_config.yml` were deleted. Preview with `python3 -m http.server`. If you see
 instructions mentioning `bundle exec`, they are stale.
 
-**Deploys usually take 40–50 seconds** from push to live — but they can take
-much longer: two in a row took **135** and **168** seconds. Do not conclude a
-push failed because the new file 404s a minute later; confirm that
-`git rev-parse origin/main` actually carries the commit, then keep polling for
-a few minutes before suspecting the workflow. Verify against the live URL
+**Deploy time is wildly variable — budget minutes, not seconds.** Three
+consecutive deploys took **135**, **168** and **258** seconds. This file used
+to claim 40–50; treat that as a best case nobody should plan around. So do not
+conclude a push failed because the new file 404s a minute later: confirm that
+`git rev-parse origin/main` carries the commit, then keep polling for four or
+five minutes before suspecting the workflow. Verify against the live URL
 rather than assuming, and pass `--retry 2` and `--retry-all-errors` to `curl`
 in any health poll — a single transient failure is not an outage, and curl
 already prints `000` on failure, so a `|| echo 000` fallback doubles it into

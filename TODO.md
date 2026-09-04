@@ -4,9 +4,10 @@ Open work on the site. Each item says where it lives and what you need to know
 to start, so none of it needs rediscovering. Not published — see `NOPUBLISH` in
 `tools/build-site.py`.
 
-Last reviewed 4 September 2026. Four items are done and have been removed: the
+Last reviewed 4 September 2026. Five items are done and have been removed: the
 timeline lead and hint copy, the duplicated contact-form and nav JS (now one
-copy in `/site.js`), and the unreferenced-media sweep. The rest are renumbered
+copy in `/site.js`), the unreferenced-media sweep, and the image-dimensions
+question (answered — see the gotcha in `CLAUDE.md`). The rest are renumbered
 each time, so a stale "item N" reference elsewhere is a bug.
 
 ---
@@ -113,24 +114,7 @@ All three live near the top of `timeline/index.html`'s inline JS.
   picks the accent via `CATS[cats[0]]`. Re-check which entries are
   multi-category and whether the leading one is the right accent.
 
-## 5. Verify whether the missing image dimensions actually cost anything
-
-Only `index.html` is left: **2 of 71** `<img>` elements carry
-`width`/`height`. `timeline/index.html` is now **71 of 71** — the eleven
-figures added on 4 September all carry dimensions, which finished off what was
-already 27 of 60. Missing intrinsic dimensions normally means layout shift.
-
-It may not matter on `index.html` either: the galleries and rotators get their
-box from CSS `aspect-ratio` (`.sp-stage` is `3/2`, `.comm-grid .duo` is `4/3`,
-the `.gal` figures use a per-figure `--ar`), so those reserve space before the
-image loads. What is not obviously covered is the hero and the one-off inline
-shots.
-
-Measure it before fixing it — check CLS in a real browser rather than adding
-69 attributes on principle. If the timeline now measures clean and the
-homepage does not, that is the answer.
-
-## 6. Not in this repo: `x.votemaxx.com` has no valid certificate
+## 5. Not in this repo: `x.votemaxx.com` has no valid certificate
 
 The timeline no longer links to it, but the subdomain still resolves to
 Squarespace and still throws a full-page TLS warning to anyone who reaches it
@@ -142,7 +126,7 @@ Your other `votemaxx.com` subdomains (`islington.`, `bunhill-2021.`,
 was missed in the Squarespace domain settings rather than a deliberate
 retirement. Either add it there so a cert is issued, or drop the DNS record.
 
-## 7. Do a real browser pass on the accessibility work
+## 6. Do a real browser pass on the accessibility work
 
 The timeline disclosure buttons and the mobile menu were verified in jsdom,
 which confirms structure and behaviour but is not a browser. It cannot tell you

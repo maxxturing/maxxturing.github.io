@@ -1,0 +1,588 @@
+/* ============================================================
+   Maxx Turing — shared design system
+   Warm, techy. Space Grotesk + JetBrains Mono. Orange duotone.
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+:root{
+  /* tells the browser this page is dark: canvas, scrollbars, overscroll
+     gutters and form controls all follow, instead of defaulting to white */
+  color-scheme:dark;
+  --bg:#120E0A; --bg2:#171109; --panel:#1E1710; --panel2:#241C13;
+  --line:#2E2820; --line2:#3A3328;
+  --ink:#FBEFE4; --ink2:#E2D4C4; --muted:#A89684; --muted2:#7E7060;
+  --orange:#FF8A33; --orange-deep:#C9621B; --green:#4ED07A;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+  --sans:"Space Grotesk",system-ui,sans-serif;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;overflow-x:hidden;background:var(--bg);}
+/* Anchor jumps clear the fixed nav. Sections carry their own top padding,
+   so the offset is discounted by it — otherwise a section with the full
+   110px padding drops its heading 80px lower than one overridden to 30px. */
+:root{--anchor-offset:78px;}
+section[id],header[id]{scroll-margin-top:var(--anchor-offset);}
+#now,#contact{scroll-margin-top:calc(var(--anchor-offset) - 80px);}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--sans); -webkit-font-smoothing:antialiased;
+  font-size:17px; line-height:1.6;
+  overflow-x:hidden;
+}
+::selection{background:var(--orange);color:#120E0A;}
+a{color:inherit;text-decoration:none;}
+img{display:block;max-width:100%;}
+h1,h2,h3{font-weight:600;letter-spacing:-0.03em;line-height:1.02;margin:0;}
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 40px;}
+.mono{font-family:var(--mono);}
+.orange{color:var(--orange);}
+
+/* ---------- duotone image helper ---------- */
+.duo{position:relative;overflow:hidden;background:#1a120a;}
+.duo>img{width:100%;height:100%;object-fit:cover;
+  filter:grayscale(.55) sepia(.5) saturate(1.5) hue-rotate(-10deg) contrast(1.05) brightness(.93);
+  transition:filter .55s ease, transform .9s cubic-bezier(.2,.7,.2,1);}
+.duo::after{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,138,51,.22),rgba(28,18,6,.5));mix-blend-mode:multiply;transition:opacity .5s ease;}
+.duo.reveal:hover>img{filter:grayscale(0) contrast(1.02) brightness(1);transform:scale(1.04);}
+.duo.reveal:hover::after{opacity:0;}
+
+/* ---------- nav ---------- */
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 40px;font-family:var(--mono);font-size:13px;
+  transition:background .3s,border-color .3s,padding .3s;border-bottom:1px solid transparent;}
+.nav.scrolled{background:rgba(18,14,10,.82);backdrop-filter:blur(12px);border-color:var(--line);padding:14px 40px;}
+.nav .logo{font-weight:600;font-size:15px;letter-spacing:0;}
+.nav .logo b{color:var(--orange);font-weight:600;}
+.nav .links{display:flex;gap:26px;align-items:center;}
+.nav .links a{color:var(--muted);transition:color .2s;}
+.nav .links a:hover{color:var(--ink);}
+.nav .links a.cta{color:var(--orange);}
+.nav .burger{display:none;}
+
+/* mobile menu */
+.burger{background:transparent;border:1px solid var(--line2);color:var(--ink);font-family:var(--mono);font-size:12px;padding:8px 13px;border-radius:8px;cursor:pointer;}
+.mobile-menu{position:fixed;top:0;left:0;right:0;z-index:49;background:rgba(18,14,10,.97);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);padding:74px 22px 22px;display:none;flex-direction:column;gap:4px;}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{font-family:var(--mono);font-size:16px;padding:14px 6px;border-bottom:1px solid var(--line);color:var(--ink2);}
+.mobile-menu a:last-child{border-bottom:none;color:var(--orange);}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;gap:8px;white-space:nowrap;font-family:var(--mono);font-size:14px;font-weight:600;
+  padding:14px 26px;border-radius:9px;background:var(--orange);color:#120E0A;border:1px solid var(--orange);
+  transition:transform .15s, box-shadow .2s, background .2s;cursor:pointer;}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px -10px rgba(255,138,51,.6);}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line2);}
+.btn.ghost:hover{border-color:var(--orange);box-shadow:none;}
+
+/* ---------- section scaffolding ---------- */
+.section{padding:110px 0;position:relative;}
+.eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--orange);
+  display:flex;align-items:center;gap:12px;margin-bottom:26px;}
+.eyebrow::before{content:"";width:30px;height:1.5px;background:var(--orange);}
+.section h2{font-size:clamp(30px,4vw,46px);max-width:18ch;margin-bottom:22px;}
+.lead{font-size:clamp(18px,2vw,21px);color:var(--ink2);max-width:60ch;line-height:1.5;}
+
+/* ---------- reveal-on-scroll ---------- */
+.reveal-up{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1);}
+.reveal-up.in{opacity:1;transform:none;}
+[data-delay="1"]{transition-delay:.08s;}
+[data-delay="2"]{transition-delay:.16s;}
+[data-delay="3"]{transition-delay:.24s;}
+[data-delay="4"]{transition-delay:.32s;}
+
+/* ============================================================
+   HERO (locked "AC" treatment)
+   ============================================================ */
+.hero{position:relative;height:100vh;min-height:660px;overflow:hidden;background:var(--bg);}
+.hero-photo,.hero-duoc{position:absolute;top:0;right:0;width:64%;height:100%;overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.35) 28%,#000 62%);
+          mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.35) 28%,#000 62%);}
+.hero-photo img{width:100%;height:100%;object-fit:cover;object-position:42% 34%;
+  filter:saturate(1.05) contrast(1.02) brightness(1.05);transform:scale(1.02);transform-origin:50% 30%;}
+.hero-duoc{background:linear-gradient(135deg,rgba(255,138,51,.12),rgba(28,18,6,.16));mix-blend-mode:multiply;}
+.hero-top{position:absolute;top:0;left:0;right:0;height:34%;z-index:2;background:linear-gradient(180deg,rgba(18,14,10,.9),rgba(18,14,10,.4) 55%,transparent);}
+.hero-feather{position:absolute;top:0;left:0;width:72%;height:100%;z-index:2;
+  background:linear-gradient(90deg,#120E0A 0%,rgba(18,14,10,.92) 30%,rgba(18,14,10,.45) 54%,rgba(18,14,10,0) 100%);}
+.hero-inner{position:relative;z-index:3;height:100%;max-width:1180px;margin:0 auto;padding:96px 40px 0;
+  display:flex;flex-direction:column;justify-content:center;}
+.hero-content{max-width:54%;}
+.hero-greet{font-size:clamp(24px,3vw,34px);font-weight:600;color:var(--ink);margin-bottom:14px;letter-spacing:-0.02em;}
+.hero-greet .wave{display:inline-block;transform-origin:70% 80%;animation:wave 2.6s ease-in-out 1s infinite;}
+@keyframes wave{0%,60%,100%{transform:rotate(0deg);}70%{transform:rotate(14deg);}80%{transform:rotate(-8deg);}90%{transform:rotate(12deg);}}
+.hero-kicker{font-family:var(--mono);font-size:13.5px;letter-spacing:.05em;color:var(--orange);margin-bottom:20px;}
+.hero h1{font-size:clamp(38px,5.4vw,68px);line-height:.98;margin:0 0 24px;max-width:13ch;text-shadow:0 2px 34px rgba(8,5,2,.55);}
+.hero-sub{font-size:clamp(16px,1.9vw,19px);color:var(--ink2);max-width:40ch;margin-bottom:32px;line-height:1.5;}
+.hero-cards{display:flex;gap:13px;margin-bottom:34px;flex-wrap:wrap;}
+.hero-card{border-radius:12px;padding:14px 18px;border:1px solid rgba(255,255,255,.18);background:rgba(16,12,8,.5);backdrop-filter:blur(8px);
+  display:flex;flex-direction:column;justify-content:center;
+  transition:border-color .2s, transform .2s;}
+.hero-card:hover{border-color:var(--orange);transform:translateY(-3px);}
+.hero-card:focus-visible{outline:2px solid var(--orange);outline-offset:3px;}
+.hero-card small{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;}
+.hero-card strong{font-size:15px;font-weight:600;}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap;}
+.hero-scroll{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);z-index:3;font-family:var(--mono);font-size:11px;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:8px;}
+.hero-scroll .line{width:1px;height:34px;background:linear-gradient(var(--orange),transparent);animation:scrolldot 1.8s infinite;}
+@keyframes scrolldot{0%{transform:scaleY(0);transform-origin:top;}40%{transform:scaleY(1);transform-origin:top;}60%{transform:scaleY(1);transform-origin:bottom;}100%{transform:scaleY(0);transform-origin:bottom;}}
+
+/* ============================================================
+   WHAT I DO NOW
+   ============================================================ */
+.now-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:54px;}
+.now-card{position:relative;border:1px solid var(--line);background:var(--panel);border-radius:18px;padding:34px 34px 30px;
+  overflow:hidden;transition:border-color .25s, transform .25s, background .25s;}
+.now-card:hover{border-color:var(--orange);transform:translateY(-4px);background:var(--panel2);}
+.now-card .role{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;display:flex;justify-content:space-between;}
+.now-card h3{font-size:27px;margin-bottom:14px;}
+.now-card h3 .tag{color:var(--orange);}
+.now-card p{color:var(--muted);font-size:15.5px;line-height:1.55;margin:0 0 22px;}
+.now-card .visit{font-family:var(--mono);font-size:13px;color:var(--ink);display:inline-flex;align-items:center;gap:8px;white-space:nowrap;border-bottom:1px solid var(--line2);padding-bottom:3px;transition:color .2s,border-color .2s;}
+.now-card:hover .visit{color:var(--orange);border-color:var(--orange);}
+.now-card .glow{position:absolute;top:-40%;right:-20%;width:60%;height:120%;background:radial-gradient(circle,rgba(255,138,51,.14),transparent 70%);opacity:0;transition:opacity .35s;pointer-events:none;}
+.now-card:hover .glow{opacity:1;}
+.cred-layout{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start;margin-top:42px;}
+.cred-left{display:flex;flex-direction:column;}
+.cred-h{font-size:clamp(22px,2.4vw,30px);letter-spacing:-0.02em;margin:0 0 14px;}
+.cred-intro{font-size:15.5px;line-height:1.6;color:var(--muted);margin:0 0 26px;max-width:42ch;}
+.cred-acc{border-top:1px solid var(--line);align-self:start;width:100%;}
+.cred-item{border-bottom:1px solid var(--line);}
+.cred-photo{position:relative;margin:0;border-radius:18px;overflow:hidden;min-height:340px;max-height:560px;height:100%;}
+.cred-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 70%;}
+.cred-photo figcaption{position:absolute;left:16px;bottom:14px;z-index:3;font-family:var(--mono);font-size:11.5px;color:rgba(255,255,255,.95);text-shadow:0 1px 12px rgba(0,0,0,.8);opacity:1;transform:none;}
+.cred-photo:hover figcaption{opacity:1;transform:none;}
+.cred-video{position:relative;display:block;width:100%;aspect-ratio:16/9;border-radius:18px;overflow:hidden;border:1px solid var(--line);align-self:start;}
+.cred-video img{width:100%;height:100%;object-fit:cover;filter:grayscale(.4) sepia(.3) saturate(1.2) hue-rotate(-8deg) brightness(.82);transition:filter .3s,transform .5s;}
+.cred-video:hover img{filter:none;transform:scale(1.03);}
+.cred-video .cv-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:70px;height:70px;border-radius:50%;background:var(--orange);box-shadow:0 8px 30px rgba(0,0,0,.5);}
+.cred-video .cv-play::after{content:"";position:absolute;left:52%;top:50%;transform:translate(-50%,-50%);border-style:solid;border-width:14px 0 14px 24px;border-color:transparent transparent transparent #120E0A;}
+.cred-video .cv-cap{position:absolute;left:16px;bottom:14px;font-family:var(--mono);font-size:12px;color:#fff;text-shadow:0 1px 10px rgba(0,0,0,.7);}
+.cred-row{width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;background:transparent;border:none;
+  padding:17px 4px;cursor:pointer;font-family:var(--mono);font-size:14px;color:var(--muted);text-align:left;transition:color .2s,padding-left .2s;}
+.cred-row:hover{color:var(--ink2);padding-left:10px;}
+.cred-row b{color:var(--ink);font-weight:500;}
+.cred-row.on{color:var(--orange);padding-left:10px;}
+.cred-row.on b{color:var(--orange);}
+.cred-x{flex:none;color:var(--muted2);font-size:17px;transition:transform .3s,color .2s;}
+.cred-row.on .cred-x{transform:rotate(135deg);color:var(--orange);}
+.cred-panel{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s cubic-bezier(.3,.7,.2,1),opacity .3s;opacity:0;}
+.cred-panel.open{grid-template-rows:1fr;opacity:1;}
+.cred-panel>div{overflow:hidden;min-height:0;}
+.cred-panel p{margin:0;padding:2px 4px 20px;color:var(--ink2);font-size:15px;line-height:1.62;max-width:64ch;}
+.cred-panel p b{color:var(--ink);font-weight:600;}
+
+/* ============================================================
+   FOUNDER COMMUNITIES
+   ============================================================ */
+.comm-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:54px;}
+.comm-grid .duo{border-radius:16px;aspect-ratio:4/3;}
+.comm-grid .comm-wide{grid-column:1 / -1;aspect-ratio:2.4/1;}
+.comm-grid figure.plain{background:#E7E2D6;}
+.comm-grid figure.plain>img{object-fit:contain;}
+.comm-grid .comm-span2{grid-column:1 / -1;aspect-ratio:2.2/1;}
+.comm-grid .comm-span2 img{object-position:50% 36%;}
+.comm-grid .comm-wide img{object-position:50% 42%;}
+.comm-grid figure.plain::after{display:none;}
+.comm-grid figure.plain>img{filter:none;}
+.comm-grid figcaption{position:absolute;left:14px;bottom:12px;z-index:3;font-family:var(--mono);font-size:11px;letter-spacing:.03em;color:rgba(255,255,255,.92);text-shadow:0 1px 10px rgba(0,0,0,.6);opacity:0;transform:translateY(6px);transition:opacity .3s,transform .3s;}
+.comm-grid .duo:hover figcaption{opacity:1;transform:none;}
+.comm-tags{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px;}
+.comm-tags span{font-family:var(--mono);font-size:12.5px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:8px 15px;}
+
+/* ============================================================
+   FRACTIONAL / SERVICES
+   ============================================================ */
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:48px;}
+.svc{border:1px solid var(--line);background:var(--panel);border-radius:16px;padding:26px 24px;transition:border-color .25s,background .25s,transform .25s;}
+.svc:hover{border-color:var(--orange);background:var(--panel2);transform:translateY(-3px);}
+.svc-n{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--muted2);display:block;margin-bottom:14px;}
+.svc h3{font-size:19px;margin:0 0 10px;letter-spacing:-0.01em;}
+.svc p{margin:0;font-size:14.5px;line-height:1.6;color:var(--muted);}
+.svc-foot{display:flex;flex-wrap:wrap;align-items:center;gap:20px;margin-top:38px;}
+.svc-note{font-family:var(--mono);font-size:12.5px;color:var(--muted);}
+
+/* ---------- rates ---------- */
+.rates{margin-top:14px;border:1px solid var(--line);background:var(--panel);border-radius:16px;padding:28px 26px;}
+.rates-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:14px;margin-bottom:20px;}
+.rates-head h3{font-size:19px;letter-spacing:-0.01em;}
+.rates-kick{font-size:12.5px;color:var(--muted2);}
+.rates-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.rate{border:1px solid var(--line);background:var(--panel2);border-radius:12px;padding:20px;}
+.rate-k{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted2);margin-bottom:12px;}
+.rate-v{display:block;font-size:32px;font-weight:600;letter-spacing:-0.03em;line-height:1;margin-bottom:9px;}
+.rate-v em{font-style:normal;font-size:15px;font-weight:500;color:var(--muted);letter-spacing:0;}
+.rate-m{font-size:13.5px;color:var(--muted);}
+.rates-note{margin:22px 0 0;padding-top:18px;border-top:1px solid var(--line);font-size:14.5px;line-height:1.6;color:var(--muted);}
+@media(max-width:880px){
+  .svc-grid{grid-template-columns:1fr;}
+  .rates-grid{grid-template-columns:1fr;}
+  .rate{display:flex;align-items:baseline;flex-wrap:wrap;gap:0 12px;padding:16px 18px;}
+  .rate-k{flex:1 1 100%;margin-bottom:8px;}
+  .rate-v{margin-bottom:0;font-size:27px;}
+  .rate-m{margin-left:auto;text-align:right;}
+}
+@media(max-width:560px){
+  .rate{display:block;}
+  .rate-v{margin-bottom:7px;}
+  .rate-m{margin-left:0;text-align:left;}
+}
+
+/* ============================================================
+   SECTION HEADER SPLIT (copy left, media right)
+   ============================================================ */
+.sec-split{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center;}
+.sec-split .lead{max-width:none;}
+
+/* ---------- click-to-play video ---------- */
+.vid{margin:0;}
+.vid-frame{display:block;position:relative;width:100%;padding:0;border:1px solid var(--line);border-radius:18px;
+  overflow:hidden;background:#0E0A06;cursor:pointer;aspect-ratio:16/9;
+  transition:border-color .25s,transform .25s,box-shadow .25s;}
+.vid-frame img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.2,.7,.2,1),filter .35s;}
+.vid-frame::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,14,10,.1),rgba(18,14,10,.45));
+  opacity:.75;transition:opacity .35s;}
+.vid-frame:hover{border-color:var(--orange);transform:translateY(-3px);box-shadow:0 22px 50px -26px rgba(0,0,0,.9);}
+.vid-frame:hover img{transform:scale(1.03);}
+.vid-frame:hover::after{opacity:.45;}
+.vid-frame:focus-visible{outline:2px solid var(--orange);outline-offset:3px;}
+.vid-play{position:absolute;left:20px;bottom:20px;z-index:2;
+  width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:var(--orange);color:#120E0A;box-shadow:0 10px 34px -8px rgba(255,138,51,.7);
+  transition:transform .25s cubic-bezier(.2,.7,.2,1);}
+.vid-play svg{width:24px;height:24px;margin-left:3px;display:block;}
+.vid-frame:hover .vid-play{transform:scale(1.08);}
+.vid-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
+.vid-frame.is-playing{cursor:default;border-color:var(--line2);}
+.vid-frame.is-playing:hover{transform:none;box-shadow:none;border-color:var(--line2);}
+.vid-frame.is-playing::after{display:none;}
+.vid figcaption{margin-top:12px;font-family:var(--mono);font-size:12.5px;color:var(--muted);}
+.vid figcaption a{color:var(--muted);border-bottom:1px solid var(--line2);transition:color .2s,border-color .2s;}
+.vid figcaption a:hover{color:var(--orange);border-color:var(--orange);}
+@media(max-width:900px){
+  .sec-split{grid-template-columns:1fr;gap:32px;}
+  .vid-play{width:50px;height:50px;left:16px;bottom:16px;}
+  .vid-play svg{width:21px;height:21px;}
+}
+
+/* ============================================================
+   SPEAKING & TEACHING
+   ============================================================ */
+.sp-grid{display:grid;grid-template-columns:1.25fr 0.75fr;gap:42px;margin-top:54px;align-items:start;}
+.sp-photo{position:relative;}
+.sp-stage{position:relative;border-radius:18px;overflow:hidden;aspect-ratio:3/2;border:1px solid var(--line);}
+.sp-stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .7s ease;
+  filter:grayscale(.5) sepia(.5) saturate(1.5) hue-rotate(-10deg) contrast(1.05) brightness(.95);}
+.sp-stage img.on{opacity:1;}
+.sp-stage::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(18,14,10,.7));pointer-events:none;}
+.sp-cap{position:absolute;left:16px;bottom:14px;z-index:2;font-family:var(--mono);font-size:11.5px;letter-spacing:.03em;color:rgba(255,255,255,.92);}
+.sp-thumbs{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px;margin-top:12px;}
+.sp-thumb{width:100%;height:52px;border-radius:9px;overflow:hidden;border:1px solid var(--line);cursor:pointer;padding:0;background:none;
+  opacity:.5;transition:opacity .2s,border-color .2s,transform .2s;}
+.sp-thumb img{width:100%;height:100%;object-fit:cover;filter:grayscale(.5) sepia(.5) saturate(1.4) hue-rotate(-10deg) brightness(.95);}
+.sp-thumb:hover{opacity:.85;transform:translateY(-2px);}
+.sp-thumb.on{opacity:1;border-color:var(--orange);}
+.sp-topics-h{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 18px;}
+.sp-topic-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0;}
+.sp-topic-list li{font-size:17px;color:var(--ink2);padding:13px 0;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:13px;
+  transition:color .2s,padding-left .2s;}
+.sp-topic-list li::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--orange);flex:none;transition:transform .2s;}
+.sp-topic-list li:hover{color:var(--ink);padding-left:6px;}
+.sp-topic-list li:hover::before{transform:scale(1.5);}
+
+/* ============================================================
+   PERSONALITY gallery
+   ============================================================ */
+.gal{display:flex;flex-wrap:wrap;gap:14px;margin-top:54px;}
+.gal .duo{position:relative;overflow:hidden;border-radius:16px;border:1px solid var(--line);margin:0;cursor:pointer;
+  height:300px;min-width:0;flex-grow:var(--ar);flex-basis:calc(var(--ar) * 300px);}
+.gal .duo>img{width:100%;height:100%;object-fit:cover;
+  filter:grayscale(.55) sepia(.5) saturate(1.5) hue-rotate(-10deg) contrast(1.05) brightness(.93);
+  transition:filter .55s ease, transform .9s cubic-bezier(.2,.7,.2,1);}
+.gal .duo::after{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,138,51,.22),rgba(28,18,6,.5));mix-blend-mode:multiply;transition:opacity .5s ease;}
+.gal .duo:hover>img{filter:grayscale(0) contrast(1.02) brightness(1);transform:scale(1.05);}
+.gal .duo:hover::after{opacity:0;}
+.gal .duo figcaption{position:absolute;left:14px;bottom:12px;z-index:3;font-family:var(--mono);font-size:11px;letter-spacing:.03em;
+  color:rgba(255,255,255,.95);text-shadow:0 1px 12px rgba(0,0,0,.7);opacity:0;transform:translateY(6px);transition:opacity .3s,transform .3s;}
+.gal .duo:hover figcaption{opacity:1;transform:none;}
+.gal .gal-fill{flex-grow:10;flex-basis:0;height:0;border:none;}
+
+/* ---------- "here's the shot I took" tile ----------
+   The wide photo already contains both the photographer and the animal, so
+   brackets mark the subject and the close-up grows out of them as a print.
+   .shot-on is the tap equivalent of :hover for touch, where there is none. */
+
+/* These two reveal tiles are driven by a class, never by :hover. A tap on a
+   phone leaves a sticky :hover on the tile, which would hold the reveal open
+   after the class had been toggled off — so it would open once and never
+   close. The page script adds the class on a mouse pointer entering and on a
+   tap, and removes it on leaving or a second tap. */
+
+/* The brackets have to sit on the animal, but the tile flexes wider than the
+   square photo, so object-fit crops it. This box reproduces the cover geometry
+   exactly — for a square source it is max(tile width, tile height) square,
+   centred — which lets the brackets be positioned against the photo itself. */
+.gal .duo.has-shot .shot-space{position:absolute;left:50%;top:50%;z-index:4;pointer-events:none;
+  width:max(100%,300px);aspect-ratio:1;transform:translate(-50%,-50%);
+  transition:transform .9s cubic-bezier(.2,.7,.2,1);}
+.gal .duo.has-shot.shot-on .shot-space{transform:translate(-50%,-50%) scale(1.05);}
+
+/* the animal, as a fraction of the photo */
+.shot-mark{position:absolute;left:15%;top:57%;width:22%;height:20%;
+  opacity:.85;transition:opacity .4s ease,transform .5s cubic-bezier(.2,.7,.2,1);}
+.shot-mark i{position:absolute;width:9px;height:9px;border:1.5px solid rgba(255,255,255,.95);
+  transition:border-color .4s ease;}
+.shot-mark i:nth-child(1){left:0;top:0;border-right:0;border-bottom:0;}
+.shot-mark i:nth-child(2){right:0;top:0;border-left:0;border-bottom:0;}
+.shot-mark i:nth-child(3){left:0;bottom:0;border-right:0;border-top:0;}
+.shot-mark i:nth-child(4){right:0;bottom:0;border-left:0;border-top:0;}
+.gal .duo.has-shot.shot-on .shot-mark{opacity:1;transform:scale(1.06);}
+.gal .duo.has-shot.shot-on .shot-mark i{border-color:var(--orange);}
+
+/* the print: springs up out of the brackets and settles top-centre — the gap
+   between Maxx and the animal — sized so its foot clears the bracket corners,
+   which sit at 57% down the photo (see .shot-mark) */
+.shot-print{position:absolute;left:50%;top:5%;width:min(42%,190px);max-height:44%;aspect-ratio:1;z-index:5;
+  border-radius:5px;overflow:hidden;border:3px solid rgba(251,239,228,.92);
+  box-shadow:0 20px 44px -14px rgba(0,0,0,.95);opacity:0;
+  transform:translate(-50%,26%) scale(.3) rotate(-6deg);transform-origin:50% 100%;
+  transition:transform .62s cubic-bezier(.2,.7,.2,1),opacity .3s ease;}
+.shot-print img{width:100%;height:100%;object-fit:cover;display:block;}
+/* The sound is two focus beeps and then the shot, so the picture has to wait
+   for the shutter rather than firing on the hover: both are held to .2s, which
+   is where the shutter lands (SHOT_AT in the page script, plus its 20ms lead). */
+.gal .duo.has-shot.shot-on .shot-print{opacity:1;transform:translate(-50%,0) scale(1) rotate(-2deg);
+  transition-delay:.2s;}
+/* the flash: one white blink as the shutter fires, then it's gone */
+.shot-flash{position:absolute;inset:0;z-index:7;background:#fff;opacity:0;pointer-events:none;}
+.gal .duo.has-shot.shot-on .shot-flash{animation:shotFlash .46s ease-out .2s;}
+@keyframes shotFlash{0%{opacity:0}7%{opacity:.92}22%{opacity:.34}100%{opacity:0}}
+/* context dims so the full-colour print reads as the output */
+.gal .duo.has-shot.shot-on::after{opacity:0;}
+.gal .duo.has-shot.shot-on>img{filter:grayscale(.15) brightness(.62) contrast(1.02);}
+/* badge sits left here so the print never lands on it, and clears on reveal */
+.gal .duo.has-shot .gal-badge{right:12px;left:auto;}
+.gal .duo.has-shot.shot-on .gal-badge{opacity:0;}
+/* two captions: the setup, then the payoff */
+.gal .duo.has-shot figcaption .cap-b{display:none;}
+.gal .duo.has-shot.shot-on figcaption .cap-a{display:none;}
+.gal .duo.has-shot.shot-on figcaption .cap-b{display:inline;}
+@media(prefers-reduced-motion:reduce){
+  .gal .duo.has-shot .shot-print{transition:opacity .3s ease;transform:translate(-50%,0) rotate(-2deg);}
+  .gal .duo.has-shot .shot-space,.shot-mark{transition:none;}
+  /* no blink for anyone who asked for less motion */
+  .gal .duo.has-shot.shot-on .shot-flash{animation:none;}
+}
+
+/* ---------- macro tile: a loupe opens over the lizard ----------
+   The glass holds a second copy of the photo, blown up and offset so the
+   animal — who sits at 37.5% / 61% of the frame — lands dead centre in the
+   circle. The copy is nested, so it escapes the duotone on .duo>img and the
+   magnified crop reads in full colour against the dimmed frame. */
+.gal .duo.has-macro .macro-glass{position:absolute;left:37.5%;top:61%;z-index:5;width:52%;aspect-ratio:1;
+  border-radius:50%;overflow:hidden;pointer-events:none;
+  border:1px solid rgba(255,255,255,.7);box-shadow:0 24px 50px -18px rgba(0,0,0,.9),0 0 0 6px rgba(12,9,6,.28);
+  opacity:0;transform:translate(-50%,-50%) scale(.6);
+  transition:transform .55s cubic-bezier(.2,1.25,.4,1),opacity .3s ease;}
+/* 460% = 4.6×; the offsets are 50% − (37.5% × 4.6) and 50% − (61% × 4.6) */
+.gal .duo.has-macro .macro-glass img{position:absolute;left:-122.5%;top:-230.6%;width:460%;max-width:none;}
+.gal .duo.has-macro.macro-on .macro-glass{opacity:1;transform:translate(-50%,-50%) scale(1);}
+/* the frame drops back so the glass is the only thing in focus */
+.gal .duo.has-macro.macro-on>img{filter:grayscale(0) contrast(1.02) brightness(.66);transform:scale(1.02);}
+.gal .duo.has-macro.macro-on::after{opacity:0;}
+.gal .duo.has-macro .macro-tag{position:absolute;right:14px;top:16px;z-index:6;font-size:11px;letter-spacing:.16em;
+  color:#fff;opacity:0;text-shadow:0 1px 10px rgba(0,0,0,.9);transition:opacity .3s ease .15s;}
+.gal .duo.has-macro.macro-on .macro-tag{opacity:1;}
+.gal .duo.has-macro.macro-on .gal-badge{opacity:0;}
+/* The glass reaches down to the caption line, so the caption goes over the top
+   of it — and a shadow won't hold against the bright magnified crop. It borrows
+   the badge's chip instead, which is free: the badge fades as the glass opens.
+   The chip's padding is always reserved — only its background fades in — so the
+   words never shift sideways as the glass opens, and left/bottom absorb the
+   padding to keep them where they were. */
+.gal .duo.has-macro figcaption{z-index:6;left:3px;bottom:7px;padding:5px 10px;
+  border:1px solid transparent;border-radius:999px;backdrop-filter:blur(6px);
+  transition:opacity .3s,transform .3s,background .35s ease,border-color .35s ease;}
+.gal .duo.has-macro.macro-on figcaption{background:rgba(16,12,8,.62);
+  border-color:rgba(255,255,255,.22);text-shadow:0 1px 3px rgba(0,0,0,.9);}
+@media(prefers-reduced-motion:reduce){
+  .gal .duo.has-macro .macro-glass{transition:opacity .3s ease;transform:translate(-50%,-50%);}
+}
+
+/* ---------- gallery tile that plays a clip on hover ---------- */
+/* --vpos biases the crop: a portrait clip in a landscape tile otherwise
+   shows only the middle band, which cuts off whoever is in the shot */
+.gal .duo>video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;
+  object-position:50% var(--vpos,50%);
+  opacity:0;transition:opacity .45s ease;}
+.gal .duo.vid-on>video{opacity:1;}
+.gal .duo.vid-on>img{transform:scale(1.05);}
+/* ---------- three-beat tile: photo → clip → the photo it produced ----------
+   The clip has no loop attribute, so it ends and the final frame stays. */
+.gal .duo.has-seq>img.seq-end{position:absolute;inset:0;z-index:2;opacity:0;transition:opacity .6s ease;}
+.gal .duo.has-seq.seq-done>img.seq-end{opacity:1;}
+.gal .duo.has-seq figcaption .cap-b{display:none;}
+.gal .duo.has-seq.seq-done figcaption .cap-a{display:none;}
+.gal .duo.has-seq.seq-done figcaption .cap-b{display:inline;}
+
+/* 3·2·1 over the still before the clip starts — a viewfinder: corner brackets,
+   a rec dot, and an orange ring sweeping clockwise once per beat (see --beat).
+   Numerals are JetBrains Mono — its 1 has a flag and a foot, so it reads as a 1. */
+.gal-count{--beat:.6s;                             /* = BEAT in the page script */
+  position:absolute;inset:0;z-index:4;display:none;align-items:center;justify-content:center;
+  background:rgba(8,7,6,.4);}
+.gal .duo.counting .gal-count{display:flex;}
+.gal .duo.counting .gal-badge{opacity:0;}          /* the overlay owns the corner while counting */
+.gal-count .ct{position:absolute;inset:0;animation:countCut var(--beat) ease-out forwards;}
+
+.gal-count .ct-br{position:absolute;width:24px;height:24px;border:2px solid rgba(255,255,255,.85);}
+.gal-count .ct-br.tl{left:14px;top:14px;border-right:0;border-bottom:0;}
+.gal-count .ct-br.tr{right:14px;top:14px;border-left:0;border-bottom:0;}
+.gal-count .ct-br.bl{left:14px;bottom:14px;border-right:0;border-top:0;}
+.gal-count .ct-br.brr{right:14px;bottom:14px;border-left:0;border-top:0;}
+.gal-count .ct-rec{position:absolute;left:16px;top:48px;display:flex;align-items:center;gap:7px;
+  font-family:var(--mono);font-size:11px;letter-spacing:.18em;color:#fff;text-shadow:0 1px 10px rgba(0,0,0,.6);}
+.gal-count .ct-rec i{width:8px;height:8px;border-radius:50%;background:#ff3b30;
+  animation:countBlink var(--beat) steps(1,end) infinite;}
+
+.gal-count .ct-mid{position:absolute;inset:0;display:grid;place-items:center;}
+.gal-count .ct-dial{position:absolute;width:min(40%,110px);max-height:58%;aspect-ratio:1;fill:none;}
+.gal-count .ct-ring-bg{stroke:rgba(255,255,255,.25);stroke-width:1.5;}
+.gal-count .ct-ring{stroke:var(--orange);stroke-width:1.5;stroke-dasharray:100;stroke-dashoffset:100;
+  transform:rotate(-90deg);transform-box:view-box;transform-origin:50% 50%;   /* starts at 12 o'clock */
+  animation:countSweep var(--beat) linear forwards;}
+.gal-count .ct-num{position:relative;font-family:var(--mono);font-weight:500;font-size:clamp(28px,6vw,46px);
+  line-height:1;color:#fff;text-shadow:0 2px 20px rgba(0,0,0,.6);}
+
+/* the offset runs to 0, so the arc grows clockwise from the top rather than
+   draining backwards — the same direction the beat is counting */
+@keyframes countSweep{from{stroke-dashoffset:100}to{stroke-dashoffset:0}}
+@keyframes countCut{0%{filter:brightness(2.2)}6%{filter:brightness(1)}100%{filter:brightness(1)}}
+@keyframes countBlink{0%,50%{opacity:1}51%,100%{opacity:.25}}
+@media(prefers-reduced-motion:reduce){
+  .gal-count .ct,.gal-count .ct-rec i{animation:none;}
+  .gal-count .ct-ring{animation:none;stroke-dashoffset:0;}
+}
+
+.gal-badge{position:absolute;right:12px;top:12px;z-index:5;font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  padding:5px 10px;border-radius:999px;color:rgba(255,255,255,.95);white-space:nowrap;
+  background:rgba(16,12,8,.55);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(6px);
+  transition:opacity .3s ease,border-color .3s ease;}
+/* stays visible while playing — it doubles as the sound control */
+.gal .duo.vid-on .gal-badge{border-color:rgba(255,138,51,.55);}
+/* it is a real <button>, so it can be tabbed to and fired with Enter/Space —
+   which means stripping the native chrome the class doesn't already override */
+button.gal-badge{appearance:none;-webkit-appearance:none;margin:0;cursor:pointer;
+  font-family:inherit;line-height:normal;text-align:center;}
+.gal-badge:focus-visible{outline:2px solid var(--orange);outline-offset:3px;}
+/* three states fade the badge out. None of them may hide the thing holding
+   focus, or the keyboard user loses their place on the page. */
+.gal .duo.has-shot.shot-on .gal-badge:focus-visible,
+.gal .duo.has-macro.macro-on .gal-badge:focus-visible,
+.gal .duo.counting .gal-badge:focus-visible{opacity:1;}
+
+/* ============================================================
+   FULL-WIDTH reveal band
+   ============================================================ */
+.band{position:relative;height:78vh;min-height:520px;overflow:hidden;display:flex;align-items:center;}
+.band .duo{position:absolute;inset:0;}
+.band .duo>img{transform:scale(1.06);object-position:28% center;}
+.band::after{content:"";position:absolute;inset:0;z-index:2;background:linear-gradient(90deg,rgba(18,14,10,.93) 0%,rgba(18,14,10,.78) 40%,rgba(18,14,10,.15) 76%,rgba(18,14,10,.45));}
+.band-inner{position:relative;z-index:3;max-width:1180px;margin:0 auto;padding:0 40px;width:100%;}
+.band blockquote{margin:0;font-size:clamp(26px,3.6vw,44px);font-weight:600;letter-spacing:-0.03em;line-height:1.08;max-width:15ch;text-shadow:0 2px 30px rgba(0,0,0,.5);}
+.band blockquote .orange{color:var(--orange);}
+.band cite{display:block;margin-top:22px;font-family:var(--mono);font-size:13px;font-style:normal;color:var(--ink2);letter-spacing:.04em;}
+
+/* ============================================================
+   CONTACT / footer
+   ============================================================ */
+.contact{padding:110px 0 60px;border-top:1px solid var(--line);}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;}
+.contact h2{font-size:clamp(32px,4.4vw,52px);margin-bottom:20px;}
+.links-list{display:flex;flex-direction:column;gap:2px;margin-top:30px;}
+.links-list a{display:flex;align-items:center;justify-content:space-between;padding:16px 4px;border-bottom:1px solid var(--line);
+  font-family:var(--mono);font-size:14px;transition:padding .2s,color .2s;}
+.links-list a:hover{padding-left:14px;color:var(--orange);}
+.links-list a .lk{display:flex;align-items:center;gap:15px;}
+.links-list .ico{width:36px;height:36px;flex:none;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--line2);border-radius:50%;color:var(--muted);transition:border-color .2s,color .2s,background .2s;}
+.links-list .ico svg{width:17px;height:17px;display:block;}
+.links-list a:hover .ico{border-color:var(--orange);color:var(--orange);background:rgba(255,138,51,.08);}
+/* brand-coloured hover per platform */
+.links-list a.lk-linkedin:hover{color:#3B8BE0;}
+.links-list a.lk-linkedin:hover .ico{border-color:#0A66C2;color:#3B8BE0;background:rgba(10,102,194,.14);}
+.links-list a.lk-x:hover{color:#fff;}
+.links-list a.lk-x:hover .ico{border-color:#fff;color:#fff;background:rgba(255,255,255,.12);}
+.links-list a.lk-ig:hover{color:#E4405F;}
+.links-list a.lk-ig:hover .lk>span:last-child{background:linear-gradient(45deg,#FED576,#F47133 26%,#BC3081 61%,#4C63D2);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;}
+.links-list a.lk-ig:hover .ico{border-color:#E4405F;color:#E4405F;background:rgba(228,64,95,.14);}
+.links-list a.lk-ig:hover .ico svg path{fill:url(#igGrad);}
+.links-list a.lk-gh:hover{color:#EDEDED;}
+.links-list a.lk-gh:hover .ico{border-color:#EDEDED;color:#fff;background:rgba(255,255,255,.1);}
+.links-list a .arr{color:var(--orange);opacity:0;transition:opacity .2s,color .2s;}
+.links-list a:hover .arr{opacity:1;}
+.links-list a.lk-linkedin:hover .arr{color:#3B8BE0;}
+.links-list a.lk-x:hover .arr{color:#fff;}
+.links-list a.lk-ig:hover .arr{color:#E4405F;}
+.links-list a.lk-gh:hover .arr{color:#EDEDED;}
+.form{display:flex;flex-direction:column;gap:14px;}
+.form label{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:-6px;}
+.form input,.form textarea{background:var(--panel);border:1px solid var(--line);border-radius:10px;color:var(--ink);
+  font-family:var(--sans);font-size:15px;padding:13px 15px;transition:border-color .2s;}
+.form input:focus,.form textarea:focus{outline:none;border-color:var(--orange);}
+.form textarea{min-height:120px;resize:vertical;}
+/* Submit result. Left blank and [hidden] in the markup so that writing to it is
+   a real content change — a role="status" region that is merely revealed, with
+   its text already in place, may not be announced at all. */
+.form-note{font-size:13px;margin:0;}
+.form-note.is-ok{color:var(--green);}
+.form-note.is-err{color:#E0743A;}
+.foot{margin-top:70px;display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:12px;color:var(--muted2);flex-wrap:wrap;gap:10px;}
+
+/* ============================================================
+   responsive
+   ============================================================ */
+@media(max-width:880px){
+  body{font-size:16px;}
+  .wrap,.hero-inner,.band-inner{padding:0 22px;}
+  .nav{padding:16px 22px;}
+  .nav .links{display:none;}
+  .nav .burger{display:inline-block;}
+  /* mobile hero: photo becomes a banner up top, text stacks below it
+     (so the headline never sits over the face) */
+  .hero{height:auto;min-height:0;padding:0 0 54px;overflow:hidden;}
+  .hero-photo{position:relative;width:100%;height:auto;aspect-ratio:1/1;
+    -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 70%,transparent 100%);
+            mask-image:linear-gradient(180deg,#000 0%,#000 70%,transparent 100%);}
+  .hero-photo img{object-position:50% 30%;transform:none;filter:saturate(1.02) contrast(1.03) brightness(.94);}
+  /* the nav sits transparent over the top of the banner, so darken just that
+     strip rather than the whole photo — the face keeps its own exposure */
+  .hero-photo::after{content:"";position:absolute;top:0;left:0;right:0;height:38%;
+    background:linear-gradient(180deg,rgba(18,14,10,.85),rgba(18,14,10,.34) 58%,transparent);}
+  .hero-duoc,.hero-top,.hero-feather{display:none;}
+  .hero-inner{position:relative;height:auto;padding:20px 22px 0;justify-content:flex-start;}
+  .hero-content{max-width:100%;}
+  .hero h1{text-shadow:none;}
+  .hero-scroll{display:none;}
+  /* keep the two cards, and the two CTAs, side-by-side and equal-width on mobile */
+  .hero-cards{flex-wrap:nowrap;gap:10px;}
+  .hero-card{flex:1 1 0;min-width:0;padding:12px 14px;justify-content:flex-start;align-items:center;text-align:center;}
+  .hero-cta{flex-wrap:nowrap;gap:8px;}
+  .hero-cta .btn{flex:1 1 0;min-width:0;justify-content:center;padding:13px 10px;font-size:12px;}
+  .now-grid,.contact-grid{grid-template-columns:1fr;}
+  .cred-layout{grid-template-columns:1fr;gap:24px;}
+  .cred-photo{width:100%;height:auto;min-height:0;max-height:none;aspect-ratio:4/3;}
+  .sp-grid{grid-template-columns:1fr;gap:28px;}
+  .comm-grid{grid-template-columns:1fr;}
+  .comm-grid .duo{aspect-ratio:16/10;}
+  .gal{gap:10px;}
+  .gal .duo{height:220px;flex:1 1 100%;}
+  /* tiles are shorter here, so the cover box the brackets track changes too */
+  .gal .duo.has-shot .shot-space{width:max(100%,220px);}
+  /* the hard crop pushes the animal to ~61-92% down the tile, so the print has
+     to be small enough to sit above the brackets instead of covering them */
+  .shot-print{width:32%;}
+  .gal .g-a,.gal .g-f{grid-row:auto;}
+  .section{padding:72px 0;}
+}

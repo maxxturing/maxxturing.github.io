@@ -533,6 +533,24 @@ button.gal-badge{appearance:none;-webkit-appearance:none;margin:0;cursor:pointer
 /* the X on an open tile: closes it without leaving the gallery (moving off
    the tile alone no longer does). Hidden (not just transparent) while closed, so it
    cannot be tabbed to. Top-left, since the badge owns the top-right. */
+/* progress along the bottom edge of an open clip. The span is a taller,
+   invisible hit area for seeking; the 3px line sits at its foot and thickens
+   under the pointer. */
+.vid-bar{position:absolute;left:0;right:0;bottom:0;z-index:7;height:16px;cursor:pointer;
+  opacity:0;visibility:hidden;transition:opacity .25s ease,visibility 0s linear .25s;}
+.vid-bar::before,.vid-bar i{position:absolute;left:0;right:0;bottom:0;height:3px;transition:height .15s ease;}
+.vid-bar::before{content:"";background:rgba(255,255,255,.22);}
+.vid-bar i{background:var(--orange);transform:scaleX(0);transform-origin:0 50%;}
+.vid-bar:hover::before,.vid-bar:hover i{height:6px;}
+.gal .duo.vid-on .vid-bar{opacity:1;visibility:visible;transition-delay:0s;}
+@media (prefers-reduced-motion:reduce){.vid-bar,.vid-bar::before,.vid-bar i{transition:none;}}
+/* a clip paused by clicking it: a play mark in the middle until clicked again */
+.vid-held{position:absolute;left:50%;top:50%;z-index:4;width:64px;height:64px;margin:-32px 0 0 -32px;
+  display:grid;place-items:center;padding-left:5px;box-sizing:border-box;border-radius:50%;
+  font-size:24px;line-height:1;color:#fff;background:rgba(16,12,8,.55);border:1px solid rgba(255,255,255,.3);
+  backdrop-filter:blur(6px);opacity:0;transform:scale(.85);transition:opacity .2s ease,transform .2s ease;pointer-events:none;}
+.gal .duo.vid-on.vid-paused .vid-held{opacity:1;transform:none;}
+@media (prefers-reduced-motion:reduce){.vid-held{transition:none;}}
 .gal-x{position:absolute;left:12px;top:12px;z-index:7;width:30px;height:30px;padding:0;margin:0;
   display:grid;place-items:center;appearance:none;-webkit-appearance:none;cursor:pointer;
   font-family:inherit;font-size:20px;line-height:1;color:rgba(255,255,255,.95);border-radius:50%;

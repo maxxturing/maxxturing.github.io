@@ -477,8 +477,9 @@
   const intend = (fig, fn) => { clearTimeout(intents.get(fig)); intents.set(fig, setTimeout(fn, HOVER)); };
   const unintend = fig => clearTimeout(intents.get(fig));
 
-  // Gallery tiles that hold a clip. On a mouse: hover counts in and plays,
-  // click for sound. On touch: tap to play, then tap or the badge for sound.
+  // Gallery tiles that hold a clip. On a mouse: resting on one plays it; on
+  // touch, a tap does. Then clicking or tapping the clip pauses and resumes
+  // it, the badge switches sound, the bar seeks and the X closes.
   // preload="none" means the file is only fetched once someone asks for it.
   // Browsers refuse play() with audio until the page has been interacted with,
   // so we try with sound and fall back to muted rather than failing to play.
@@ -510,6 +511,27 @@
     // blurs. One decode, always in step — a second <video> would fetch the
     // file again and drift. The loop runs only while the clip is playing.
     let amb = null, drawing = false;
+
+    // Progress along the bottom edge while the clip is open; click it to jump.
+    // It is a transform, set each frame below, rather than a width, so it
+    // never touches layout.
+    const bar = document.createElement('span');
+    bar.className = 'vid-bar';
+    bar.setAttribute('aria-hidden', 'true');
+    const fill = document.createElement('i');
+    bar.append(fill);
+    fig.append(bar);
+    const showProgress = () => {
+      fill.style.transform = `scaleX(${v.duration ? Math.min(1, v.currentTime / v.duration) : 0})`;
+    };
+    bar.addEventListener('click', e => {
+      e.stopPropagation();                // a click here seeks; it must not pause
+      if (!fig.classList.contains('vid-on') || !v.duration) return;
+      const r = bar.getBoundingClientRect();
+      v.currentTime = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)) * v.duration;
+      fig.classList.remove('seq-done');   // a finished one-shot rolls back from its end frame
+      showProgress();
+    });
     if (fig.dataset.grow === 'letterbox') {
       const c = document.createElement('canvas');
       c.className = 'vid-amb'; c.width = 48; c.height = 27;
@@ -517,19 +539,22 @@
       fig.insertBefore(c, v);
       amb = c.getContext('2d');
     }
+    // one frame loop while the clip is open: the progress bar, and the
+    // letterbox fill where there is one
     const ambient = () => {
-      if (!amb || drawing) return;
+      if (drawing) return;
       drawing = true;
       const draw = () => {
         if (!fig.classList.contains('vid-on')) { drawing = false; return; }
-        if (v.readyState >= 2) amb.drawImage(v, 0, 0, 48, 27);
+        showProgress();
+        if (amb && v.readyState >= 2) amb.drawImage(v, 0, 0, 48, 27);
         requestAnimationFrame(draw);
       };
       draw();
     };
 
     const soundLabel = () =>
-      label(v.muted ? (canHover ? '🔇 click for sound' : '🔇 tap for sound') : '🔊 sound on');
+      label(v.muted ? '🔇 sound off' : '🔊 sound on');   // the state; the badge is the switch
     const toggleSound = () => {
       wantSound = v.muted;
       v.muted = !v.muted;               // a click is a gesture, so this always sticks
@@ -544,6 +569,7 @@
     const play = async () => {
       const mine = ++run;
       closeOthers(fig);                       // the newly opened tile takes over
+      fig.classList.remove('vid-paused');
       fig.classList.add('vid-on');
       // tells the gallery to grow this tile (and fold the open one) in one move
       fig.dispatchEvent(new CustomEvent('gal:play', { bubbles: true }));
@@ -564,7 +590,7 @@
     };
     const stop = () => {
       run++;
-      fig.classList.remove('vid-on', 'seq-done');
+      fig.classList.remove('vid-on', 'vid-paused', 'seq-done');
       v.pause();                        // no rewind: hovering back resumes from here
       label(rest);
     };
@@ -587,17 +613,31 @@
       });
     }
     // The badge is the sound control once a clip runs, which is what its label
-    // says it is; the tile itself does the same. The X is what stops it.
+    // says it is. Clicking the clip itself pauses and resumes it, with a play
+    // mark in the middle while it holds; the tile stays open either way, and
+    // the X is what closes it.
     if (badge) badge.addEventListener('click', e => {
       if (!fig.classList.contains('vid-on')) return;   // nothing running: let the tile start it
       e.stopPropagation();
       toggleSound();
     });
+    const held = document.createElement('span');
+    held.className = 'vid-held';
+    held.setAttribute('aria-hidden', 'true');
+    held.textContent = '\u25B6\uFE0E';     // text-style triangle, never the emoji
+    fig.insertBefore(held, badge);
     fig.addEventListener('click', () => {
       // the tile's own state, not v.paused — a clip that is still decoding is
       // paused but already running, and a second tap must not start it twice
       if (!fig.classList.contains('vid-on')) { play(); return; }
-      toggleSound();
+      if (fig.classList.contains('vid-paused')) {
+        fig.classList.remove('vid-paused');
+        if (v.ended) play();              // a finished one-shot starts over
+        else v.play().catch(() => {});
+      } else {
+        v.pause();
+        fig.classList.add('vid-paused');
+      }
     });
 
     // Enter and Space on the badge already arrive as a click, so starting and

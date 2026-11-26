@@ -519,45 +519,6 @@ html:has(#beyond .gal){overflow-anchor:none;}
 .gal .duo.has-seq.seq-done figcaption .cap-a{display:none;}
 .gal .duo.has-seq.seq-done figcaption .cap-b{display:inline;}
 
-/* 3·2·1 over the still before the clip starts — a viewfinder: corner brackets,
-   a rec dot, and an orange ring sweeping clockwise once per beat (see --beat).
-   Numerals are JetBrains Mono — its 1 has a flag and a foot, so it reads as a 1. */
-.gal-count{--beat:.5s;                             /* = BEAT in the page script */
-  position:absolute;inset:0;z-index:4;display:none;align-items:center;justify-content:center;
-  background:rgba(8,7,6,.4);}
-.gal .duo.counting .gal-count{display:flex;}
-.gal .duo.counting .gal-badge{opacity:0;}          /* the overlay owns the corner while counting */
-.gal-count .ct{position:absolute;inset:0;animation:countCut var(--beat) ease-out forwards;}
-
-.gal-count .ct-br{position:absolute;width:24px;height:24px;border:2px solid rgba(255,255,255,.85);}
-.gal-count .ct-br.tl{left:14px;top:14px;border-right:0;border-bottom:0;}
-.gal-count .ct-br.tr{right:14px;top:14px;border-left:0;border-bottom:0;}
-.gal-count .ct-br.bl{left:14px;bottom:14px;border-right:0;border-top:0;}
-.gal-count .ct-br.brr{right:14px;bottom:14px;border-left:0;border-top:0;}
-.gal-count .ct-rec{position:absolute;left:16px;top:48px;display:flex;align-items:center;gap:7px;
-  font-family:var(--mono);font-size:11px;letter-spacing:.18em;color:#fff;text-shadow:0 1px 10px rgba(0,0,0,.6);}
-.gal-count .ct-rec i{width:8px;height:8px;border-radius:50%;background:#ff3b30;
-  animation:countBlink var(--beat) steps(1,end) infinite;}
-
-.gal-count .ct-mid{position:absolute;inset:0;display:grid;place-items:center;}
-.gal-count .ct-dial{position:absolute;width:min(40%,110px);max-height:58%;aspect-ratio:1;fill:none;}
-.gal-count .ct-ring-bg{stroke:rgba(255,255,255,.25);stroke-width:1.5;}
-.gal-count .ct-ring{stroke:var(--orange);stroke-width:1.5;stroke-dasharray:100;stroke-dashoffset:100;
-  transform:rotate(-90deg);transform-box:view-box;transform-origin:50% 50%;   /* starts at 12 o'clock */
-  animation:countSweep var(--beat) linear forwards;}
-.gal-count .ct-num{position:relative;font-family:var(--mono);font-weight:500;font-size:clamp(28px,6vw,46px);
-  line-height:1;color:#fff;text-shadow:0 2px 20px rgba(0,0,0,.6);}
-
-/* the offset runs to 0, so the arc grows clockwise from the top rather than
-   draining backwards — the same direction the beat is counting */
-@keyframes countSweep{from{stroke-dashoffset:100}to{stroke-dashoffset:0}}
-@keyframes countCut{0%{filter:brightness(2.2)}6%{filter:brightness(1)}100%{filter:brightness(1)}}
-@keyframes countBlink{0%,50%{opacity:1}51%,100%{opacity:.25}}
-@media(prefers-reduced-motion:reduce){
-  .gal-count .ct,.gal-count .ct-rec i{animation:none;}
-  .gal-count .ct-ring{animation:none;stroke-dashoffset:0;}
-}
-
 .gal-badge{position:absolute;right:12px;top:12px;z-index:5;font-size:10px;letter-spacing:.1em;text-transform:uppercase;
   padding:5px 10px;border-radius:999px;color:rgba(255,255,255,.95);white-space:nowrap;
   background:rgba(16,12,8,.55);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(6px);
@@ -592,8 +553,7 @@ button.gal-badge{appearance:none;-webkit-appearance:none;margin:0;cursor:pointer
 .gal .duo.has-shot.shot-on .gal-badge:focus-visible,
 .gal .duo.has-macro.macro-on .gal-badge:focus-visible,
 .gal .duo.has-deal.deal-on .gal-badge:focus-visible,
-.gal .duo.is-big .gal-badge:focus-visible,
-.gal .duo.counting .gal-badge:focus-visible{opacity:1;}
+.gal .duo.is-big .gal-badge:focus-visible{opacity:1;}
 
 /* ============================================================
    FULL-WIDTH reveal band

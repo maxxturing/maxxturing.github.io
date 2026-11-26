@@ -145,7 +145,8 @@ The gallery was rebuilt on 25–26 November. It is now a fixed 3×3 of equal 4:3
 tiles (`.gal` in `site.css`, rows sized from the gallery width via
 `#beyond .wrap{container-type:inline-size}`), and hovering a tile grows it while
 the others move — the script is "The gallery grows" in `index.html`'s inline JS.
-A tile grows when it opens (a clip once its 3-2-1 ends) and stays open until
+A tile opens once the pointer rests on it for `HOVER` (200ms), grows in the same
+move that folds the open one away, and stays open until
 its X, Escape, another tile opening, or the pointer leaving the gallery; one
 sound setting is shared by all the clips.
 Shapes come from `data-grow` on the `<figure>`: none = 2×2, `tall` = 1×2 (the
@@ -153,7 +154,9 @@ portrait clips, St Anton and snowboarding), `letterbox` = 2×2 with the whole
 16:9 frame shown, the bars filled by a blurred copy of the clip drawn on a
 `.vid-amb` canvas (Signal Hill, Okavango). Read that
 comment block before touching it: the grown tile is anchored on the cell under
-the pointer, or the grid thrashes.
+the pointer, and the tile that opens is pinned to its cell so its X folds it
+back there (tiles reflow out of order around it until the pointer leaves the
+gallery), or the grid thrashes.
 
 Verified in Chrome on desktop and in a phone-width frame. Still open:
 

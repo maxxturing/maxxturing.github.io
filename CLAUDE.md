@@ -86,13 +86,14 @@ block returns early if its element is absent, so adding the file to `cv/` or
 blocks is page-specific and belongs where it is.
 
 **Do not add `width`/`height` to the images that lack them.** It looks like an
-easy win — 69 of `index.html`'s 71 `<img>` carry no intrinsic dimensions — and
-it would buy nothing. Every one of the 69 sits in a container that reserves its
+easy win — 74 of `index.html`'s 76 `<img>` carry no intrinsic dimensions — and
+it would buy nothing. Every one of the 74 sits in a container that reserves its
 box first: `.sp-stage` is `aspect-ratio:3/2` with the images
 `position:absolute;inset:0`, `.sp-thumb` is a fixed `height:52px`, `.gal .duo`
-is `height:300px` with width from `flex-basis:calc(var(--ar) * 300px)`,
+fills a grid cell whose rows are a fixed height worked out from the gallery width,
 `.cred-photo` has `min-height`/`aspect-ratio`, and the hero, the `.band` photo
-and the two reveal overlays (`.shot-print`, `.macro-glass`) are all absolutely
+and the reveal overlays (`.shot-print`, `.macro-glass`, the kangaroo tile's
+`.deal-print`s) are all absolutely
 positioned — out of flow, so they cannot shift anything. Layout shift needs the
 *intrinsic* size to influence layout and here it never does.
 `timeline/index.html` is 71 of 71 already, so there is nothing to do there

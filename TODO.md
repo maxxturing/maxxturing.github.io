@@ -4,20 +4,22 @@ Open work on the site. Each item says where it lives and what you need to know
 to start, so none of it needs rediscovering. Not published — see `NOPUBLISH` in
 `tools/build-site.py`.
 
-Last reviewed **5 September 2026** against the live site. Every
-file path, line number, colour and count below was re-checked against the tree
-on that date, not carried over.
+Last reviewed **5 September 2026** against the live site; items 1–3 below
+have not been re-checked since. On **26 November 2026** the two Beyond work
+items (labels, and newer material) were done and removed, and item 4 was added
+from that work — its references are current as of that date.
 
-Down from eleven items to five. Removed as done: the timeline lead and hint
+Down from eleven items to four. Removed as done: the timeline lead and hint
 copy; the duplicated contact-form and nav JS (now one copy in `/site.js`); the
-unreferenced-media sweep; and the image-dimensions question (answered — see the
-gotcha in `CLAUDE.md`, which also says not to "fix" it). Removed as won't-do:
-`x.votemaxx.com`'s certificate, Squarespace-side and not worth chasing, since
-the site links straight to <https://x.com/VoteMaxx>.
+unreferenced-media sweep; the image-dimensions question (answered — see the
+gotcha in `CLAUDE.md`, which also says not to "fix" it); and both Beyond work
+items — the badges now name the activity, captions give the place, and the
+gallery gained a kangaroo tile. Removed as won't-do: `x.votemaxx.com`'s
+certificate, Squarespace-side and not worth chasing, since the site links
+straight to <https://x.com/VoteMaxx>.
 
 Items are renumbered every time something is removed, so a stale "item N"
-reference anywhere is a bug. The only two in this file point at items 1 and 2
-and are correct as of this review.
+reference anywhere is a bug. There are none in this file as of 26 November.
 
 ---
 
@@ -46,49 +48,7 @@ private backup of the old history, at `5a50833`.
 
 ---
 
-## 1. Update the labels in the Beyond work section
-
-The `.gal-badge` buttons on the gallery figures in `index.html` — the section
-is `<section class="section" id="beyond">` at `:351`, and the eight
-`<figure class="duo reveal g-…">` rows run `:358`–`:365`.
-Current labels:
-
-- `▶ video` — six figures (skydive, Cape Town, Camps Bay, Savute, St Anton,
-  snowboarding)
-- `📷 the shot →` — the Okavango wildlife figure
-- `🔍 look closer` — the lizard macro figure
-
-Keep these in sync when changing them:
-
-- the button's visible text **and** its `aria-label` (pattern is
-  `"<label> — <data-subject>"`; the badge text is its accessible name);
-- the inline JS that swaps `badge.textContent` and rewrites `aria-label` to
-  report playback and sound state — search `soundLabel` and `label('▶ video')`.
-  Those replacement strings must match the new wording or the button will
-  announce something the eye never sees.
-
-## 2. Add newer material to the Beyond work section
-
-The eight figures are all older trips (Algarve, Cape Town, Botswana, the Alps).
-Australia is the obvious gap. To add one, copy an existing `<figure>` and keep
-its anatomy intact:
-
-- `class="duo reveal g-<letter>"` plus a behaviour class (`has-video`,
-  `has-shot`, `has-seq`, `has-macro`) — the behaviour class is what the inline
-  JS hooks. `.gal` is a flex-wrap row, so the `g-*` letter only matters for the
-  one grid override that uses it, `.gal .g-a,.gal .g-f{grid-row:auto;}` at
-  `site.css:586`, inside the mobile media query.
-- `style="--ar:<aspect ratio>"`, optionally `--vpos` to shift the video crop.
-- a poster `<img>` with real `alt`, plus, for video figures,
-  `<video muted loop playsinline preload="none" aria-hidden="true" tabindex="-1">`.
-- the `.gal-badge` button with `data-subject` and a matching `aria-label`
-  (see item 1), and a `<figcaption>` — two `<span class="cap-a">` / `cap-b`
-  captions if the figure reveals a second image.
-
-Media goes in `assets/img/` and `assets/video/`. Keep new files referenced and
-reasonably compressed; several earlier commits deleted ~290 MB of orphans.
-
-## 3. Font Awesome icons on the timeline
+## 1. Font Awesome icons on the timeline
 
 No icon font is loaded anywhere on the site today — every badge and label is a
 Unicode glyph. Doing this means adding Font Awesome **self-hosted in
@@ -109,7 +69,7 @@ and `.tl-card.open .tl-chev` rotates it 135°. If it becomes an icon, keep it
 `aria-hidden` — the button's accessible name must stay the entry title alone.
 Give any decorative icon `aria-hidden="true"`.
 
-## 4. Review the timeline categories, filtering and colours
+## 2. Review the timeline categories, filtering and colours
 
 All three live near the top of `timeline/index.html`'s inline JS.
 
@@ -139,7 +99,7 @@ All three live near the top of `timeline/index.html`'s inline JS.
   picks the accent via `CATS[cats[0]]`. Re-check which entries are
   multi-category and whether the leading one is the right accent.
 
-## 5. Do a real browser pass on `/timeline/`
+## 3. Do a real browser pass on `/timeline/`
 
 The most useful ten minutes available on this site, for two reasons.
 
@@ -178,3 +138,43 @@ list below as unverified:
   readable at that size and that the pair stacks properly under 600px.
 - **Two bounded figures**: `tl-startbook.jpg` is cropped to 3:2 anchored bottom,
   and `tl-foundertribe.jpg` is capped at its native 720px and centred.
+
+## 4. Beyond work gallery: loose ends
+
+The gallery was rebuilt on 25–26 November. It is now a fixed 3×3 of equal 4:3
+tiles (`.gal` in `site.css`, rows sized from the gallery width via
+`#beyond .wrap{container-type:inline-size}`), and hovering a tile grows it while
+the others move — the script is "The gallery grows" in `index.html`'s inline JS.
+A tile grows when it opens (a clip once its 3-2-1 ends) and stays open until
+its X, Escape, another tile opening, or the pointer leaving the gallery; one
+sound setting is shared by all the clips.
+Shapes come from `data-grow` on the `<figure>`: none = 2×2, `tall` = 1×2 (the
+portrait clips, St Anton and snowboarding), `letterbox` = 2×2 with the whole
+16:9 frame shown, the bars filled by a blurred copy of the clip drawn on a
+`.vid-amb` canvas (Signal Hill, Okavango). Read that
+comment block before touching it: the grown tile is anchored on the cell under
+the pointer, or the grid thrashes.
+
+Verified in Chrome on desktop and in a phone-width frame. Still open:
+
+- **Never tested:** keyboard (Tab to a badge, Enter, Escape) and a real touch
+  device for the three still tiles — kanga selfies (`.has-deal`), bush walk
+  snaps (`.has-shot`) and scaly sidekick (`.has-macro`, whose loupe now opens
+  only within `NEAR` of the lizard) — and any browser other than Chrome.
+- **Built for exactly nine tiles.** A tenth needs a decision about where it
+  sits; the `.gal` comment in `site.css` says the same.
+- **Two captions are still in the old style.** The badges were renamed, but
+  bush walk snaps still reads "Shooting wildlife · Okavango Delta" and scaly
+  sidekick "Making friends · a curious lizard" — visible captions and the end of
+  each badge's `aria-label` (`data-subject`). Every other tile is "Place,
+  Country".
+- **`site.css` and `site.js` are unversioned.** GitHub Pages lets browsers cache
+  them for ten minutes, so just after a deploy a returning visitor can get new
+  HTML with old CSS — that is exactly how a local check went wrong on 26
+  November. A `?v=` on the two tags (in every page, kept in step) would fix it.
+- **Sync points.** The kangaroo prints land on shutter frames: `--d` on
+  `.deal-print.p1`–`p4` in `site.css` must match `SHOT_AT` + n × `BURST` in the
+  page script. The skydive clip carries `data-vol="0.35"` (wind roar) and
+  `--hpos`/`--vzoom` to crop a title card's "VE" off its left edge — the
+  lettering reaches 15.2% of the frame width.
+

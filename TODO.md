@@ -70,27 +70,16 @@ and `.tl-card.open .tl-chev` rotates it 135°. If it becomes an icon, keep it
 `aria-hidden` — the button's accessible name must stay the entry title alone.
 Give any decorative icon `aria-hidden="true"`.
 
-## 2. Review the timeline categories, filtering and colours
+## 2. Review the timeline categories and filtering
 
 All three live near the top of `timeline/index.html`'s inline JS.
 
-- **`CATS`** defines four categories and their colours, and the problem is
-  measurable rather than a matter of taste. Perceptual distance (CIE76 dE,
-  where under about 15 reads as "the same colour" at swatch size):
-
-  | pair | dE |
-  |---|---|
-  | `venture` `#FF8A33` vs `learning` `#E0743A` | **15.8** |
-  | `politics` `#E6B33E` vs `life` `#E0B57A` | 27.8 |
-  | every other pair | 32–41 |
-
-  So `venture` and `learning` are the collision, at roughly half the separation
-  of the next-closest pair. Contrast against the open card (`--panel2`
-  `#241C13`) is fine everywhere and is not the issue: `venture` 7.15:1,
-  `politics` 8.70:1, `learning` 5.38:1, `life` 8.84:1 — though `learning` is
-  the weakest and `life` the palest, which is why `life` reads washed out.
-  Re-pick the ramp so no pair sits under about 25 dE while all four stay above
-  4.5:1 on the card.
+- **`CATS` colours — done 27 November.** `learning` was `#E0743A`, a near
+  twin of `venture`'s brand orange (CIE76 dE 15.8). Now `venture` `#FF8A33`,
+  `politics` `#E8C547`, `learning` `#5FB8D6`, `life` `#7DCB8A`: the closest
+  pair is dE 41, and every colour is at least 7:1 on the open card
+  (`--panel2` `#241C13`). The colours only reach the filter pills, the
+  category tags and the spine dots; open cards keep the orange accent.
 - **The filter pills** are built from `CATS`, so adding or renaming a category
   flows through automatically, counts included. Caveat: the filter is
   single-select with no "clear" beyond the `All` pill, and filtering only

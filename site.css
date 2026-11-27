@@ -351,7 +351,7 @@ html:has(#beyond .gal){overflow-anchor:none;}
 .gal .duo.has-deal.deal-on .deal-hand{pointer-events:auto;}
 .gal .duo.has-deal.deal-on .deal-print{opacity:1;visibility:visible;transform:rotate(var(--r));
   transition:transform .6s cubic-bezier(.2,.9,.25,1.15) var(--d),opacity .25s ease var(--d),visibility 0s linear 0s;}
-.gal .duo.has-deal.deal-on .deal-print:hover{transform:rotate(0) scale(1.65);z-index:2;
+.gal .duo.has-deal.deal-on .deal-print:hover{transform:rotate(0) scale(1.45);z-index:2;
   transition:transform .3s cubic-bezier(.2,.7,.2,1);}
 .gal .duo.has-deal.deal-on>img{filter:grayscale(.3) brightness(.45);transform:scale(1.02);}
 .gal .duo.has-deal.deal-on::after{opacity:0;}

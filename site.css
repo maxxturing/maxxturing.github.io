@@ -48,6 +48,10 @@ h1,h2,h3{font-weight:600;letter-spacing:-0.03em;line-height:1.02;margin:0;}
 .duo.reveal:hover::after{opacity:0;}
 
 /* ---------- nav ---------- */
+/* Skip link: off screen until a keyboard user tabs to it, then over the nav */
+.skip{position:fixed;left:16px;top:-60px;z-index:100;padding:10px 16px;border-radius:8px;
+  background:var(--orange);color:#120E0A;font-family:var(--mono);font-size:13px;font-weight:600;transition:top .15s ease;}
+.skip:focus{top:12px;}
 .nav{position:fixed;top:0;left:0;right:0;z-index:50;
   display:flex;align-items:center;justify-content:space-between;
   padding:20px 40px;font-family:var(--mono);font-size:13px;

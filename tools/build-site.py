@@ -44,10 +44,12 @@ NOPUBLISH = re.compile(
     re.VERBOSE,
 )
 
-# Pages worth listing for search engines, in the order jekyll-sitemap emitted
-# them. PDFs are included because the previous sitemap included them — this
-# script is a like-for-like replacement, not a change of SEO surface.
-PDF_SUFFIX = ".pdf"
+# Pages worth listing for search engines. Only real pages: the PDFs (the CV,
+# a degree transcript, a diploma, a brochure) and /meet-maxx/ (a full-screen
+# Calendly frame) were listed once, as a like-for-like copy of what
+# jekyll-sitemap emitted, and are left out now. Leaving a URL out of the
+# sitemap does not hide it; anything linked from a page can still be found.
+SITEMAP_SKIP = {"meet-maxx/index.html", "404.html"}
 
 
 def tracked_files():
@@ -86,7 +88,7 @@ def url_for(rel):
 def build_sitemap(published, base):
     entries = []
     for rel in published:
-        if rel.endswith("index.html") or rel.endswith(PDF_SUFFIX):
+        if rel.endswith("index.html") and rel not in SITEMAP_SKIP:
             entries.append((url_for(rel), last_commit_iso(rel)))
     # stable, and shallow paths first so the homepage leads
     entries.sort(key=lambda e: (e[0].count("/"), e[0]))

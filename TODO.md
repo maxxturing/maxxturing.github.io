@@ -157,27 +157,22 @@ portrait clips, St Anton and snowboarding), `letterbox` = 2×2 with the whole
 16:9 frame shown, the bars filled by a blurred copy of the clip drawn on a
 `.vid-amb` canvas (Signal Hill, Okavango). Read that
 comment block before touching it: the grown tile is anchored on the cell under
-the pointer, and the tile that opens is pinned to its cell so its X folds it
+the pointer (or, switching from an open tile or opening by keyboard, on its own
+cell as it will be once the open one folds), and the tile that opens is pinned to its cell so its X folds it
 back there (tiles reflow out of order around it until the pointer leaves the
 gallery), or the grid thrashes.
 
 Verified in Chrome on desktop and in a phone-width frame. Still open:
 
-- **Never tested:** keyboard (Tab to a badge, Enter, Escape) and a real touch
-  device for the three still tiles — kanga selfies (`.has-deal`), bush walk
-  snaps (`.has-shot`) and scaly sidekick (`.has-macro`, whose loupe now opens
-  only within `NEAR` of the lizard) — and any browser other than Chrome.
+- **Never tested:** a real touch device for the three still tiles — kanga
+  selfies (`.has-deal`), bush walk snaps (`.has-shot`) and scaly sidekick
+  (`.has-macro`, whose loupe now opens only within `NEAR` of the lizard) — and
+  any browser other than Chrome. The keyboard path was checked in Chrome on 26
+  November with real key presses: Tab to a badge, Enter opens (a clip's second
+  Enter toggles sound), Escape closes with focus left on the badge, and the X
+  is one Shift+Tab back from the badge.
 - **Built for exactly nine tiles.** A tenth needs a decision about where it
   sits; the `.gal` comment in `site.css` says the same.
-- **Two captions are still in the old style.** The badges were renamed, but
-  bush walk snaps still reads "Shooting wildlife · Okavango Delta" and scaly
-  sidekick "Making friends · a curious lizard" — visible captions and the end of
-  each badge's `aria-label` (`data-subject`). Every other tile is "Place,
-  Country".
-- **`site.css` and `site.js` are unversioned.** GitHub Pages lets browsers cache
-  them for ten minutes, so just after a deploy a returning visitor can get new
-  HTML with old CSS — that is exactly how a local check went wrong on 26
-  November. A `?v=` on the two tags (in every page, kept in step) would fix it.
 - **Sync points.** The kangaroo prints land on shutter frames: `--d` on
   `.deal-print.p1`–`p4` in `site.css` must match `SHOT_AT` + n × `BURST` in the
   page script. The skydive clip carries `data-vol="0.35"` (wind roar) and

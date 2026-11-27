@@ -85,6 +85,12 @@ block returns early if its element is absent, so adding the file to `cv/` or
 `meet-maxx/` stays harmless. Everything else in those pages' inline `<script>`
 blocks is page-specific and belongs where it is.
 
+**`site.css` and `site.js` are versioned at build time, not in the source.**
+`build-site.py` rewrites their tags in every staged page to
+`site.css?v=<content hash>`, so a deploy never serves new HTML with a cached
+old stylesheet. Leave the tags in the pages bare — there is nothing to bump by
+hand — and if another shared file needs the same, add it to `VERSIONED`.
+
 **Do not add `width`/`height` to the images that lack them.** It looks like an
 easy win — 74 of `index.html`'s 76 `<img>` carry no intrinsic dimensions — and
 it would buy nothing. Every one of the 74 sits in a container that reserves its

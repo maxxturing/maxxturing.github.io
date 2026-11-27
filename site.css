@@ -429,10 +429,6 @@ html:has(#beyond .gal){overflow-anchor:none;}
 /* badge sits left here so the print never lands on it, and clears on reveal */
 .gal .duo.has-shot .gal-badge{right:12px;left:auto;}
 .gal .duo.has-shot.shot-on .gal-badge{opacity:0;}
-/* two captions: the setup, then the payoff */
-.gal .duo.has-shot figcaption .cap-b{display:none;}
-.gal .duo.has-shot.shot-on figcaption .cap-a{display:none;}
-.gal .duo.has-shot.shot-on figcaption .cap-b{display:inline;}
 @media(prefers-reduced-motion:reduce){
   .gal .duo.has-shot .shot-print{transition:opacity .3s ease;transform:translate(-50%,0) rotate(-2deg);}
   .gal .duo.has-shot .shot-space,.shot-mark{transition:none;}
@@ -517,9 +513,6 @@ html:has(#beyond .gal){overflow-anchor:none;}
    The clip has no loop attribute, so it ends and the final frame stays. */
 .gal .duo.has-seq>img.seq-end{position:absolute;inset:0;z-index:2;opacity:0;transition:opacity .6s ease;}
 .gal .duo.has-seq.seq-done>img.seq-end{opacity:1;}
-.gal .duo.has-seq figcaption .cap-b{display:none;}
-.gal .duo.has-seq.seq-done figcaption .cap-a{display:none;}
-.gal .duo.has-seq.seq-done figcaption .cap-b{display:inline;}
 
 .gal-badge{position:absolute;right:12px;top:12px;z-index:5;font-size:10px;letter-spacing:.1em;text-transform:uppercase;
   padding:5px 10px;border-radius:999px;color:rgba(255,255,255,.95);white-space:nowrap;

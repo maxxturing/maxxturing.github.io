@@ -15,6 +15,7 @@ Usage:
 """
 
 import argparse
+import hashlib
 import re
 import shutil
 import subprocess
@@ -102,6 +103,35 @@ def build_sitemap(published, base):
     return "\n".join(lines) + "\n", len(entries)
 
 
+# The shared stylesheet and script are fetched by every page, and GitHub Pages
+# lets browsers cache them for ten minutes, so just after a deploy a returning
+# visitor could get new HTML with old CSS. The staged pages ask for them as
+# site.css?v=<hash of its contents> instead: a new version is a new URL, and an
+# unchanged file keeps its cached copy. Done here, not in the source, so there
+# is nothing to keep in step by hand, and local previews are unaffected.
+VERSIONED = ("site.css", "site.js")
+ASSET_REF = re.compile(r'(?P<attr>(?:href|src)=")(?P<path>/?(?:%s))"'
+                       % "|".join(re.escape(n) for n in VERSIONED))
+
+
+def version_assets(out, published):
+    tags = {n: hashlib.sha256((ROOT / n).read_bytes()).hexdigest()[:10]
+            for n in VERSIONED}
+    count = 0
+    for rel in published:
+        if not rel.endswith(".html"):
+            continue
+        page = out / rel
+        text = page.read_text()
+        new, n = ASSET_REF.subn(
+            lambda m: f'{m["attr"]}{m["path"]}?v={tags[m["path"].lstrip("/")]}"',
+            text)
+        if n:
+            page.write_text(new)
+            count += n
+    return count
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default="_site")
@@ -123,6 +153,8 @@ def main():
     if not (out / "CNAME").exists():
         sys.exit("CNAME missing from the staged site — the custom domain would break")
 
+    n_ver = version_assets(out, published)
+
     base = site_url()
     xml, n = build_sitemap(published, base)
     (out / "sitemap.xml").write_text(xml)
@@ -135,6 +167,7 @@ def main():
     print(f"staged {len(published)} files into {shown}/ "
           f"({held} held back)")
     print(f"sitemap.xml: {n} urls, base {base}")
+    print(f"versioned {n_ver} site.css/site.js references")
 
 
 if __name__ == "__main__":

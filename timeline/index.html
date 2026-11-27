@@ -60,6 +60,7 @@
   .tl-card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:18px 22px;
     transition:border-color .25s, transform .25s, background .25s;}
   .tl-card:hover{border-color:var(--orange);background:var(--panel2);}
+  .tl-card:not(.open){cursor:pointer;}   /* a closed card opens from anywhere on it */
   /* keyboard focus should light the card up the same way hovering it does */
   .tl-card:focus-within{border-color:var(--orange);background:var(--panel2);}
   .tl-card.open{border-color:var(--orange);transform:none;background:var(--panel2);}
@@ -443,14 +444,23 @@ DATA.forEach((e, i) => {
       <div class="tl-collapse tl-full" id="tl-panel-${i}"><div><div class="tl-rich">${e.b}</div></div></div>
     </div>`;
   const card = el.querySelector('.tl-card');
-  // Only the header button toggles. It used to be the whole card, which meant
-  // no keyboard could reach it, and clicking anywhere in an open entry — to
-  // select a line of text, say — collapsed it.
+  // The header button is the real control: keyboards reach it, and it is the
+  // only thing that closes an entry, so clicking inside an open one — to select
+  // a line of text, follow a link, page a carousel — never collapses it.
+  // A closed entry also opens from a click anywhere on the card, as long as
+  // the click is not a text drag and not on a link or another control.
   const toggle = el.querySelector('.tl-toggle');
-  toggle.addEventListener('click', () => {
-    toggle.setAttribute('aria-expanded', String(card.classList.toggle('open')));
+  const setOpen = open => {
+    card.classList.toggle('open', open);
+    toggle.setAttribute('aria-expanded', String(open));
     requestAnimationFrame(updateProgress);
     setTimeout(updateProgress, 440);
+  };
+  toggle.addEventListener('click', () => setOpen(!card.classList.contains('open')));
+  card.addEventListener('click', ev => {
+    if (card.classList.contains('open') || ev.target.closest('a, button, iframe')) return;
+    if (String(getSelection()).trim()) return;     // finished a text selection
+    setOpen(true);
   });
   itemsEl.appendChild(el);
 });

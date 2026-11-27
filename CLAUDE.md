@@ -111,9 +111,11 @@ with its links tab-focusable — keyboard users land on invisible targets inside
 closed entries. The `visibility` rules and their transition delay are load-
 bearing, not cosmetic.
 
-**The timeline entry header is a real `<button>` inside its `<h3>`.** Only that
-button toggles; the card body deliberately does not, so selecting text in an
-open entry no longer closes it. Keep `aria-expanded` in step via `setMenu`-style
+**The timeline entry header is a real `<button>` inside its `<h3>`.** It is the
+only thing that *closes* an entry, so selecting text, following a link or
+paging a carousel inside an open entry never collapses it. A *closed* entry
+also opens from a click anywhere on the card, unless the click finished a text
+selection or landed on a link or control — keep that asymmetry. Keep `aria-expanded` in step via `setMenu`-style
 single-path updates, keep the chevron `aria-hidden`, and keep `aria-controls`
 pointing at a unique panel id. Same pattern for the burger: every state change
 goes through one function so the class and the attribute cannot disagree.

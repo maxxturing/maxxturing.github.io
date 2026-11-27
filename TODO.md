@@ -4,22 +4,18 @@ Open work on the site. Each item says where it lives and what you need to know
 to start, so none of it needs rediscovering. Not published — see `NOPUBLISH` in
 `tools/build-site.py`.
 
-Last reviewed **5 September 2026** against the live site; items 1–3 below
-have not been re-checked since. On **26 November 2026** the two Beyond work
-items (labels, and newer material) were done and removed, and item 4 was added
-from that work — its references are current as of that date.
+Last brought up to date on **27 November 2026**, after the site review and the
+timeline work that followed it. Items are renumbered every time something is
+removed, so a stale "item N" reference anywhere is a bug.
 
-Down from eleven items to four. Removed as done: the timeline lead and hint
-copy; the duplicated contact-form and nav JS (now one copy in `/site.js`); the
-unreferenced-media sweep; the image-dimensions question (answered — see the
-gotcha in `CLAUDE.md`, which also says not to "fix" it); and both Beyond work
-items — the badges now name the activity, captions give the place, and the
-gallery gained a kangaroo tile. Removed as won't-do: `x.votemaxx.com`'s
-certificate, Squarespace-side and not worth chasing, since the site links
-straight to <https://x.com/VoteMaxx>.
-
-Items are renumbered every time something is removed, so a stale "item N"
-reference anywhere is a bug. There are none in this file as of 26 November.
+Done and removed on 26–27 November: Font Awesome icons (every timeline entry
+now has one, inlined as SVG — see item 1's note); the timeline category
+colours; the group-photo pass (the DWYL photo was the one that mattered and is
+fixed); the review PRs — self-hosted fonts, resized images and re-encoded
+clips, canonical links, Person JSON-LD, a trimmed sitemap, a 404 page, skip
+links, and the CV opening directly on phones; testimonials on the home page;
+and the timeline's year markers, entry links (`/timeline/#slug`), maps that
+load on click, sentence-case titles and the Startbook-era entries.
 
 ---
 
@@ -48,38 +44,29 @@ private backup of the old history, at `5a50833`.
 
 ---
 
-## 1. Font Awesome icons on the timeline
+## 1. How the timeline is built now (read before editing it)
 
-No icon font is loaded anywhere on the site today — every badge and label is a
-Unicode glyph. Doing this means adding Font Awesome **self-hosted in
-`assets/`**, not from a CDN: the only third-party requests today are Google
-Analytics (`_partials/analytics.html`) and the two Google Maps embeds on the
-timeline, and a font CDN should not join them.
+Not a task — notes that used to be spread across older items, kept so nobody
+re-derives them.
 
-Glyphs to swap in `timeline/index.html`:
-
-- the carousel arrows `‹` / `›` — three carousels, so six buttons. Keep the
-  `aria-label`s ("Previous" / "Next") on them
-- the rebrand arrow `⟶` (2 occurrences)
-- the `↓` in `.tl-hint` (`:287`)
-- the category swatches, if those should become icons
-
-Note the disclosure chevron is **no longer** a bare glyph: it is
-`<span class="tl-chev" aria-hidden="true">+</span>` inside the header button,
-and `.tl-card.open .tl-chev` rotates it 135°. If it becomes an icon, keep it
-`aria-hidden` — the button's accessible name must stay the entry title alone.
-Give any decorative icon `aria-hidden="true"`.
+- **Icons.** Each `DATA` entry names an icon with `ic:'briefcase'` etc. The
+  paths live in `ICONS` near the top of the script: Font Awesome Free 6.5.2
+  solid, inlined so no icon font loads. To add one, take the SVG from
+  `@fortawesome/fontawesome-free@6.5.2/svgs/solid/<name>.svg` and add its
+  `[viewBox width, path]`. The carousel arrows, the `⟶` rebrand arrow and the
+  `↓` hint are still Unicode, deliberately.
+- **Entry addresses** are `slug(e.st)`, the short title. Renaming an entry's
+  `st` changes its URL and breaks any link already shared to it.
+- **Third parties.** Google Analytics loads on every page (statistics only,
+  with a footer opt-out — see item 3). Google Maps and YouTube load only when
+  someone clicks; fonts are self-hosted.
 
 ## 2. Review the timeline categories and filtering
 
-All three live near the top of `timeline/index.html`'s inline JS.
+Both live near the top of `timeline/index.html`'s inline JS. (The colours
+were re-picked on 27 November: closest pair now CIE76 dE 41, all at least 7:1
+on the open card.)
 
-- **`CATS` colours — done 27 November.** `learning` was `#E0743A`, a near
-  twin of `venture`'s brand orange (CIE76 dE 15.8). Now `venture` `#FF8A33`,
-  `politics` `#E8C547`, `learning` `#5FB8D6`, `life` `#7DCB8A`: the closest
-  pair is dE 41, and every colour is at least 7:1 on the open card
-  (`--panel2` `#241C13`). The colours only reach the filter pills, the
-  category tags and the spine dots; open cards keep the orange accent.
 - **The filter pills** are built from `CATS`, so adding or renaming a category
   flows through automatically, counts included. Caveat: the filter is
   single-select with no "clear" beyond the `All` pill, and filtering only
@@ -89,29 +76,21 @@ All three live near the top of `timeline/index.html`'s inline JS.
   picks the accent via `CATS[cats[0]]`. Re-check which entries are
   multi-category and whether the leading one is the right accent.
 
-## 3. `/timeline/`: what the browser pass left open
+## 3. Open questions from the 26–27 November review
 
-The visual pass was done in Chrome on 26 November, at desktop width and in a
-390px frame, with every entry open. Fixed then: the NEF Fast Track selfie
-(`tl-nefcohort2`, 100%) cut Maxx's face off the right edge, `tl-medopad1`
-(22%) showed a blurred window instead of the Glass wearer, `tl-hp-portrait2`
-(80%) had Maxx against the edge, and a `.crest` card in a row of taller photos
-(The Family, The John Warner School) left its caption floating mid-card — the
-crest now takes `margin:auto` so the caption sits on the bottom edge. The
-upscaled logos looked fine; the MBA pair stacks properly under 600px; nothing
-scrolls sideways at phone width.
-
-Left alone as acceptable, worth a look if anyone minds:
-
-- **Group photos lose people at the edges** in three-column rows:
-  `tl-ef` (Entrepreneurs First), `tl-dwyl`, `tl-nefcohort` and `tl-oxent`
-  (the "OX" of the banner). Wider rows or two columns would fix them; an
-  `object-position` only moves the cut.
-- **`tl-kantan`** crops the start of the Kantan stand's logo.
-- **The Smartly MBA sheet** is legible on a phone for its headline numbers,
-  not its small print.
-- **Not checked:** the keyboard path and a screen reader on a phone, from the
-  original list — tab through, open and close entries, Escape returning focus.
+- **Analytics.** GA runs on every page; visitors can switch it off in the
+  footer's "Cookie settings" dialog. If this ever changes, the alternatives
+  are GA behind a consent banner (Consent Mode, denied by default) or a
+  cookieless tool such as Umami.
+- **NEF Pitch Days.** Maxx helped host every one until 2023; the details are in
+  `maxx@centreforentrepreneurs.org`, which he no longer has. A timeline entry
+  would need someone at CfE to supply dates and photos.
+- **Tech for Good 2024 photos.** The timeline carousel shows the 2025 final;
+  no 2024 photos were found in the Startbook Drive or on startbook.co.uk.
+- **Timeline crops left alone:** `tl-ef`, `tl-nefcohort` and `tl-oxent` lose
+  people at the edges, and `tl-kantan` crops the stand's logo. Maxx looked and
+  is happy with them.
+- **Not checked:** the timeline by keyboard and screen reader on a phone.
 
 ## 4. Beyond work gallery: loose ends
 

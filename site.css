@@ -326,6 +326,13 @@ h1,h2,h3{font-weight:600;letter-spacing:-0.03em;line-height:1.02;margin:0;}
 .sp-topic-list li::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--orange);flex:none;transition:transform .2s;}
 .sp-topic-list li:hover{color:var(--ink);padding-left:6px;}
 .sp-topic-list li:hover::before{transform:scale(1.5);}
+/* where I've taught and hosted: two columns under the photo and topics */
+.sp-where{display:grid;grid-template-columns:1fr 1fr;gap:28px 48px;margin-top:56px;}
+.sp-where-list{list-style:none;margin:0;padding:0;}
+.sp-where-list li{display:flex;flex-direction:column;gap:3px;padding:12px 0;border-bottom:1px solid var(--line);}
+.sp-where-list b{font-weight:600;font-size:16px;color:var(--ink);}
+.sp-where-list span{font-family:var(--mono);font-size:12px;color:var(--muted);}
+@media(max-width:880px){.sp-where{grid-template-columns:1fr;}}
 
 /* ============================================================
    PERSONALITY gallery

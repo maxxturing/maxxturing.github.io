@@ -84,3 +84,31 @@
     }
   });
 })();
+
+(function () {
+  // Analytics opt-out. GA runs for statistics only (see the analytics
+  // partial); the footer says so and carries this button. Opting out stores
+  // "ga-consent" = "denied", which the partial reads on every page, turns GA
+  // off for this page and clears its cookies; the button then offers undo.
+  const btn = document.getElementById('gaOpt');
+  if (!btn) return;
+  const isOff = () => { try { return localStorage.getItem('ga-consent') === 'denied'; } catch (e) { return false; } };
+  const show = () => { btn.textContent = isOff() ? 'Opted out \u2014 undo' : 'Opt out'; };
+  btn.addEventListener('click', () => {
+    const off = !isOff();
+    try { off ? localStorage.setItem('ga-consent', 'denied') : localStorage.removeItem('ga-consent'); } catch (e) {}
+    if (typeof gtag === 'function') gtag('consent', 'update', { analytics_storage: off ? 'denied' : 'granted' });
+    if (off) {
+      const host = location.hostname.split('.');
+      document.cookie.split(';').map(c => c.split('=')[0].trim()).filter(n => n.startsWith('_ga')).forEach(n => {
+        for (let k = 0; k < host.length; k++) {
+          const d = host.slice(k).join('.');
+          document.cookie = `${n}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=${d}`;
+        }
+        document.cookie = `${n}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+      });
+    }
+    show();
+  });
+  show();
+})();

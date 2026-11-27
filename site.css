@@ -727,3 +727,7 @@ button.gal-badge{appearance:none;-webkit-appearance:none;margin:0;cursor:pointer
   .gal .g-a,.gal .g-f{grid-row:auto;}
   .section{padding:72px 0;}
 }
+
+/* ---------- analytics notice and opt-out (contact partial, site.js) ---------- */
+.ga-note{color:var(--muted2);}
+.ga-opt{background:none;border:0;padding:0;font:inherit;color:var(--orange);cursor:pointer;text-decoration:underline;text-underline-offset:3px;}

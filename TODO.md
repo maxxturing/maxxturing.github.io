@@ -52,8 +52,9 @@ private backup of the old history, at `5a50833`.
 
 No icon font is loaded anywhere on the site today — every badge and label is a
 Unicode glyph. Doing this means adding Font Awesome **self-hosted in
-`assets/`**, not from a CDN: the site currently ships zero third-party requests
-and that is worth keeping.
+`assets/`**, not from a CDN: the only third-party requests today are Google
+Analytics (`_partials/analytics.html`) and the two Google Maps embeds on the
+timeline, and a font CDN should not join them.
 
 Glyphs to swap in `timeline/index.html`:
 
@@ -99,45 +100,29 @@ All three live near the top of `timeline/index.html`'s inline JS.
   picks the accent via `CATS[cats[0]]`. Re-check which entries are
   multi-category and whether the leading one is the right accent.
 
-## 3. Do a real browser pass on `/timeline/`
+## 3. `/timeline/`: what the browser pass left open
 
-The most useful ten minutes available on this site, for two reasons.
+The visual pass was done in Chrome on 26 November, at desktop width and in a
+390px frame, with every entry open. Fixed then: the NEF Fast Track selfie
+(`tl-nefcohort2`, 100%) cut Maxx's face off the right edge, `tl-medopad1`
+(22%) showed a blurred window instead of the Glass wearer, `tl-hp-portrait2`
+(80%) had Maxx against the edge, and a `.crest` card in a row of taller photos
+(The Family, The John Warner School) left its caption floating mid-card — the
+crest now takes `margin:auto` so the caption sits on the bottom edge. The
+upscaled logos looked fine; the MBA pair stacks properly under 600px; nothing
+scrolls sideways at phone width.
 
-**The behaviour is verified; the appearance is not.** The mobile menu and the
-contact form were checked in jsdom against the live pages on 4 September —
-32 assertions, both pages, covering the burger's `aria-expanded`, Escape
-returning focus, link-click closing, and the form's success and failure paths.
-jsdom confirms structure and behaviour and cannot tell you whether the focus
-ring looks right, whether the collapse animation still feels smooth with
-`visibility` delayed behind it, or how a screen reader actually announces an
-entry. Tab through the timeline, open and close a few entries by keyboard, and
-check Escape-and-return-focus on a phone.
+Left alone as acceptable, worth a look if anyone minds:
 
-**And a lot of unseen layout landed on 4–5 September.** Eleven company logos
-were added to timeline entries and every judgement about how they sit was made
-by reading CSS, not by looking. Static analysis was wrong three times that day —
-on the icon canvas, on rendered sizes, and on an upscale sweep — so treat the
-list below as unverified:
-
-- **Logos in three-column rows.** Nine rows went from two columns to three when
-  a logo was inserted, which narrowed every cell and made `object-fit:cover`
-  crop the photographs harder. Only three photos carry an `object-position`:
-  `tl-cbp1` (75%), `tl-cbp2` (38%), `tl-oxent2` (68%), all pre-existing, plus
-  `tl-hp-portrait` (78%) which was fixed after the crop cut the subject to the
-  edge. **The other ~15 are on default centre and have never been looked at.**
-  Any with an off-centre subject will have the same fault.
-- **Four logos render slightly upscaled** — `medopad-logo` 1.71×,
-  `tl-fac-logo` 1.59×, `dwyl-logo` 1.29×, `tl-jws-crest` 1.28×. Those are upper
-  bounds: `.pad` uses `object-fit:contain`, so the row height may bind before
-  the width and the real figure may be lower. Flat-colour logos tolerate this
-  far better than type-heavy artwork, so this may well be fine. Look before
-  changing anything.
-- **The MBA entry** puts the Quantic wordmark and the Smartly cohort sheet side
-  by side in a `.tl-figrow.onethird` with `align-items:start`, and the sheet's
-  box is capped at 680px with `object-fit:contain`. Check the sheet is still
-  readable at that size and that the pair stacks properly under 600px.
-- **Two bounded figures**: `tl-startbook.jpg` is cropped to 3:2 anchored bottom,
-  and `tl-foundertribe.jpg` is capped at its native 720px and centred.
+- **Group photos lose people at the edges** in three-column rows:
+  `tl-ef` (Entrepreneurs First), `tl-dwyl`, `tl-nefcohort` and `tl-oxent`
+  (the "OX" of the banner). Wider rows or two columns would fix them; an
+  `object-position` only moves the cut.
+- **`tl-kantan`** crops the start of the Kantan stand's logo.
+- **The Smartly MBA sheet** is legible on a phone for its headline numbers,
+  not its small print.
+- **Not checked:** the keyboard path and a screen reader on a phone, from the
+  original list — tab through, open and close entries, Escape returning focus.
 
 ## 4. Beyond work gallery: loose ends
 
@@ -164,10 +149,11 @@ gallery), or the grid thrashes.
 
 Verified in Chrome on desktop and in a phone-width frame. Still open:
 
-- **Never tested:** a real touch device for the three still tiles — kanga
+- **Never tested:** desktop Safari and Firefox. A real phone was checked by
+  hand on 26 November and works, including the three still tiles — kanga
   selfies (`.has-deal`), bush walk snaps (`.has-shot`) and scaly sidekick
-  (`.has-macro`, whose loupe now opens only within `NEAR` of the lizard) — and
-  any browser other than Chrome. The keyboard path was checked in Chrome on 26
+  (`.has-macro`, whose loupe opens only within `NEAR` of the lizard when a
+  mouse steers it, and straight away on a tap). The keyboard path was checked in Chrome on 26
   November with real key presses: Tab to a badge, Enter opens (a clip's second
   Enter toggles sound), Escape closes with focus left on the badge, and the X
   is one Shift+Tab back from the badge.

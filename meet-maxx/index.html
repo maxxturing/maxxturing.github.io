@@ -14,14 +14,25 @@
 <style>html,body{margin:0;height:100%;background:#120E0A;}</style>
 <!-- @partial:analytics -->
 <!-- Google tag (gtag.js) — GA4 property "maxxturing.com".
-     async, so it never blocks the first paint. -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-3WC1D0EMKE"></script>
+     async, so it never blocks the first paint.
+     Statistics only, relying on the Data (Use and Access) Act 2025 exemption
+     for analytics cookies: visitors are told in the footer (contact partial)
+     and can opt out there (site.js), which stores "ga-consent" = "denied".
+     Advertising storage and Google signals stay off, so the data is used only
+     to count and improve the site. -->
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
+  var gaOff = false;
+  try { gaOff = localStorage.getItem('ga-consent') === 'denied'; } catch (e) {}
+  gtag('consent', 'default', {
+    analytics_storage: gaOff ? 'denied' : 'granted',
+    ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied'
+  });
   gtag('js', new Date());
-  gtag('config', 'G-3WC1D0EMKE');
+  gtag('config', 'G-3WC1D0EMKE', { allow_google_signals: false, allow_ad_personalization_signals: false });
 </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-3WC1D0EMKE"></script>
 <!-- /@partial:analytics -->
 </head>
 <body>

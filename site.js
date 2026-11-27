@@ -86,29 +86,46 @@
 })();
 
 (function () {
-  // Analytics opt-out. GA runs for statistics only (see the analytics
-  // partial); the footer says so and carries this button. Opting out stores
-  // "ga-consent" = "denied", which the partial reads on every page, turns GA
-  // off for this page and clears its cookies; the button then offers undo.
+  // Cookie settings. The footer link opens a dialog explaining what Google
+  // Analytics collects, with one switch, on by default. Switching it off
+  // stores "ga-consent" = "denied" (the analytics partial reads it on every
+  // page), turns GA off for this page and clears its cookies.
   const btn = document.getElementById('gaOpt');
-  if (!btn) return;
+  if (!btn || typeof HTMLDialogElement !== 'function') return;
   const isOff = () => { try { return localStorage.getItem('ga-consent') === 'denied'; } catch (e) { return false; } };
-  const show = () => { btn.textContent = isOff() ? 'Opted out \u2014 undo' : 'Opt out'; };
-  btn.addEventListener('click', () => {
-    const off = !isOff();
+  const clearCookies = () => {
+    const host = location.hostname.split('.');
+    document.cookie.split(';').map(c => c.split('=')[0].trim()).filter(n => n.startsWith('_ga')).forEach(n => {
+      for (let k = 0; k < host.length; k++) {
+        document.cookie = `${n}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=${host.slice(k).join('.')}`;
+      }
+      document.cookie = `${n}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+    });
+  };
+  const dlg = document.createElement('dialog');
+  dlg.className = 'cookie-dlg';
+  dlg.setAttribute('aria-labelledby', 'cookieDlgTitle');
+  dlg.innerHTML =
+    '<form method="dialog">' +
+    '<button class="cookie-x" value="cancel" aria-label="Close">\u00d7</button>' +
+    '<h3 id="cookieDlgTitle">Cookie settings</h3>' +
+    '<p>This site uses <strong>Google Analytics</strong> to see how it is used: which pages are read, for how long, and roughly where visitors are, to city level. ' +
+    'Its cookies recognise a returning browser, and Google processes the data. Nothing is used for advertising.</p>' +
+    '<label class="cookie-row"><span><b>Analytics cookies</b><small>Google Analytics · _ga, _ga_*</small></span>' +
+    '<input type="checkbox" role="switch" id="cookieGa"></label>' +
+    '<p class="cookie-fine">No other cookies are set. Your choice is remembered in this browser and can be changed here at any time.</p>' +
+    '<div class="cookie-btns"><button class="btn" value="save">Save</button></div>' +
+    '</form>';
+  document.body.appendChild(dlg);
+  const box = dlg.querySelector('#cookieGa');
+  btn.addEventListener('click', () => { box.checked = !isOff(); dlg.showModal(); });
+  dlg.addEventListener('close', () => {
+    if (dlg.returnValue !== 'save') return;
+    const off = !box.checked;
     try { off ? localStorage.setItem('ga-consent', 'denied') : localStorage.removeItem('ga-consent'); } catch (e) {}
     if (typeof gtag === 'function') gtag('consent', 'update', { analytics_storage: off ? 'denied' : 'granted' });
-    if (off) {
-      const host = location.hostname.split('.');
-      document.cookie.split(';').map(c => c.split('=')[0].trim()).filter(n => n.startsWith('_ga')).forEach(n => {
-        for (let k = 0; k < host.length; k++) {
-          const d = host.slice(k).join('.');
-          document.cookie = `${n}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=${d}`;
-        }
-        document.cookie = `${n}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
-      });
-    }
-    show();
+    if (off) clearCookies();
   });
-  show();
+  // a click on the backdrop closes without saving
+  dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close('cancel'); });
 })();

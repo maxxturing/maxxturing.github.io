@@ -145,7 +145,10 @@ The gallery was rebuilt on 25–26 November. It is now a fixed 3×3 of equal 4:3
 tiles (`.gal` in `site.css`, rows sized from the gallery width via
 `#beyond .wrap{container-type:inline-size}`), and hovering a tile grows it while
 the others move — the script is "The gallery grows" in `index.html`'s inline JS.
-A tile opens once the pointer rests on it for `HOVER` (200ms), grows in the same
+A tile opens once the pointer rests on it for `HOVER` (500ms, shown by a hand
+sweeping once round, `.gal-wait`, wiping the orange grade off the photo
+behind it, `.gal-clear`; `--hover` on `.gal` in `site.css` must match; the tile then grows over
+`MOVE`, 500ms, and a clip or a still's reveal starts once it has — `.rev-growing` marks a still's wait), grows in the same
 move that folds the open one away, and stays open until
 its X, Escape, another tile opening, or the pointer leaving the gallery; one
 sound setting is shared by all the clips.

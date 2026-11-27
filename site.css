@@ -331,7 +331,8 @@ html:has(#beyond .gal){overflow-anchor:none;}
    .deal-on comes from the same script as .shot-on/.macro-on (hover with a
    mouse, tap on touch, Enter/Space on the badge). The prints fly in from below
    the tile one after another, land tilted, and the photo underneath dims like
-   a tabletop. Hovering a single print straightens it and lifts it to the top.
+   a tabletop. Hovering a single print straightens it, lifts it to the top and blows it
+   up from its outer corner (transform-origin), so it grows into the tile.
    Gathering them up runs with no stagger, so leaving the tile is instant. */
 .deal-hand{position:absolute;inset:0;z-index:4;pointer-events:none;}
 .deal-print{position:absolute;width:38%;padding:5px 5px 0;background:#fbefe4;border-radius:3px;
@@ -343,15 +344,15 @@ html:has(#beyond .gal){overflow-anchor:none;}
   color:#3a2a1c;text-align:center;padding:5px 0 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 /* --d lands each print on its own shutter frame: SHOT_AT + n * BURST in the
    page script (.185s + .13s steps, plus the 20ms audio lead) */
-.deal-print.p1{left:5%;top:7%;--r:-8deg;--fx:60%;--d:.2s;}
-.deal-print.p2{left:56%;top:4%;--r:6deg;--fx:-60%;--d:.33s;}
-.deal-print.p3{left:9%;top:51%;--r:5deg;--fx:55%;--d:.46s;}
-.deal-print.p4{left:55%;top:50%;--r:-5deg;--fx:-55%;--d:.59s;}
+.deal-print.p1{left:5%;top:7%;--r:-8deg;--fx:60%;--d:.2s;transform-origin:0 0;}
+.deal-print.p2{left:56%;top:4%;--r:6deg;--fx:-60%;--d:.33s;transform-origin:100% 0;}
+.deal-print.p3{left:9%;top:51%;--r:5deg;--fx:55%;--d:.46s;transform-origin:0 100%;}
+.deal-print.p4{left:55%;top:50%;--r:-5deg;--fx:-55%;--d:.59s;transform-origin:100% 100%;}
 .gal .duo.has-deal.deal-on .deal-hand{pointer-events:auto;}
 .gal .duo.has-deal.deal-on .deal-print{opacity:1;visibility:visible;transform:rotate(var(--r));
   transition:transform .6s cubic-bezier(.2,.9,.25,1.15) var(--d),opacity .25s ease var(--d),visibility 0s linear 0s;}
-.gal .duo.has-deal.deal-on .deal-print:hover{transform:rotate(0) scale(1.1);z-index:2;
-  transition:transform .25s cubic-bezier(.2,.7,.2,1);}
+.gal .duo.has-deal.deal-on .deal-print:hover{transform:rotate(0) scale(1.65);z-index:2;
+  transition:transform .3s cubic-bezier(.2,.7,.2,1);}
 .gal .duo.has-deal.deal-on>img{filter:grayscale(.3) brightness(.45);transform:scale(1.02);}
 .gal .duo.has-deal.deal-on::after{opacity:0;}
 .gal .duo.has-deal.deal-on figcaption{opacity:1;transform:none;}
@@ -501,6 +502,7 @@ html:has(#beyond .gal){overflow-anchor:none;}
   .gal .duo>video{transform:scale(var(--vzoom,1));transform-origin:var(--hpos,50%) 50%;}
 }
 .gal .duo.vid-on>video{opacity:1;}
+.gal .duo.vid-on.vid-growing>video{opacity:0;}   /* the cleared photo grows first; the clip follows */
 /* a 16:9 clip grown to 2x2 (about 4:3) shows the whole frame, letterboxed,
    rather than losing its edges — the Okavango title card runs edge to edge */
 .gal .duo.is-big[data-grow="letterbox"]>video{object-fit:contain;}
@@ -533,6 +535,39 @@ button.gal-badge{appearance:none;-webkit-appearance:none;margin:0;cursor:pointer
 /* the X on an open tile: closes it without leaving the gallery (moving off
    the tile alone no longer does). Hidden (not just transparent) while closed, so it
    cannot be tabbed to. Top-left, since the badge owns the top-right. */
+/* the wait before a hovered tile opens: a film-leader sweep. A hand turns
+   once round the tile from twelve o'clock in --hover (= HOVER in the page
+   script), and behind it the orange grade comes off the photo wedge by wedge;
+   the tile opens as it comes round. While it turns, the tile keeps its graded
+   look rather than fading to the hover one, so the wipe does the work.
+   .gal-wait (the hand) is a square of the tile's longer side x 1.42, so the
+   hand reaches past every corner; the tile's overflow clips it. .gal-clear is
+   the ungraded photo, masked to the swept wedge. A fresh .intending restarts
+   both. */
+@property --sweep{syntax:'<angle>';inherits:false;initial-value:0deg;}
+.gal{--hover:.5s;}                     /* = HOVER in the page script */
+.gal-wait{position:absolute;left:50%;top:50%;z-index:6;width:142cqmax;height:142cqmax;
+  transform:translate(-50%,-50%);opacity:0;transition:opacity .12s ease;pointer-events:none;}
+.gal-wait svg{display:block;width:100%;height:100%;fill:none;}
+.gal-wait .w-hand{stroke:rgba(255,255,255,.85);stroke-width:2px;vector-effect:non-scaling-stroke;
+  transform-box:view-box;transform-origin:50% 50%;}
+.gal-clear{position:absolute;inset:0;z-index:1;display:none;pointer-events:none;
+  background:center/cover no-repeat;filter:contrast(1.02);
+  -webkit-mask:conic-gradient(#000 var(--sweep),transparent 0);mask:conic-gradient(#000 var(--sweep),transparent 0);}
+.gal .duo.intending .gal-wait{opacity:1;}
+.gal .duo.intending .gal-clear{display:block;animation:galClear var(--hover) linear forwards;}
+.gal .duo.intending .w-hand{animation:galHand var(--hover) linear forwards;}
+.gal .duo.intending>img{filter:grayscale(.55) sepia(.5) saturate(1.5) hue-rotate(-10deg) contrast(1.05) brightness(.93);transform:none;}
+.gal .duo.intending::after{opacity:1;}
+/* when it comes round, the tile takes its hover look at once, not by fading */
+.gal .duo.swept>img{transition:transform .9s cubic-bezier(.2,.7,.2,1);}
+.gal .duo.swept::after{transition:none;}
+@keyframes galClear{to{--sweep:360deg}}
+@keyframes galHand{90%{opacity:1}to{transform:rotate(360deg);opacity:0}}   /* gone once round, leaving the clean photo to grow */
+@media (prefers-reduced-motion:reduce){
+  .gal .duo.intending .gal-clear,.gal .duo.intending .w-hand{animation:none;}
+  .gal .duo.intending .gal-clear{--sweep:360deg;}
+}
 /* progress along the bottom edge of an open clip. The span is a taller,
    invisible hit area for seeking; the 3px line sits at its foot and thickens
    under the pointer. */
@@ -556,7 +591,7 @@ button.gal-badge{appearance:none;-webkit-appearance:none;margin:0;cursor:pointer
   font-family:inherit;font-size:20px;line-height:1;color:rgba(255,255,255,.95);border-radius:50%;
   background:rgba(16,12,8,.6);border:1px solid rgba(255,255,255,.28);backdrop-filter:blur(6px);
   opacity:0;visibility:hidden;transition:opacity .25s ease,visibility 0s linear .25s,background .2s ease,border-color .2s ease;}
-.gal .duo:is(.vid-on,.shot-on,.deal-on,.macro-on) .gal-x{opacity:1;visibility:visible;transition-delay:0s;}
+.gal .duo:is(.vid-on,.shot-on,.deal-on,.macro-on,.rev-growing) .gal-x{opacity:1;visibility:visible;transition-delay:0s;}
 .gal-x:hover{background:rgba(16,12,8,.85);border-color:rgba(255,138,51,.7);}
 .gal-x:focus-visible{outline:2px solid var(--orange);outline-offset:3px;}
 @media (prefers-reduced-motion:reduce){.gal-x{transition:none;}}

@@ -129,3 +129,7 @@
   // a click on the backdrop closes without saving
   dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close('cancel'); });
 })();
+
+// The footer's copyright year, kept current: the HTML carries the year the
+// page was last edited, and this replaces it with this year.
+document.querySelectorAll('.this-year').forEach(el => { el.textContent = new Date().getFullYear(); });

@@ -118,11 +118,6 @@
 
   /* rich expanded copy — preserves paragraphs, lists, bold & links */
   .tl-rich{padding-top:4px;}
-  /* copy-link button at the foot of an open entry */
-  .tl-foot{display:flex;justify-content:flex-end;margin-top:18px;}
-  .tl-copy{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;color:var(--muted);background:transparent;border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;transition:color .2s,border-color .2s;}
-  .tl-copy svg{width:13px;height:13px;fill:currentColor;}
-  .tl-copy:hover,.tl-copy:focus-visible,.tl-copy.done{color:var(--orange);border-color:var(--orange);}
   .tl-rich p{margin:13px 0 0;color:var(--ink2);font-size:15px;line-height:1.62;}
   .tl-rich a,.lead a{color:var(--orange);border-bottom:1px solid rgba(255,138,51,.35);transition:border-color .2s;}
   .tl-rich a:hover,.lead a:hover{border-color:var(--orange);}
@@ -413,7 +408,6 @@
 // font loads (https://fontawesome.com/license/free; icons CC BY 4.0).
 // Each is [viewBox width, path]; entries name theirs with ic in DATA.
 const ICONS = {
-  'link': [640, 'M579.8 267.7c56.5-56.5 56.5-148 0-204.5c-50-50-128.8-56.5-186.3-15.4l-1.6 1.1c-14.4 10.3-17.7 30.3-7.4 44.6s30.3 17.7 44.6 7.4l1.6-1.1c32.1-22.9 76-19.3 103.8 8.6c31.5 31.5 31.5 82.5 0 114L422.3 334.8c-31.5 31.5-82.5 31.5-114 0c-27.9-27.9-31.5-71.8-8.6-103.8l1.1-1.6c10.3-14.4 6.9-34.4-7.4-44.6s-34.4-6.9-44.6 7.4l-1.1 1.6C206.5 251.2 213 330 263 380c56.5 56.5 148 56.5 204.5 0L579.8 267.7zM60.2 244.3c-56.5 56.5-56.5 148 0 204.5c50 50 128.8 56.5 186.3 15.4l1.6-1.1c14.4-10.3 17.7-30.3 7.4-44.6s-30.3-17.7-44.6-7.4l-1.6 1.1c-32.1 22.9-76 19.3-103.8-8.6C74 372 74 321 105.5 289.5L217.7 177.2c31.5-31.5 82.5-31.5 114 0c27.9 27.9 31.5 71.8 8.6 103.9l-1.1 1.6c-10.3 14.4-6.9 34.4 7.4 44.6s34.4 6.9 44.6-7.4l1.1-1.6C433.5 260.8 427 182 377 132c-56.5-56.5-148-56.5-204.5 0L60.2 244.3z'],
   'earth-oceania': [512, 'M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM208.6 357.3l-39-13.5c-6.5-2.2-13.6-2.3-20.1-.3l-15.3 4.9c-18.5 5.9-38.5-2.4-47.5-19.5l-3.3-6.2c-10.6-20.1-2.3-45 18.2-54.7l35.3-16.8c2.3-1.1 4.4-2.8 5.9-4.8l5.3-7c7.2-9.6 18.6-15.3 30.6-15.3s23.4 5.7 30.6 15.3l4.6 6.1c2 2.6 4.9 4.5 8.1 5.1c7.8 1.6 15.7-1.5 20.4-7.9l10.4-14.2c2-2.8 5.3-4.4 8.7-4.4c4.4 0 8.4 2.7 10 6.8l10.1 25.9c2.8 7.2 6.7 14 11.5 20.2L311 299.8c5.8 7.4 9 16.6 9 26s-3.2 18.6-9 26L299 367.2c-8.3 10.6-21 16.8-34.4 16.8c-8.4 0-16.6-2.4-23.7-7l-25.4-16.4c-2.2-1.4-4.5-2.5-6.9-3.4zm65.2-214.8L296 164.7c10.1 10.1 2.9 27.3-11.3 27.3H254.8c-5.6 0-11.1-1.2-16.2-3.4l-42.8-19c-14.3-6.3-11.9-27.3 3.4-30.3l38.5-7.7c13.1-2.6 26.7 1.5 36.1 10.9zM248 432c0-8.8 7.2-16 16-16h16c8.8 0 16 7.2 16 16s-7.2 16-16 16H264c-8.8 0-16-7.2-16-16zM431.2 298.9l8 24c2.8 8.4-1.7 17.4-10.1 20.2s-17.4-1.7-20.2-10.1l-8-24c-2.8-8.4 1.7-17.4 10.1-20.2s17.4 1.7 20.2 10.1zm-19.9 80.4l-32 32c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l32-32c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z'],
   'person-snowboarding': [512, 'M209.7 3.4c15.8-7.9 35-1.5 42.9 14.3l25 50 42.4 8.5c19.5 3.9 37.8 12.3 53.5 24.5l126.1 98.1c14 10.9 16.5 31 5.6 44.9s-31 16.5-44.9 5.6l-72.1-56.1-71.5 31.8 33.1 27.6c23.2 19.3 33.5 50 26.7 79.4l-17.4 75.2c-2.2 9.4-8.2 16.8-16.1 21l86.5 33.1c4.6 1.8 9.4 2.6 14.3 2.6H472c13.3 0 24 10.7 24 24s-10.7 24-24 24H443.8c-10.8 0-21.4-2-31.5-5.8L60.1 371.3c-11.5-4.4-22-11.2-30.8-20L7 329c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l22.4 22.4c4 4 8.7 7.1 14 9.1l22.4 8.6c-.8-1.6-1.5-3.2-2.1-4.9c-5.6-16.8 3.5-34.9 20.2-40.5L192 264.9l0-53.2c0-24.2 13.7-46.4 35.4-57.2l45.2-22.6-7.5-1.5c-19.4-3.9-35.9-16.5-44.7-34.1l-25-50c-7.9-15.8-1.5-35 14.3-42.9zM139 350.1l159 60.9c-2.1-5.6-2.6-11.9-1.1-18.2l17.4-75.2c1.4-5.9-.7-12-5.3-15.9l-52.8-44 0 18.8c0 20.7-13.2 39-32.8 45.5L139 350.1zM432 0a48 48 0 1 1 0 96 48 48 0 1 1 0-96z'],
   'parachute-box': [512, 'M383.5 192c.3-5.3 .5-10.6 .5-16c0-51-15.9-96-40.2-127.6C319.5 16.9 288.2 0 256 0s-63.5 16.9-87.8 48.4C143.9 80 128 125 128 176c0 5.4 .2 10.7 .5 16H240V320H208c-7 0-13.7 1.5-19.7 4.2L68.2 192H96.5c-.3-5.3-.5-10.6-.5-16c0-64 22.2-121.2 57.1-159.3C62 49.3 18.6 122.6 4.2 173.6C1.5 183.1 9 192 18.9 192h6L165.2 346.3c-3.3 6.5-5.2 13.9-5.2 21.7v96c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48V368c0-7.8-1.9-15.2-5.2-21.7L487.1 192h6c9.9 0 17.4-8.9 14.7-18.4C493.4 122.6 450 49.3 358.9 16.7C393.8 54.8 416 112.1 416 176c0 5.4-.2 10.7-.5 16h28.3L323.7 324.2c-6-2.7-12.7-4.2-19.7-4.2H272V192H383.5z'],
@@ -566,7 +560,7 @@ DATA.forEach((e, i) => {
         </button>
       </h3>
       <div class="tl-collapse tl-summary"><div><p>${e.sb}</p></div></div>
-      <div class="tl-collapse tl-full" id="tl-panel-${i}"><div><div class="tl-rich">${e.b}</div><div class="tl-foot"><button type="button" class="tl-copy">${icon('link')}<span>Copy link</span></button></div></div></div>
+      <div class="tl-collapse tl-full" id="tl-panel-${i}"><div><div class="tl-rich">${e.b}</div></div></div>
     </div>`;
   const card = el.querySelector('.tl-card');
   // The header button is the real control: keyboards reach it, and it is the
@@ -594,18 +588,6 @@ DATA.forEach((e, i) => {
     setOpen(true);
   });
   el.open = () => setOpen(true);
-  // Copy link: the entry's clean address, without any ?cat= filter, so the
-  // person who receives it sees the whole timeline with this entry open.
-  const copyBtn = el.querySelector('.tl-copy');
-  copyBtn.addEventListener('click', async () => {
-    const url = location.origin + location.pathname + '#' + el.id;
-    const label = copyBtn.querySelector('span');
-    try { await navigator.clipboard.writeText(url); label.textContent = 'Link copied ✓'; }
-    catch (err) { label.textContent = url; }   // no clipboard: show it to copy by hand
-    copyBtn.classList.add('done');
-    clearTimeout(copyBtn.t);
-    copyBtn.t = setTimeout(() => { label.textContent = 'Copy link'; copyBtn.classList.remove('done'); }, 2200);
-  });
   itemsEl.appendChild(el);
 });
 

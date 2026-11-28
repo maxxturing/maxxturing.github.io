@@ -68,9 +68,11 @@ were re-picked on 27 November: closest pair now CIE76 dE 41, all at least 7:1
 on the open card.)
 
 - **The filter pills** are built from `CATS`, so adding or renaming a category
-  flows through automatically, counts included. Caveat: the filter is
-  single-select with no "clear" beyond the `All` pill, and filtering only
-  toggles `.is-hidden`. Consider whether multi-select is wanted.
+  flows through automatically, counts included. The filter is multi-select
+  (an entry shows if it carries any chosen category; all four chosen folds
+  back to `All`) and lives in the address as `?cat=life,venture`, so links can
+  arrive pre-filtered. `?cat=` sits beside an entry's `#anchor`; if a link's
+  filter would hide the entry it names, the entry wins and the filter drops.
 - **Category order matters.** Each entry's `cat` array drives both `data-cats`
   (the filter) and the `.tl-cat` tag row, and the *first* entry in the array
   picks the accent via `CATS[cats[0]]`. Re-check which entries are
@@ -91,6 +93,10 @@ on the open card.)
   people at the edges, and `tl-kantan` crops the stand's logo. Maxx looked and
   is happy with them.
 - **Not checked:** the timeline by keyboard and screen reader on a phone.
+- **Where the family first lived in England (Feb 1994).** "Moved to England"
+  is a one-line entry; it was not Hoddesdon (that came in Jan 1995, its own
+  entry). Maxx is checking with family; then add a sentence and a `tl-map` pin like
+  the Bavaria and Hoddesdon entries.
 
 ## 4. Beyond work gallery: loose ends
 

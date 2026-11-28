@@ -531,7 +531,10 @@ DATA.forEach((e, i) => {
     card.classList.toggle('open', open);
     toggle.setAttribute('aria-expanded', String(open));
     // the address bar always names the entry last opened, ready to share
-    if (open) history.replaceState(null, '', '#' + el.id);
+    if (open) {
+      history.replaceState(null, '', '#' + el.id);
+      card.querySelectorAll('.tl-map-load').forEach(loadMap);
+    }
     else if (location.hash === '#' + el.id) history.replaceState(null, '', location.pathname + location.search);
     requestAnimationFrame(updateProgress);
     setTimeout(updateProgress, 440);
@@ -588,17 +591,18 @@ document.querySelectorAll('.vid-frame').forEach(btn => {
   }, {once:true});
 });
 
-// Maps load only when asked for, like the videos above: until then nothing
-// is fetched from Google.
+// Maps load when their entry opens (setOpen above), or from the "Show map"
+// button if an entry is already open: until then nothing is fetched from Google.
+function loadMap(btn) {
+  if (!btn.isConnected) return;
+  const frame = document.createElement('iframe');
+  frame.src = btn.dataset.src;
+  frame.title = btn.dataset.title;
+  frame.referrerPolicy = 'no-referrer-when-downgrade';
+  btn.replaceWith(frame);
+}
 document.querySelectorAll('.tl-map-load').forEach(btn => {
-  btn.addEventListener('click', ev => {
-    ev.stopPropagation();
-    const frame = document.createElement('iframe');
-    frame.src = btn.dataset.src;
-    frame.title = btn.dataset.title;
-    frame.referrerPolicy = 'no-referrer-when-downgrade';
-    btn.replaceWith(frame);
-  }, {once:true});
+  btn.addEventListener('click', ev => { ev.stopPropagation(); loadMap(btn); }, {once:true});
 });
 
 // filters
